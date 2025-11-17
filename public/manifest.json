@@ -1,0 +1,51 @@
+{
+  "id": "/",
+  "name": "Mi Vida UPMH",
+  "short_name": "UPMH",
+  "description": "Organiza tu vida universitaria en UPMH - Gestiona tareas, horarios, eventos y más",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#6a11cb",
+  "background_color": "#f5f7fa",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["education", "productivity", "lifestyle"],
+  "lang": "es",
+  "dir": "ltr",
+  "shortcuts": [
+    {
+      "name": "Ver Tareas",
+      "short_name": "Tareas",
+      "description": "Accede rápidamente a tus tareas pendientes",
+      "url": "/?section=tasks",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Ver Horario",
+      "short_name": "Horario",
+      "description": "Consulta tu horario de clases",
+      "url": "/?section=schedule",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

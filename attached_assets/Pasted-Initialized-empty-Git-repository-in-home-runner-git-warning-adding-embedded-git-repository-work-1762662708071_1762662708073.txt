@@ -1,0 +1,104 @@
+Initialized empty Git repository in /home/runner/.git/
+warning: adding embedded git repository: workspace
+hint: You've added another git repository inside your current repository.
+hint: Clones of the outer repository will not contain the contents of
+hint: the embedded repository and will not know how to obtain it.
+hint: If you meant to add a submodule, use:
+hint:
+hint:   git submodule add <url> workspace
+hint:
+hint: If you added this path by mistake, you can remove it from the
+hint: index with:
+hint:
+hint:   git rm --cached workspace
+hint:
+hint: See "git help submodule" for more information.
+hint: Disable this message with "git config set advice.addEmbeddedRepo false"
+[main (root-commit) 14e0c85] Recreate repository
+ 76 files changed, 97 insertions(+)
+ create mode 100644 .nix-channels
+ create mode 120000 .nix-defexpr/channels
+ create mode 120000 .nix-defexpr/channels_root
+ create mode 120000 .nix-profile
+ create mode 100644 .npm/_cacache/content-v2/sha512/01/89/dbd67432638f6d7be551015826cdf7208d84bdd666393f44ca50308b10cfa036703edd3eab5884d744b602a5a869a9241b379704fa01e99cfc978c75b173
+ create mode 100644 .npm/_cacache/content-v2/sha512/05/fb/176f13b403aade06852cefb2e3ee2c3a04247a09fc37ecb3b50b8f36a5a3ac8cc6c114392af475d858e38f4f3d76c5800b7cfd4fde4e1954ebe0800ef228
+ create mode 100644 .npm/_cacache/content-v2/sha512/12/1d/c44cf3789ff6b4e1d7dce9cb94419fd85c777495de00f05f7a61312331753e46d2236d20d564564d2523a95975fdf14771d152119919af6e0bc0a14b2c3d
+ create mode 100644 .npm/_cacache/content-v2/sha512/16/aa/c8b50e034f5342e33094a8c07873801939130a21ad26f3f51154267bece67f41235e279e1b535beb1400db0ecbb07c83dc8249d1926a9a9107209cbe0689
+ create mode 100644 .npm/_cacache/content-v2/sha512/19/77/4f08acfc42df1e5e91ad6e06e15ca331134ff4eb9566fe1cd01a60d7857a5f8ba0593cec17c4c897b5f99cc5889fa0aa5c9b858b0be16aa4a62b746fa064
+ create mode 100644 .npm/_cacache/content-v2/sha512/1b/58/3b7b8da50fef7281444ea8813566fd3bc97724132d72d09d6dc00cefb2304ab9b607dfb705499ce8e3df0f5e4f851be7f5161d49d21ea72e296215a62a22
+ create mode 100644 .npm/_cacache/content-v2/sha512/23/f7/97b1d56808ab5280af4ec3240a3c07eb89c58a50c342c092ad6ad4583260e8e4df39f6d6cedd4b01c39913ddd5359fa65c335243ccf4521a10149317cbc7
+ create mode 100644 .npm/_cacache/content-v2/sha512/4d/0f/76981396d25dcb78c7b22d5ea6cf2fe45abf2591dfe1a7799383bc182bbcc986e052b6618c046d0175e0d94bf759c7522e91a5fa064d75cdc967db9a3503
+ create mode 100644 .npm/_cacache/content-v2/sha512/51/75/8c2a12cec1529bef6f0852d40f5f17d853ebac7726ed52b2bff2e184f0240cbeb84ea70bf30c1c23d108522fb31073bbc8b084811bc550f3e203431a5f40
+ create mode 100644 .npm/_cacache/content-v2/sha512/55/9e/8f97d99181b501f97100d7acce4f122fb7fc0a9355df72fea2bcc028211efa3a1cfd3d352d1e88d65f1416335210632e042072b67d9bccfd2fe75bb55ce3
+ create mode 100644 .npm/_cacache/content-v2/sha512/5a/d2/a8f7633d8d0bd753f75032c3a1bc6075dadf04e2955e77248d9fb0e3390182ee0f3c5ffe2b7ab205913b94c779eae5b3383f557685a30f40479403b3f30a
+ create mode 100644 .npm/_cacache/content-v2/sha512/5c/9c/a936e2766102b99a5f67efba4e4a2cc7b139b4ddf8cd3d55a2d4da4446f727c9459ddb44a2a0705a0726bb6c6ed63df2c4c5f163ede1c7cb38c9f3f67755
+ create mode 100644 .npm/_cacache/content-v2/sha512/62/0f/1eb4c60fafcbd0c5978879898be0202ce844dc34f363686e166175fc1cd4a30b78077b13d7c1bda93adff341f2c5125d5fdcb7bd01466c594d369483c019
+ create mode 100644 .npm/_cacache/content-v2/sha512/67/3f/9a6564a3f0b13ace8c43fb1ae387855f9081bc61ae8bbd8919aad5101893d98d8979df2a42694c16aa8ede234c7ae8a046791a3e9a504490c49e499dfc37
+ create mode 100644 .npm/_cacache/content-v2/sha512/6e/ce/d60e0ea10aea04ee55ee234e46ac81ca7b27cd4edd98591b08d6466d897cdb1f9878d08850948f971a80af45411f91948d812fa82cd73f557c20aa07b5de
+ create mode 100644 .npm/_cacache/content-v2/sha512/72/75/df6e26a6a535271bdc13336d5403c9b282f6a1c27db9f87e859fe13da50e14203e016bf5cd3a0b77490576e9c4006805e6a6ef9f58d837497e3360e81130
+ create mode 100644 .npm/_cacache/content-v2/sha512/79/24/69a6370f21ab5120c0b553a52780ff1715ccfc31058641db75313050ecd6809af5c37ef3716ef595df1db2e8274451c8824ac0c70d065b858681f10128da
+ create mode 100644 .npm/_cacache/content-v2/sha512/85/83/e4fd80238f95b6f865060934b4583daf11962eb48757a62c71dda5963b67a2963553419f5b1d281013eb459601ca5593dd1eb530dad423e2f60f68b1e088
+ create mode 100644 .npm/_cacache/content-v2/sha512/85/af/a57fef8dda0126c61da96b2ed183e76040fb9fde8150618a5605ea0e12d5317d236f611292831960e1bc5f0c1bb4d956d554d43d91d5dcb80aeac51b0b68
+ create mode 100644 .npm/_cacache/content-v2/sha512/8a/2b/fd5e05b2c5ad4e476c6b717357041f17224a31119454076d81a729c4843f78218e393fcabe6491f41974b17f3559f4ce096cce27c1b446d24a2126b1aa8e
+ create mode 100644 .npm/_cacache/content-v2/sha512/8c/74/57f7e96778dd092fec52b82d45035f699eab6d0f4aeec2fdf54772a0987e3e7ece99a0571f52ad686b97e44ed91a71e41f2e4dded9c48fa7e41d135f88ca
+ create mode 100644 .npm/_cacache/content-v2/sha512/8e/3b/b6584a49193f11f6290838c3ed84a85f1b63167c181fb9c79226f521b30fcab8b8615f5e9efdcbf155b24867174a9c8891001562957cb322318c1355c44f
+ create mode 100644 .npm/_cacache/content-v2/sha512/9a/0d/ce3cc578857cb0c29a03c6edd075ae7108a422faf09366af12f49fc4a64841d87cca5eae12345644dfe34af77258c5cf153127a9fa5394482fd154a681ab
+ create mode 100644 .npm/_cacache/content-v2/sha512/ab/34/19441aa416c632692597b841dcd9647d7346b4097c2213915652f9fb64cfaf772d6e64b7c2ba70f7f14ce1b81ed837f275d6775b0c171398e771268f50ec
+ create mode 100644 .npm/_cacache/content-v2/sha512/bd/70/78213f7f28b0eb4b65915e6636dac541db04ec4f0929c6307c4379a76a44c435c630dc54667dd603cbf69c36696cfa51e60dace0ad18caff243a85002dc0
+ create mode 100644 .npm/_cacache/content-v2/sha512/d4/04/cc432a53159a5b6ffda93813e86e1d0f832cc40c0a03e2893d039db12e9670fb4749c015382dfab6bd314122c1bf52659eac68de578a0c95687016d664a5
+ create mode 100644 .npm/_cacache/content-v2/sha512/d6/b6/1d4e9cafd378b2705d7e061cebcd024274eb803ad6aa1d35896425af8a3283d8de57bb44ed542f3ffb57da5aa70ff6204258e9a39a1a07f78747f360713d
+ create mode 100644 .npm/_cacache/content-v2/sha512/e1/9a/03672e5284b6db7b528f49a7db161d6f6e5d1ab1355f900042ede5aa22cd35fbaea770cf36609c55d95b55dd85494eaab63fc1ccc770c2a1149607f377af
+ create mode 100644 .npm/_cacache/content-v2/sha512/e6/58/d5a103efdf28faae8ee9fd8c6539e6210f666c2b56c8a8ede44501a2bea2a5e57a502e5a973321b7d2cd19d07b585dc0ac832a2e10208c6ac261966e9108
+ create mode 100644 .npm/_cacache/content-v2/sha512/e7/aa/f10aaec6fd77c1e04917abd1209f9182aae816bc316369f0ce4e121d301b08d798aa3ea479af5e537d2af560f61e108d7d61e6973026d8eaef3c63be862d
+ create mode 100644 .npm/_cacache/content-v2/sha512/e8/e2/ffcbddbd5b41fd7f650a808ef0cbc0ef2de75886c8423d5329d90ef4966059e509a60e681d9a3fb2f7008126f82b978a08dcbd1f180308b008aa28bf6ac6
+ create mode 100644 .npm/_cacache/content-v2/sha512/ee/8a/8127ea8e0da7780611f128268e77a557a7f98e84b32c362e9b96b2a084ce99a758320043a8c3f58a9d7c419d86a5d5220345f7a6e5c8668ac11c934950b6
+ create mode 100644 .npm/_cacache/content-v2/sha512/ee/c8/335d0334c41e879185d324dbb2f53e5b7816c593eb096565b50e213af90f6ce187128b939d82bd2981b09120e6bdefe0478a34c435f54eb5931b6857e8ff
+ create mode 100644 .npm/_cacache/content-v2/sha512/f8/b7/a9773fc093058e072bda0362a4c21ef2049109d9b9f45cd78bd2be0bc27d5711fa32ebcb186979129311752fec9db590cc24ca694a8008155cb5599ffeda
+ create mode 100644 .npm/_cacache/content-v2/sha512/fa/f6/bc2a26713bc196c76a51630d4551d672629a7a6b239638e180ce85d08465c37108f9704af92a2f2ca84f923b9798c2538f5ab0dc8eae32c1e7281aab34aa
+ create mode 100644 .npm/_cacache/content-v2/sha512/fc/d5/24698965f4396611a5578ef54d3665c49c89113c0f4702df92014947691b3f48799d21908a17ddd73b5d4dbdaf4d0bbc33f77529f2ed0eca99c03f654b63
+ create mode 100644 .npm/_cacache/index-v5/02/54/708a212497c70746a136910bc7c746b9920a54c3febd96c29b64d7b86ec2
+ create mode 100644 .npm/_cacache/index-v5/03/26/a803a672ae73dc30db64aea05285d6af53ee415e8bd058825b11e4416ddc
+ create mode 100644 .npm/_cacache/index-v5/04/45/4bf3e80567c12016c806f3f100b1e579574b03a193502079fd898f0dae22
+ create mode 100644 .npm/_cacache/index-v5/05/f2/5efeceaf581d5b606bdafad32623ddd75352cb1942290a9cd93d48923be6
+ create mode 100644 .npm/_cacache/index-v5/21/34/53ec8cb3c3ed9e3e909f90237e82d1bb12cc38d37901d339f2bfe6be997c
+ create mode 100644 .npm/_cacache/index-v5/2a/5d/8e2cdf7b09a414b84f76dfeb208caec2aeec6373528b960940d81a8037b2
+ create mode 100644 .npm/_cacache/index-v5/2b/4d/b06fbfafc5d420e57bca9490af47c1d3339c777468f63d6b5487e02cd292
+ create mode 100644 .npm/_cacache/index-v5/2e/79/1a42176a040acd97682b202cd8fbda5a6dad0a13d43e2654a3301f3bde95
+ create mode 100644 .npm/_cacache/index-v5/44/3f/49a4bd3964d3962ab953e64375f5536ed717b20609914c2d7d33cf8f7bb8
+ create mode 100644 .npm/_cacache/index-v5/4c/3d/0751b48cfb4f360226ca54aadf79c3e8b4524f063002d19a185839bd672c
+ create mode 100644 .npm/_cacache/index-v5/60/38/d31625ceba037eab302c494b7c3a7598b8d29393ca569faac6a94f7d4c1a
+ create mode 100644 .npm/_cacache/index-v5/60/8e/c72a34a6de6bda3502dd0f906bddc6a40e465a6622994c3c457229672144
+ create mode 100644 .npm/_cacache/index-v5/69/e3/1018bd2617c9bf8a0c2742b8d6db95d9995670b0e195cb06cfea9d61c009
+ create mode 100644 .npm/_cacache/index-v5/77/aa/0279d825c414aee546cc583263666eeb12fee99b75b380a953bf3d2ab855
+ create mode 100644 .npm/_cacache/index-v5/80/3a/4a5732c282b178c7db04d066e1bf72f3e188eb895364b06eb795a5f7e87b
+ create mode 100644 .npm/_cacache/index-v5/95/75/687939821827baf89453eb86559a27c09f58aeb98ea6455ac1964224bc85
+ create mode 100644 .npm/_cacache/index-v5/96/c0/b0f9b5540f4411a70046161bbf8672c4333f852914d8848b4357e43cfb78
+ create mode 100644 .npm/_cacache/index-v5/9f/ed/1a865896ac854406e778c64c746b1bbd506befa888d226b99565598f10c8
+ create mode 100644 .npm/_cacache/index-v5/a2/4a/3d5bdac14715979eb9fd138545da301bdfd3b6d148a73661f88ce8e829eb
+ create mode 100644 .npm/_cacache/index-v5/a3/3c/53b5f80765489e50d173723464c10775a89c8654c92aa5bc0995f14c380e
+ create mode 100644 .npm/_cacache/index-v5/a5/ef/2ac2cd4303cbe93e3d5a762a96c6ed6a474ff2a42a2947e338332cb4ac57
+ create mode 100644 .npm/_cacache/index-v5/a6/26/f752d55914157dff9474ec17502c364bb8ce2b87d5aef9497653536a3b15
+ create mode 100644 .npm/_cacache/index-v5/ab/cd/c5e1beec009cf17e2ca82a2507bf42e92bba68d3e1c9b681140193958109
+ create mode 100644 .npm/_cacache/index-v5/ad/c6/53a64af25fd02008de2eb592b26aa519502fc7de21bf15e1e9c802d123c6
+ create mode 100644 .npm/_cacache/index-v5/b6/b1/f58f7d63bb6409cc7c88c376c2e6981aab7c77b23cf6868e771e5e888b30
+ create mode 100644 .npm/_cacache/index-v5/b7/7c/bef778b25c0ebbc1ec51711ea957725f5792a3e2511e72d6c71494c7dbbe
+ create mode 100644 .npm/_cacache/index-v5/c0/8e/025c3c0478e4f06d601e75dd7d3ada004b5039f33b736da4d242cb82da6b
+ create mode 100644 .npm/_cacache/index-v5/d0/de/17967526e47c8b144ee3ae701f3cafb5e6c3bc9e7076dfbb0dc4aa4b0a55
+ create mode 100644 .npm/_cacache/index-v5/e1/b1/55400119d0eeb2819ba51766054733668d93d041a646ab7f32413eec0316
+ create mode 100644 .npm/_cacache/index-v5/e3/fd/4770783f9e8a04dc1981e9b336245aa81e7c44c38754a79c812ab556e605
+ create mode 100644 .npm/_cacache/index-v5/f6/0f/8da259e6ade04fd102ca2063fae305a8375daba24ad2f57ce67d21d5293f
+ create mode 100644 .npm/_cacache/index-v5/fb/46/5e8aff849401736eb58be2bf2affef386dbd88f3bc511e24fa3ab6038b56
+ create mode 100644 .npm/_cacache/index-v5/fb/d2/39a98815c49f269f56f9186be52961b03a0d1dc20e74d8bc8e28bf6ccf9d
+ create mode 100644 .npm/_cacache/index-v5/fc/ee/fc3e1dd6706bd557d2840d92ff10cdd6928b92fb8c46d2195dfbd8d4b2be
+ create mode 100644 .npm/_update-notifier-last-checked
+ create mode 160000 workspace
+Enumerating objects: 219, done.
+Counting objects: 100% (219/219), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (152/152), done.
+Writing objects: 100% (219/219), 11.87 MiB | 5.71 MiB/s, done.
+Total 219 (delta 6), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (6/6), done.
+To https://github.com/juarezperezj643-ui/MiVIdaEstudiantil.git
+ * [new branch]      main -> main
+branch 'main' set up to track 'origin/main'.
