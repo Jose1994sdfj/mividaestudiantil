@@ -5,23 +5,28 @@ const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/offline.html',
+  '/style.css',
+  '/script.js',
+  '/manifest.json',
   '/icons/icon-192.png',
   '/icons/icon-512.png',
-  '/icons/icon-maskable-512.png',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
   'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap'
 ];
 
 self.addEventListener('install', (event) => {
-  console.log('[Service Worker] Installing...');
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('[Service Worker] Precaching static assets');
-        return cache.addAll(STATIC_ASSETS.map(url => new Request(url, { cache: 'no-cache' })));
-      })
-      .catch((error) => {
-        console.error('[Service Worker] Precaching failed:', error);
+        return Promise.allSettled(
+          STATIC_ASSETS.map(url => {
+            return fetch(new Request(url, { cache: 'no-cache' }))
+              .then(response => {
+                if (response.ok) return cache.put(url, response);
+                throw new Error(`Failed to fetch ${url}`);
+              });
+          })
+        );
       })
       .then(() => self.skipWaiting())
   );
@@ -106,19 +111,23 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  if (request.destination === 'style' || request.destination === 'script') {
+  if (request.destination === 'style' || request.destination === 'script' || request.destination === 'document') {
     event.respondWith(
-      fetch(request)
-        .then((networkResponse) => {
-          if (networkResponse && networkResponse.status === 200) {
-            const clonedResponse = networkResponse.clone();
-            caches.open(DYNAMIC_CACHE).then((cache) => {
-              cache.put(request, clonedResponse);
-            });
-          }
-          return networkResponse;
-        })
-        .catch(() => caches.match(request))
+      caches.match(request).then((cachedResponse) => {
+        const fetchPromise = fetch(request)
+          .then((networkResponse) => {
+            if (networkResponse && networkResponse.status === 200) {
+              const clonedResponse = networkResponse.clone();
+              caches.open(DYNAMIC_CACHE).then((cache) => {
+                cache.put(request, clonedResponse);
+              });
+            }
+            return networkResponse;
+          })
+          .catch(() => cachedResponse);
+
+        return cachedResponse || fetchPromise;
+      })
     );
     return;
   }
