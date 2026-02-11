@@ -2782,6 +2782,8 @@
                 populatePersonSelectsBienestar();
                 setupEmotionsFilters();
                 renderEmotionsHistoryBienestar();
+                setupEmotionTags();
+                setupEmotionForm();
             }
 
             if (pageName === 'horario') {
@@ -3616,64 +3618,88 @@
 
         // ========== EVENT LISTENERS ADICIONALES ==========
         // Emoción tags (página bienestar)
-        document.querySelectorAll('#page-bienestar .emotion-tag').forEach(tag => {
-            tag.addEventListener('click', function() {
-                this.classList.toggle('active');
-            });
-        });
-
-        // Formulario de emociones en página bienestar
-        const emotionFormBienestar = document.getElementById('emotion-form-bienestar');
-        if (emotionFormBienestar) {
-            emotionFormBienestar.addEventListener('submit', function(e) {
-                e.preventDefault();
-
-                const selectedEmotions = Array.from(document.querySelectorAll('#page-bienestar .emotion-tag.active'))
-                    .map(tag => tag.getAttribute('data-emotion'))
-                    .filter(emotion => emotion && emotion.trim() !== '');
-
-                if (selectedEmotions.length === 0) {
-                    showNotification('Por favor selecciona al menos una emoción', 'error');
-                    return;
-                }
-
-                const personSelect = document.getElementById('person-select-bienestar');
-                if (!personSelect || !personSelect.value || personSelect.value.trim() === '') {
-                    showNotification('Por favor selecciona una persona', 'error');
-                    return;
-                }
-
-                const descriptionField = document.getElementById('emotion-description-bienestar');
-                const description = descriptionField ? descriptionField.value.trim() : '';
+        function setupEmotionTags() {
+            const tags = document.querySelectorAll('#page-bienestar .emotion-tag');
+            tags.forEach(tag => {
+                // Eliminar listeners previos para evitar duplicados
+                const newTag = tag.cloneNode(true);
+                tag.parentNode.replaceChild(newTag, tag);
                 
-                if (!description) {
-                    showNotification('Por favor describe cómo te sientes', 'error');
-                    return;
-                }
-
-                const newEmotion = {
-                    id: Date.now(),
-                    person: personSelect.value.trim(),
-                    date: new Date().toISOString(), // Usar ISO completo para el sort
-                    emotions: selectedEmotions,
-                    description: description
-                };
-
-                // Asegurar que appData.emotions existe
-                if (!Array.isArray(appData.emotions)) appData.emotions = [];
-
-                appData.emotions.unshift(newEmotion); // Agregar al inicio para que aparezca primero
-                saveData();
-                populatePersonSelectsBienestar();
-                renderEmotionsHistoryBienestar();
-                updateStats();
-                showNotification('¡Emoción registrada correctamente! ❤️');
-                e.target.reset();
-
-                document.querySelectorAll('#page-bienestar .emotion-tag.active').forEach(tag => {
-                    tag.classList.remove('active');
+                newTag.style.cursor = 'pointer';
+                newTag.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.classList.toggle('active');
+                    console.log('Emotion tag clicked:', this.getAttribute('data-emotion'));
                 });
             });
+        }
+
+        // Formulario de emociones en página bienestar
+        function setupEmotionForm() {
+            const emotionFormBienestar = document.getElementById('emotion-form-bienestar');
+            if (emotionFormBienestar) {
+                // Eliminar listeners previos
+                const newForm = emotionFormBienestar.cloneNode(true);
+                emotionFormBienestar.parentNode.replaceChild(newForm, emotionFormBienestar);
+                
+                // Asegurar que el botón tenga el cursor correcto
+                const submitBtn = newForm.querySelector('button[type="submit"]');
+                if (submitBtn) {
+                    submitBtn.style.cursor = 'pointer';
+                    submitBtn.classList.add('btn', 'btn-primary');
+                }
+
+                newForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    console.log('Form submit triggered');
+
+                    const selectedEmotions = Array.from(newForm.querySelectorAll('.emotion-tag.active'))
+                        .map(tag => tag.getAttribute('data-emotion'))
+                        .filter(emotion => emotion && emotion.trim() !== '');
+
+                    if (selectedEmotions.length === 0) {
+                        showNotification('Por favor selecciona al menos una emoción', 'error');
+                        return;
+                    }
+
+                    const personSelect = newForm.querySelector('#person-select-bienestar');
+                    if (!personSelect || !personSelect.value || personSelect.value.trim() === '') {
+                        showNotification('Por favor selecciona una persona', 'error');
+                        return;
+                    }
+
+                    const descriptionField = newForm.querySelector('#emotion-description-bienestar');
+                    const description = descriptionField ? descriptionField.value.trim() : '';
+                    
+                    if (!description) {
+                        showNotification('Por favor describe cómo te sientes', 'error');
+                        return;
+                    }
+
+                    const newEmotion = {
+                        id: Date.now(),
+                        person: personSelect.value.trim(),
+                        date: new Date().toISOString(),
+                        emotions: selectedEmotions,
+                        description: description
+                    };
+
+                    if (!Array.isArray(appData.emotions)) appData.emotions = [];
+
+                    appData.emotions.unshift(newEmotion);
+                    saveData();
+                    populatePersonSelectsBienestar();
+                    renderEmotionsHistoryBienestar();
+                    updateStats();
+                    showNotification('¡Emoción registrada correctamente! ❤️');
+                    
+                    newForm.reset();
+                    newForm.querySelectorAll('.emotion-tag.active').forEach(tag => {
+                        tag.classList.remove('active');
+                    });
+                });
+            }
         }
 
         // Botón analizar en página bienestar
