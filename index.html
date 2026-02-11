@@ -448,10 +448,44 @@
             background: var(--gradient);
             color: white;
             border-color: transparent;
+            cursor: pointer;
         }
 
         .action-btn:active {
             transform: translateY(-2px) scale(0.98);
+        }
+
+        .btn {
+            display: inline-block;
+            font-weight: 600;
+            text-align: center;
+            vertical-align: middle;
+            user-select: none;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-radius: 12px;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            box-shadow: 0 4px 15px rgba(106, 17, 203, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: var(--gradient-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(106, 17, 203, 0.4);
+            cursor: pointer;
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
         }
 
         .action-icon {
