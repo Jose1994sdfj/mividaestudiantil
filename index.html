@@ -3328,7 +3328,7 @@
                     const currentValue = select.value;
                     select.innerHTML = id === 'person-select-analysis' ? '<option value="">Todas las personas</option>' : '<option value="">Selecciona una persona</option>';
                     
-                    if (Array.isArray(appData.people)) {
+                    if (appData && Array.isArray(appData.people)) {
                         appData.people.forEach(person => {
                             const option = document.createElement('option');
                             option.value = person.name;
@@ -3624,6 +3624,9 @@
                     emotions: selectedEmotions,
                     description: description
                 };
+
+                // Asegurar que appData.emotions existe
+                if (!Array.isArray(appData.emotions)) appData.emotions = [];
 
                 appData.emotions.unshift(newEmotion); // Agregar al inicio para que aparezca primero
                 saveData();
