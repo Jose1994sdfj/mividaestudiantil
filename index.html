@@ -1509,43 +1509,13 @@
                 <h3>Bienestar Social ❤️</h3>
             </div>
 
-            <div class="emotion-form">
-                <form id="emotion-form-bienestar">
-                    <div class="form-group">
-                        <label for="person-select-bienestar">Persona:</label>
-                        <select id="person-select-bienestar" class="form-control" required>
-                            <option value="">Selecciona una persona</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Emociones que sentiste:</label>
-                        <div class="emotion-tags" id="emotion-tags-bienestar">
-                            <span class="emotion-tag" data-emotion="Alegría">
-                                <span class="emoji">😊</span> Alegría
-                            </span>
-                            <span class="emotion-tag" data-emotion="Tristeza">
-                                <span class="emoji">😢</span> Tristeza
-                            </span>
-                            <span class="emotion-tag" data-emotion="Enojo">
-                                <span class="emoji">😠</span> Enojo
-                            </span>
-                            <span class="emotion-tag" data-emotion="Amor">
-                                <span class="emoji">❤️</span> Amor
-                            </span>
-                            <span class="emotion-tag" data-emotion="Frustración">
-                                <span class="emoji">😤</span> Frustración
-                            </span>
-                            <span class="emotion-tag" data-emotion="Confianza">
-                                <span class="emoji">🤝</span> Confianza
-                            </span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="emotion-description-bienestar">Describe cómo te sientes:</label>
-                        <textarea id="emotion-description-bienestar" class="form-control" rows="4" placeholder="¿Qué pasó? ¿Cómo te sentiste?" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Registrar Emoción 💝</button>
-                </form>
+            <div class="card" style="text-align: center; padding: 2.5rem 1.5rem; background: var(--glass-bg); border: 2px dashed var(--primary-color); cursor: pointer;" onclick="openEmotionModal()">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">💝</div>
+                <h3 style="color: var(--primary-color); margin-bottom: 0.5rem;">¿Cómo te sientes hoy?</h3>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">Toca aquí para registrar tus emociones y fortalecer tus relaciones.</p>
+                <button class="btn btn-primary" style="margin-top: 1.5rem; width: auto; padding: 12px 30px;">
+                    Registrar Emoción
+                </button>
             </div>
 
             <div class="section-title" style="margin-top: 2rem;">
@@ -1605,8 +1575,39 @@
         </a>
     </nav>
 
-    <!-- Modal para Agregar Tarea -->
-    <div class="modal" id="task-modal">
+    <!-- Modal para Agregar Emoción -->
+    <div class="modal" id="emotion-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Registrar Emoción 💝</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="emotion-form-modal">
+                <div class="form-group">
+                    <label for="emotion-person-modal">Persona:</label>
+                    <select id="emotion-person-modal" class="form-control" required>
+                        <option value="">Selecciona una persona</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Emociones:</label>
+                    <div class="emotion-tags" id="emotion-tags-modal">
+                        <span class="emotion-tag" data-emotion="Alegría">😊 Alegría</span>
+                        <span class="emotion-tag" data-emotion="Tristeza">😢 Tristeza</span>
+                        <span class="emotion-tag" data-emotion="Enojo">😠 Enojo</span>
+                        <span class="emotion-tag" data-emotion="Amor">❤️ Amor</span>
+                        <span class="emotion-tag" data-emotion="Frustración">😤 Frustración</span>
+                        <span class="emotion-tag" data-emotion="Confianza">🤝 Confianza</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="emotion-desc-modal">Descripción:</label>
+                    <textarea id="emotion-desc-modal" class="form-control" rows="4" placeholder="¿Cómo te sientes?" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Guardar Emoción ✨</button>
+            </form>
+        </div>
+    </div>
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Nueva Tarea 📝</h3>
@@ -1964,7 +1965,7 @@
             document.getElementById('add-task-btn').addEventListener('click', openTaskModal);
             document.getElementById('add-person-btn').addEventListener('click', openPersonModal);
             document.getElementById('add-event-btn').addEventListener('click', openEventModal);
-            document.getElementById('add-emotion-btn').addEventListener('click', scrollToEmotions);
+            document.getElementById('add-emotion-btn').addEventListener('click', openEmotionModal);
 
             // Formularios
             document.getElementById('task-form').addEventListener('submit', handleTaskSubmit);
@@ -2542,6 +2543,52 @@
             }, 100);
         }
 
+        function openEmotionModal() {
+            populatePersonSelectsBienestar();
+            document.getElementById('emotion-modal').style.display = 'flex';
+            
+            // Setup tags inside modal
+            const tags = document.querySelectorAll('#emotion-tags-modal .emotion-tag');
+            tags.forEach(tag => {
+                tag.classList.remove('active');
+                tag.onclick = function() {
+                    this.classList.toggle('active');
+                };
+            });
+        }
+
+        // Handle Emotion Modal Submit
+        document.getElementById('emotion-form-modal').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const person = document.getElementById('emotion-person-modal').value;
+            const description = document.getElementById('emotion-desc-modal').value;
+            const emotions = Array.from(document.querySelectorAll('#emotion-tags-modal .emotion-tag.active'))
+                                .map(t => t.getAttribute('data-emotion'));
+
+            if (!person || emotions.length === 0 || !description) {
+                showNotification('Por favor completa todos los campos', 'error');
+                return;
+            }
+
+            const newEmotion = {
+                id: Date.now(),
+                person: person,
+                date: new Date().toISOString(),
+                emotions: emotions,
+                description: description
+            };
+
+            appData.emotions.unshift(newEmotion);
+            saveData();
+            renderEmotionsHistoryBienestar();
+            updateStats();
+            
+            document.getElementById('emotion-modal').style.display = 'none';
+            this.reset();
+            showNotification('¡Emoción registrada! ❤️');
+        });
+
         function closeAllModals() {
             document.querySelectorAll('.modal').forEach(modal => {
                 modal.style.display = 'none';
@@ -2805,8 +2852,6 @@
                 populatePersonSelectsBienestar();
                 setupEmotionsFilters();
                 renderEmotionsHistoryBienestar();
-                setupEmotionTags();
-                setupEmotionForm();
             }
 
             if (pageName === 'horario') {
@@ -3380,7 +3425,7 @@
 
         // ========== BIENESTAR ==========
         function populatePersonSelectsBienestar() {
-            const selects = ['person-select-bienestar', 'person-select-analysis'];
+            const selects = ['person-select-analysis', 'emotion-person-modal'];
             selects.forEach(id => {
                 const select = document.getElementById(id);
                 if (select) {
