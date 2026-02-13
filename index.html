@@ -3597,7 +3597,7 @@
                         ` : ''}
                         
                         <div style="margin-top: 1rem;">
-                            <button class="btn toggle-person-emotions-btn" data-person="${personName}" style="width: 100%; background: var(--bg-primary); color: var(--text-primary); border: 1px solid var(--border-color); padding: 0.8rem;">
+                            <button class="btn toggle-person-emotions-btn" onclick="togglePersonEmotions('${personName}')" style="width: 100%; background: var(--bg-primary); color: var(--text-primary); border: 1px solid var(--border-color); padding: 0.8rem;">
                                 <i class="fas fa-chevron-down"></i> Ver todos los registros
                             </button>
                             <div id="person-emotions-${personName.replace(/\s+/g, '-')}" style="display: none; margin-top: 1rem;">
