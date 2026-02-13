@@ -3664,6 +3664,7 @@
             const toggleViewBtn = document.getElementById('toggle-view-btn');
             
             if (toggleViewBtn) {
+                // Remove existing listeners by replacing the element
                 const newToggleBtn = toggleViewBtn.cloneNode(true);
                 toggleViewBtn.parentNode.replaceChild(newToggleBtn, toggleViewBtn);
                 
@@ -3675,7 +3676,7 @@
                         currentView = 'grouped';
                         timelineView.style.display = 'none';
                         groupedView.style.display = 'block';
-                        this.innerHTML = '<i class="fas fa-stream"></i> Cronológico';
+                        this.innerHTML = '<i class="fas fa-history"></i> Línea de Tiempo';
                         renderEmotionsGroupedView();
                     } else {
                         currentView = 'timeline';
