@@ -4271,36 +4271,67 @@
         async function enterApp(displayName) {
             document.getElementById('auth-screen').style.display  = 'none';
             document.getElementById('sync-overlay').style.display = 'flex';
-            document.getElementById('sync-message').textContent   = `Hola ${displayName}, cargando tus datos...`;
+            document.getElementById('sync-message').textContent   = `Hola ${displayName}, cargando...`;
+
+            // Panel de debug visible en pantalla (para Android sin DevTools)
+            const dbg = document.createElement('div');
+            dbg.id = 'debug-panel';
+            dbg.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:rgba(0,0,0,0.85);color:#0f0;font-size:11px;font-family:monospace;padding:8px;z-index:99999;max-height:40vh;overflow-y:auto;';
+            document.body.appendChild(dbg);
+            function log(msg) {
+                const line = document.createElement('div');
+                line.textContent = new Date().toLocaleTimeString() + ' ' + msg;
+                dbg.appendChild(line);
+                dbg.scrollTop = dbg.scrollHeight;
+            }
+            window._dbgLog = log;
+            log('enterApp iniciado');
 
             try {
+                log('cargando Firebase...');
                 await loadAllDataFromFirebase();
+                log('Firebase OK');
             } catch(err) {
-                console.warn('enterApp: carga Firebase falló, continuando con datos locales', err);
+                log('Firebase ERROR: ' + err.message);
             } finally {
-                // SIEMPRE ocultar overlay y mostrar app, sin importar lo que pasó
+                log('mostrando app...');
                 document.getElementById('sync-overlay').style.display = 'none';
                 document.getElementById('app-header').style.display   = '';
                 document.getElementById('app-main').style.display     = '';
                 document.getElementById('app-nav').style.display      = '';
+                log('overlay oculto');
             }
 
             localStorage.setItem('institutionName', displayName);
 
             try {
+                log('loadTheme...');
                 loadTheme();
+                log('updateInstitutionName...');
                 updateInstitutionName(displayName);
+                log('initializeApp...');
                 initializeApp();
+                log('setupEventListeners...');
                 setupEventListeners();
+                log('renderAllData...');
                 renderAllData();
+                log('setupGlobalDeleteListeners...');
                 setupGlobalDeleteListeners();
+                log('initializeTutorial...');
                 initializeTutorial();
+                log('scheduleAllNotifications...');
                 scheduleAllNotifications();
+                log('checkTasksDueToday...');
                 checkTasksDueToday();
-                setTimeout(() => { evaluateBadges(); updateBadgeCounter(); }, 1200);
+                log('✅ App lista');
+                // Ocultar debug después de 15s si todo fue bien
+                setTimeout(() => { if (dbg.parentNode) dbg.parentNode.removeChild(dbg); }, 15000);
             } catch(initErr) {
-                console.error('Error inicializando la app:', initErr);
+                log('❌ ERROR INIT: ' + initErr.message);
+                log('Stack: ' + (initErr.stack || '').substring(0, 200));
             }
+
+            setTimeout(() => { evaluateBadges(); updateBadgeCounter(); }, 1200);
         }
 
         // ── Traducir errores de Firebase Auth ──
