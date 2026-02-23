@@ -797,6 +797,10 @@
             border-radius: 12px;
             background: rgba(37, 117, 252, 0.08);
             transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            touch-action: manipulation;
         }
 
         .see-all:hover {
@@ -2339,7 +2343,7 @@
         <!-- Tareas Pendientes -->
         <div class="section-title">
             <h3>Tareas Pendientes 📋</h3>
-            <a href="#" class="see-all" id="see-all-tasks">Ver todas</a>
+            <button class="see-all" id="see-all-tasks">Ver todas</button>
         </div>
         <div class="cards-scroll" id="tasks-scroll">
             <!-- Las tareas se cargarán dinámicamente -->
@@ -2348,7 +2352,7 @@
         <!-- Próximos Eventos -->
         <div class="section-title">
             <h3>Próximos Eventos 🗓️</h3>
-            <a href="#" class="see-all" id="see-all-events">Ver todos</a>
+            <button class="see-all" id="see-all-events">Ver todos</button>
         </div>
         <div class="cards-scroll" id="events-scroll">
             <!-- Los eventos se cargarán dinámicamente -->
@@ -2357,7 +2361,7 @@
         <!-- Personas Especiales -->
         <div class="section-title">
             <h3>Personas Especiales 👨‍👩‍👧‍👦</h3>
-            <a href="#" class="see-all" id="see-all-people">Ver todas</a>
+            <button class="see-all" id="see-all-people">Ver todas</button>
         </div>
         <div class="cards-scroll" id="people-scroll">
             <!-- Las personas se cargarán dinámicamente -->
@@ -3203,21 +3207,43 @@
             on('settings-btn',      'click', showSettingsModal);
             on('badges-btn',        'click', showBadgesModal);
 
-            // Ver todos — touchend + click para Android
+            // Ver todos — touchend con flag para evitar doble ejecución con click
             function onTouch(id, fn) {
                 const el = document.getElementById(id);
                 if (!el) return;
-                el.addEventListener('touchend', function(e) { e.preventDefault(); fn(e); }, { passive: false });
-                el.addEventListener('click', fn);
+                let touched = false;
+                el.addEventListener('touchend', function(e) {
+                    e.preventDefault();
+                    touched = true;
+                    fn();
+                    setTimeout(() => { touched = false; }, 500);
+                }, { passive: false });
+                el.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (touched) return;
+                    fn();
+                });
             }
-            onTouch('see-all-tasks',  function(e) { if(e.preventDefault) e.preventDefault(); showAllItems('tasks'); });
-            onTouch('see-all-events', function(e) { if(e.preventDefault) e.preventDefault(); showAllItems('events'); });
-            onTouch('see-all-people', function(e) { if(e.preventDefault) e.preventDefault(); showAllItems('people'); });
             onTouch('add-habit-btn-2', openHabitModal);
 
             // Contenedores persistentes para hábitos y tareas
             setupHabitsContainerListener();
             setupTasksContainerListener();
+
+            // Listener persistente en app-main para botones "ver todas"
+            const appMain = document.getElementById('app-main');
+            if (appMain) {
+                function handleSeeAll(e) {
+                    const btn = e.target.closest('button, a');
+                    if (!btn) return;
+                    const id = btn.id;
+                    if (id === 'see-all-tasks')  { if(e.cancelable) e.preventDefault(); showAllItems('tasks');  }
+                    if (id === 'see-all-events') { if(e.cancelable) e.preventDefault(); showAllItems('events'); }
+                    if (id === 'see-all-people') { if(e.cancelable) e.preventDefault(); showAllItems('people'); }
+                }
+                appMain.addEventListener('touchend', function(e) { handleSeeAll(e); }, { passive: false });
+                appMain.addEventListener('click',    function(e) { handleSeeAll(e); });
+            }
 
             addTouchSupport();
         }
