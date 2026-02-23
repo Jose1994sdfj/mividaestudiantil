@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#6a11cb">
-    <meta name="description" content="Organiza tu vida universitaria en UPMH">
+    <meta name="description" content="Rose — tu compañero de vida. Productividad, bienestar y relaciones en un solo lugar.">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Mi Vida UPMH">
-    <title>Mi Vida UPMH</title>
+    <meta name="apple-mobile-web-app-title" content="Rose">
+    <title>Rose</title>
     
     <link rel="manifest" href="/manifest.json">
     <link rel="apple-touch-icon" href="/icons/icon-192.png">
@@ -18,41 +18,106 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* ═══════════════════════════════════════════
+           SISTEMA DE COLORES — ChromaAudit certified
+           ═══════════════════════════════════════════ */
         :root {
-            --primary-color: #7c4dff;
-            --secondary-color: #448aff;
-            --accent-color: #ff4081;
-            --light-color: #f5f7fa;
-            --dark-color: #1a1a2e;
-            --success-color: #00e676;
-            --warning-color: #ffea00;
-            --danger-color: #ff5252;
-            --card-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-            --gradient: linear-gradient(135deg, #7c4dff 0%, #448aff 100%);
-            --gradient-hover: linear-gradient(135deg, #651fff 0%, #2979ff 100%);
-            --radius: 24px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            
-            /* Tema claro */
-            --bg-primary: #f0f2f5;
-            --bg-secondary: #ffffff;
-            --text-primary: #1a1a2e;
+            /* ChromaAudit palette */
+            --chroma-deep-violet:  #222255;
+            --chroma-royal-blue:   #221188;
+            --chroma-navy:         #223377;
+            --chroma-forest:       #224433;
+            --chroma-green:        #225500;
+            --chroma-steel:        #116699;
+            --chroma-electric:     #0066FF;
+            --chroma-white:        #FFFFFF;
+
+            /* Tokens semánticos — tema por defecto (Violeta · combo-1) */
+            --primary-color:    #222255;
+            --secondary-color:  #221188;
+            --accent-color:     #0066FF;
+            --gradient:         linear-gradient(135deg, #222255 0%, #221188 100%);
+            --gradient-hover:   linear-gradient(135deg, #1a1a44 0%, #1a0d6e 100%);
+
+            /* Sistema base */
+            --success-color:  #00e676;
+            --warning-color:  #ffea00;
+            --danger-color:   #ff5252;
+            --card-shadow:    0 10px 40px rgba(0, 0, 0, 0.08);
+            --radius:         24px;
+            --transition:     all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+            /* Superficie clara */
+            --bg-primary:    #f0f2f5;
+            --bg-secondary:  #ffffff;
+            --text-primary:  #222255;
             --text-secondary: #64748b;
-            --border-color: rgba(0, 0, 0, 0.05);
-            --shadow-color: rgba(0, 0, 0, 0.05);
-            --glass-bg: rgba(255, 255, 255, 0.8);
-            --glass-border: rgba(255, 255, 255, 0.4);
+            --border-color:  rgba(0, 0, 0, 0.06);
+            --glass-bg:      rgba(255, 255, 255, 0.82);
+            --glass-border:  rgba(255, 255, 255, 0.45);
         }
 
+        /* ── Tema: Marino (Navy #223377) ── */
+        [data-theme="navy"] {
+            --primary-color:   #223377;
+            --secondary-color: #116699;
+            --accent-color:    #0066FF;
+            --gradient:        linear-gradient(135deg, #223377 0%, #116699 100%);
+            --gradient-hover:  linear-gradient(135deg, #1a2860 0%, #0d5280 100%);
+            --text-primary:    #223377;
+        }
+
+        /* ── Tema: Profundo (Deep Violet #222255) — default ── */
+        [data-theme="violet"] {
+            --primary-color:   #222255;
+            --secondary-color: #221188;
+            --accent-color:    #0066FF;
+            --gradient:        linear-gradient(135deg, #222255 0%, #221188 100%);
+            --gradient-hover:  linear-gradient(135deg, #1a1a44 0%, #1a0d6e 100%);
+            --text-primary:    #222255;
+        }
+
+        /* ── Tema: Bosque (Forest #224433) ── */
+        [data-theme="forest"] {
+            --primary-color:   #224433;
+            --secondary-color: #225500;
+            --accent-color:    #116699;
+            --gradient:        linear-gradient(135deg, #224433 0%, #225500 100%);
+            --gradient-hover:  linear-gradient(135deg, #1a3328 0%, #1a4400 100%);
+            --text-primary:    #224433;
+        }
+
+        /* ── Tema: Acero (Steel #116699) ── */
+        [data-theme="steel"] {
+            --primary-color:   #116699;
+            --secondary-color: #0066FF;
+            --accent-color:    #223377;
+            --gradient:        linear-gradient(135deg, #116699 0%, #0066FF 100%);
+            --gradient-hover:  linear-gradient(135deg, #0d5280 0%, #0052cc 100%);
+            --text-primary:    #116699;
+        }
+
+        /* ── Tema: Eléctrico (Electric #0066FF) ── */
+        [data-theme="electric"] {
+            --primary-color:   #0066FF;
+            --secondary-color: #116699;
+            --accent-color:    #221188;
+            --gradient:        linear-gradient(135deg, #0066FF 0%, #116699 100%);
+            --gradient-hover:  linear-gradient(135deg, #0052cc 0%, #0d5280 100%);
+            --text-primary:    #0066FF;
+        }
+
+        /* ── Tema: Oscuro (dark mode universal) ── */
         [data-theme="dark"] {
-            --bg-primary: #0f172a;
-            --bg-secondary: #1e293b;
-            --text-primary: #f8fafc;
+            --bg-primary:    #0f172a;
+            --bg-secondary:  #1e293b;
+            --text-primary:  #f8fafc;
             --text-secondary: #94a3b8;
-            --border-color: rgba(255, 255, 255, 0.1);
-            --card-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            --glass-bg: rgba(30, 41, 59, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --border-color:  rgba(255, 255, 255, 0.1);
+            --card-shadow:   0 10px 40px rgba(0, 0, 0, 0.35);
+            --glass-bg:      rgba(30, 41, 59, 0.75);
+            --glass-border:  rgba(255, 255, 255, 0.1);
+            /* mantiene el gradiente del tema seleccionado */
         }
 
         * {
@@ -77,23 +142,139 @@
 
         /* App Header */
         .mobile-header {
-            background: var(--bg-secondary);
-            padding: 20px;
+            background: var(--gradient);
+            padding: 16px 20px 14px;
             position: sticky;
             top: 0;
             z-index: 100;
-            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 4px 24px rgba(124, 77, 255, 0.25);
+        }
+
+        .header-content {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .header-main {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .header-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .app-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.18);
+            border: 1px solid rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        .app-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+        }
+
+        .app-title {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -0.3px;
+            line-height: 1;
+            text-shadow: 0 1px 6px rgba(0,0,0,0.15);
+        }
+
+        .app-subtitle {
+            font-size: 0.72rem;
+            color: rgba(255,255,255,0.80);
+            font-weight: 500;
+            letter-spacing: 0.2px;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .user-menu button {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            backdrop-filter: blur(8px);
+        }
+
+        .user-menu button:hover {
+            background: rgba(255,255,255,0.28);
+            transform: translateY(-1px);
+        }
+
+        .date-display {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .date-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.22);
+            border-radius: 20px;
+            padding: 4px 10px;
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.95);
+            font-weight: 500;
+            backdrop-filter: blur(8px);
+            white-space: nowrap;
+        }
+
+        .date-pill-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.7);
+            flex-shrink: 0;
+        }
+
+        .date-countdown {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(255,255,255,0.10);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 20px;
+            padding: 4px 10px;
+            font-size: 0.72rem;
+            color: rgba(255,255,255,0.80);
+            font-weight: 500;
+        }
+
+        [data-theme="dark"] .mobile-header {
+            box-shadow: 0 4px 24px rgba(124, 77, 255, 0.35);
         }
 
         /* Modern Cards */
@@ -1235,6 +1416,514 @@
             transform: translateY(0);
         }
 
+        /* ========== HÁBITOS Y RACHAS ========== */
+        .habits-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 0.5rem 0 1.5rem 0;
+        }
+
+        .habit-card {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 16px 18px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            border: 1.5px solid var(--border-color);
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .habit-card.completed-today {
+            border-color: var(--success-color);
+            background: linear-gradient(135deg, rgba(0, 230, 118, 0.06), rgba(0, 230, 118, 0.02));
+        }
+
+        .habit-card:active { transform: scale(0.97); }
+
+        .habit-emoji {
+            font-size: 1.8rem;
+            width: 52px;
+            height: 52px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-primary);
+            flex-shrink: 0;
+            transition: var(--transition);
+        }
+
+        .habit-card.completed-today .habit-emoji {
+            background: rgba(0, 230, 118, 0.15);
+        }
+
+        .habit-info { flex: 1; min-width: 0; }
+
+        .habit-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .habit-meta { display: flex; align-items: center; gap: 8px; }
+
+        .habit-streak {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .habit-streak.on-fire { color: #ff6b35; }
+
+        .habit-category-badge {
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 20px;
+            background: rgba(124, 77, 255, 0.1);
+            color: var(--primary-color);
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+
+        .habit-check-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2.5px solid var(--border-color);
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            flex-shrink: 0;
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+        }
+
+        .habit-card.completed-today .habit-check-btn {
+            background: var(--success-color);
+            border-color: var(--success-color);
+            color: white;
+            font-size: 1rem;
+        }
+
+        .habit-delete-btn {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(255, 82, 82, 0.12);
+            border: none;
+            color: var(--danger-color);
+            font-size: 0.65rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            opacity: 0.5;
+        }
+
+        .habit-card:hover .habit-delete-btn,
+        .habit-card:active .habit-delete-btn { opacity: 1; }
+
+        .habits-day-progress {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 16px 18px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--card-shadow);
+        }
+
+        .habits-day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .habits-day-title { font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); }
+        .habits-day-count { font-size: 0.85rem; font-weight: 700; color: var(--primary-color); }
+
+        .habits-progress-bar {
+            height: 8px;
+            background: var(--bg-primary);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .habits-progress-fill {
+            height: 100%;
+            background: var(--gradient);
+            border-radius: 4px;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes habitComplete {
+            0% { transform: scale(1); }
+            40% { transform: scale(1.12); }
+            70% { transform: scale(0.96); }
+            100% { transform: scale(1); }
+        }
+
+        .habit-card.just-completed { animation: habitComplete 0.4s ease; }
+
+        .category-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+
+        .category-pill {
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1.5px solid var(--border-color);
+            background: transparent;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-secondary);
+        }
+
+        .category-pill.selected {
+            background: var(--gradient);
+            color: white;
+            border-color: transparent;
+        }
+
+        .emoji-picker { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+
+        .emoji-option {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            border: 1.5px solid var(--border-color);
+            background: var(--bg-primary);
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .emoji-option.selected {
+            border-color: var(--primary-color);
+            background: rgba(124, 77, 255, 0.1);
+            transform: scale(1.1);
+        }
+
+        /* ========== REVISIÓN SEMANAL ========== */
+        .review-wizard-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 1rem 0 1.5rem;
+            padding: 0 4px;
+        }
+
+        .review-progress-dots {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .review-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--border-color);
+            transition: var(--transition);
+        }
+
+        .review-dot.active {
+            background: var(--primary-color);
+            width: 28px;
+            border-radius: 5px;
+        }
+
+        .review-dot.done {
+            background: var(--success-color);
+        }
+
+        .review-step-label {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .review-step-card {
+            background: var(--bg-secondary);
+            border-radius: 24px;
+            padding: 2rem 1.5rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--card-shadow);
+            animation: fadeInUp 0.35s ease;
+        }
+
+        .review-step-icon {
+            font-size: 3rem;
+            margin-bottom: 0.8rem;
+            text-align: center;
+        }
+
+        .review-step-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 0.4rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .review-step-subtitle {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .review-context-box {
+            background: var(--bg-primary);
+            border-radius: 14px;
+            padding: 14px 16px;
+            margin-bottom: 1.2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .review-context-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            padding: 4px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .review-context-row:last-child { border-bottom: none; }
+
+        .review-context-label { color: var(--text-secondary); }
+        .review-context-value { font-weight: 700; color: var(--primary-color); }
+
+        .mood-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 0.5rem 0;
+        }
+
+        .mood-btn {
+            padding: 14px 8px;
+            border-radius: 16px;
+            border: 1.5px solid var(--border-color);
+            background: var(--bg-primary);
+            cursor: pointer;
+            text-align: center;
+            transition: var(--transition);
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .mood-btn .mood-emoji { font-size: 1.8rem; display: block; margin-bottom: 4px; }
+
+        .mood-btn.selected {
+            border-color: var(--primary-color);
+            background: rgba(124,77,255,0.08);
+            color: var(--primary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(124,77,255,0.15);
+        }
+
+        .stars-row {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 0.5rem 0 1rem;
+        }
+
+        .star-btn {
+            font-size: 2.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+            filter: grayscale(1) opacity(0.4);
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .star-btn.active {
+            filter: none;
+            transform: scale(1.15);
+        }
+
+        .review-textarea {
+            width: 100%;
+            background: var(--bg-primary);
+            border: 1.5px solid var(--border-color);
+            border-radius: 14px;
+            padding: 14px;
+            font-size: 0.92rem;
+            color: var(--text-primary);
+            resize: none;
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            transition: var(--transition);
+        }
+
+        .review-textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(124,77,255,0.1);
+        }
+
+        .review-textarea::placeholder { color: var(--text-secondary); }
+
+        .review-wizard-footer {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 1.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        /* Tarjetas del resumen */
+        .summary-hero {
+            background: var(--gradient);
+            border-radius: 24px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            color: white;
+            margin-bottom: 1.2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .summary-hero::before {
+            content: '';
+            position: absolute;
+            top: -30px; right: -30px;
+            width: 150px; height: 150px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+        }
+
+        .summary-score {
+            font-size: 4.5rem;
+            font-weight: 800;
+            line-height: 1;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .summary-score-label {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-top: 0.3rem;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 1.2rem;
+        }
+
+        .summary-card {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--card-shadow);
+            text-align: center;
+        }
+
+        .summary-card-icon { font-size: 1.8rem; margin-bottom: 6px; }
+        .summary-card-value { font-size: 1.4rem; font-weight: 700; color: var(--primary-color); }
+        .summary-card-label { font-size: 0.75rem; color: var(--text-secondary); margin-top: 2px; }
+
+        .insight-card {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 18px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--card-shadow);
+            margin-bottom: 1.2rem;
+        }
+
+        .insight-card-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .insight-card-content {
+            font-size: 0.93rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+        }
+
+        .insight-highlight {
+            display: inline-block;
+            background: rgba(124,77,255,0.1);
+            color: var(--primary-color);
+            border-radius: 8px;
+            padding: 2px 8px;
+            font-weight: 600;
+            font-size: 0.88rem;
+        }
+
+        /* Tarjeta del historial */
+        .review-history-card {
+            background: var(--bg-secondary);
+            border-radius: 18px;
+            padding: 16px 18px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--card-shadow);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .review-history-card:hover { transform: translateY(-2px); }
+
+        .review-history-emoji {
+            font-size: 2rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .review-history-info { flex: 1; min-width: 0; }
+        .review-history-date { font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 2px; }
+        .review-history-title { font-size: 0.95rem; font-weight: 600; color: var(--text-primary); }
+        .review-history-score { font-size: 1.4rem; font-weight: 800; color: var(--primary-color); }
+
     </style>
 </head>
 <body>
@@ -1243,18 +1932,24 @@
         <div class="header-content">
             <div class="header-main">
                 <div class="logo-section">
-                    <div class="app-icon">📚</div>
+                    <div class="app-icon">🌹</div>
                     <div class="app-info">
-                        <h1 class="app-title">Mi Vida UPMH</h1>
-                        <p class="app-subtitle">Tu asistente académico</p>
+                        <h1 class="app-title">Rose</h1>
+                        <p class="app-subtitle" id="header-subtitle">Tu día, tu versión</p>
                     </div>
                 </div>
                 <div class="user-menu">
-                    <i class="fas fa-clipboard-list" id="notifications-btn" style="cursor: pointer;"></i>
-                    <i class="fas fa-cog" id="settings-btn" style="cursor: pointer;"></i>
+                    <button id="notifications-btn" aria-label="Pendientes">🔔</button>
+                    <button id="settings-btn" aria-label="Ajustes">⚙️</button>
                 </div>
             </div>
-            <div class="date-display" id="current-date">Cargando fecha...</div>
+            <div class="date-display" id="current-date-wrapper">
+                <div class="date-pill">
+                    <div class="date-pill-dot"></div>
+                    <span id="current-date-text">Cargando...</span>
+                </div>
+                <div class="date-countdown" id="current-date-countdown"></div>
+            </div>
         </div>
     </header>
 
@@ -1265,9 +1960,9 @@
     <div class="tutorial-overlay" id="tutorial-overlay">
         <div class="tutorial-content">
             <div class="tutorial-icon" id="tutorial-icon">👋</div>
-            <h2 class="tutorial-title" id="tutorial-title">¡Bienvenido a Mi Vida UPMH!</h2>
+            <h2 class="tutorial-title" id="tutorial-title">¡Bienvenido a Rose!</h2>
             <p class="tutorial-description" id="tutorial-description">
-                Tu asistente personal para organizar tu vida universitaria
+                Tu compañero de vida diaria
             </p>
             
             <div class="tutorial-features" id="tutorial-features">
@@ -1296,8 +1991,8 @@
             <div class="welcome-bg-pattern"></div>
             <div class="welcome-content">
                 <div class="welcome-greeting">
-                    <div class="greeting-emoji">👋</div>
-                    <h2 class="greeting-title">¡Hola de nuevo!</h2>
+                    <div class="greeting-emoji" id="greeting-emoji">🌅</div>
+                    <h2 class="greeting-title" id="greeting-title">Buenos días</h2>
                     <p class="greeting-subtitle" id="welcome-message">Cargando...</p>
                 </div>
                 
@@ -1308,8 +2003,8 @@
                     </div>
                     <div class="stat-divider"></div>
                     <div class="quick-stat-item">
-                        <div class="stat-number" id="quick-events-stat">0</div>
-                        <div class="stat-label-small">Eventos</div>
+                        <div class="stat-number" id="quick-habits-stat">0</div>
+                        <div class="stat-label-small">Hábitos ✓</div>
                     </div>
                     <div class="stat-divider"></div>
                     <div class="quick-stat-item">
@@ -1328,7 +2023,7 @@
         <!-- Estadísticas -->
         <div class="stats-grid">
             <div class="stat-item">
-                <div class="stat-icon">📚</div>
+                <div class="stat-icon">📝</div>
                 <div class="stat-info">
                     <div class="stat-value" id="task-count">0/0</div>
                     <div class="stat-label">Tareas</div>
@@ -1339,6 +2034,20 @@
                 <div class="stat-info">
                     <div class="stat-value" id="emotion-count">0</div>
                     <div class="stat-label">Emociones</div>
+                </div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon">🔥</div>
+                <div class="stat-info">
+                    <div class="stat-value" id="habits-today-stat">0/0</div>
+                    <div class="stat-label">Hábitos Hoy</div>
+                </div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon">⚡</div>
+                <div class="stat-info">
+                    <div class="stat-value" id="best-streak-stat">0</div>
+                    <div class="stat-label">Mejor Racha</div>
                 </div>
             </div>
         </div>
@@ -1357,10 +2066,24 @@
                 <div class="action-emoji">👥</div>
                 <span>Agregar Persona</span>
             </button>
-            <button class="action-btn" id="add-emotion-btn">
+            <button class="action-btn" id="add-emotion-quick-btn">
                 <div class="action-emoji">😊</div>
-                <span>Agregar Emoción</span>
+                <span>Emoción</span>
             </button>
+            <button class="action-btn" id="add-habit-btn">
+                <div class="action-emoji">🔥</div>
+                <span>Nuevo Hábito</span>
+            </button>
+        </div>
+
+        <!-- Hábitos de Hoy -->
+        <div class="section-title">
+            <h3>Hábitos de Hoy 🔥</h3>
+            <button class="see-all" id="add-habit-btn-2" style="padding: 10px 18px;">+ Nuevo</button>
+        </div>
+        <div id="habits-day-progress-bar"></div>
+        <div class="habits-container" id="habits-container">
+            <!-- Los hábitos se cargarán dinámicamente -->
         </div>
 
         <!-- Tareas Pendientes -->
@@ -1397,7 +2120,7 @@
         <!-- Sección de Horario -->
         <div id="page-horario" class="page-section" style="display: none;">
             <div class="section-title">
-                <h3>Mi Horario 📅</h3>
+                <h3>Mis Rutinas 🔁</h3>
                 <div style="display: flex; gap: 8px;">
                     <button class="see-all" id="manage-classes-btn" style="padding: 10px 18px; background: rgba(255, 107, 107, 0.15); color: var(--danger-color);">🗑️ Gestionar</button>
                     <button class="see-all" id="add-class-btn" style="padding: 10px 18px;">+ Agregar</button>
@@ -1409,21 +2132,21 @@
                     <div class="stat-icon">🕐</div>
                     <div class="stat-info">
                         <div class="stat-value" id="classes-today">0</div>
-                        <div class="stat-label">Clases Hoy</div>
+                        <div class="stat-label">Rutinas Hoy</div>
                     </div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-icon">📚</div>
+                    <div class="stat-icon">🔁</div>
                     <div class="stat-info">
                         <div class="stat-value" id="total-classes">0</div>
-                        <div class="stat-label">Clases Semanales</div>
+                        <div class="stat-label">Rutinas Semanales</div>
                     </div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-icon">⏰</div>
                     <div class="stat-info">
                         <div class="stat-value" id="next-class-time">--:--</div>
-                        <div class="stat-label">Próxima Clase</div>
+                        <div class="stat-label">Próxima Rutina</div>
                     </div>
                 </div>
                 <div class="stat-item">
@@ -1444,7 +2167,7 @@
         <!-- Sección de Progreso -->
         <div id="page-progreso" class="page-section" style="display: none;">
             <div class="section-title">
-                <h3>Mi Progreso Académico 📊</h3>
+                <h3>Mis Metas 🎯</h3>
                 <div style="display: flex; gap: 8px;">
                     <button class="see-all" id="manage-subjects-btn" style="padding: 10px 18px; background: rgba(255, 107, 107, 0.15); color: var(--danger-color);">🗑️ Gestionar</button>
                     <button class="see-all" id="add-subject-btn" style="padding: 10px 18px;">+ Agregar</button>
@@ -1452,7 +2175,7 @@
             </div>
 
             <div class="card" style="background: var(--gradient); color: white; text-align: center; padding: 2rem;">
-                <h3 style="margin-bottom: 1rem; opacity: 0.95;">Promedio General</h3>
+                <h3 style="margin-bottom: 1rem; opacity: 0.95;">Progreso General</h3>
                 <div style="font-size: 4rem; font-weight: 700; margin-bottom: 0.5rem; text-shadow: 0 4px 12px rgba(0,0,0,0.2);" id="overall-average">0.0</div>
                 <p style="opacity: 0.9; font-size: 1.1rem;" id="performance-message">Cargando...</p>
                 <div class="progress-bar" style="margin-top: 1rem; background: rgba(255,255,255,0.3);">
@@ -1461,13 +2184,13 @@
             </div>
 
             <div class="section-title">
-                <h3>Materias 📚</h3>
+                <h3>Áreas de Vida 🌱</h3>
             </div>
 
             <div id="subjects-container"></div>
 
             <div class="section-title">
-                <h3>Estadísticas del Semestre 📈</h3>
+                <h3>Mis Estadísticas 📈</h3>
             </div>
 
             <div class="stats-grid">
@@ -1479,24 +2202,24 @@
                     </div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-icon">📚</div>
+                    <div class="stat-icon">🌱</div>
                     <div class="stat-info">
                         <div class="stat-value" id="total-subjects-stat">0</div>
-                        <div class="stat-label">Materias Cursando</div>
+                        <div class="stat-label">Áreas Activas</div>
                     </div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-icon">🏆</div>
                     <div class="stat-info">
                         <div class="stat-value" id="approved-subjects">0</div>
-                        <div class="stat-label">Materias Aprobadas</div>
+                        <div class="stat-label">Metas Logradas</div>
                     </div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-icon">⏰</div>
                     <div class="stat-info">
                         <div class="stat-value" id="study-hours">0h</div>
-                        <div class="stat-label">Horas de Estudio</div>
+                        <div class="stat-label">Horas Invertidas</div>
                     </div>
                 </div>
             </div>
@@ -1506,7 +2229,7 @@
         <!-- Sección de Bienestar -->
         <div id="page-bienestar" class="page-section" style="display: none;">
             <div class="section-title">
-                <h3>Bienestar Social ❤️</h3>
+                <h3>Cómo me Siento ❤️</h3>
             </div>
 
             <div class="card" style="text-align: center; padding: 2.5rem 1.5rem; background: var(--glass-bg); border: 2px dashed var(--primary-color); cursor: pointer;" onclick="openEmotionModal()">
@@ -1540,8 +2263,9 @@
             <div class="section-title" style="margin-top: 2rem;">
                 <h3>Mis Emociones Registradas 📝</h3>
                 <div style="display: flex; gap: 8px;">
+                    <button class="see-all" id="manage-emotions-btn" style="padding: 10px 18px; background: rgba(255, 107, 107, 0.15); color: var(--danger-color);">🗑️ Gestionar</button>
                     <button class="see-all" id="toggle-view-btn" style="padding: 10px 18px; position: relative; z-index: 100;">
-                        <i class="fas fa-th-list"></i> Por Persona
+                        👥 Por Persona
                     </button>
                 </div>
             </div>
@@ -1553,6 +2277,78 @@
             <div id="emotions-grouped-view" class="emotion-view" style="display: none;"></div>
         </div>
         <!-- Fin Sección de Bienestar -->
+
+        <!-- Sección de Revisión Semanal -->
+        <div id="page-semana" class="page-section" style="display: none;">
+
+            <!-- Vista principal: estado de la semana -->
+            <div id="review-home">
+                <div class="welcome-card-new" style="margin-top:0;">
+                    <div class="welcome-bg-pattern"></div>
+                    <div class="welcome-content">
+                        <div class="welcome-greeting">
+                            <div class="greeting-emoji">📋</div>
+                            <h2 class="greeting-title">Revisión Semanal</h2>
+                            <p class="greeting-subtitle">5 minutos · 5 preguntas · 1 semana más clara</p>
+                        </div>
+                        <div class="quick-stats" id="review-week-stats">
+                            <div class="quick-stat-item">
+                                <div class="stat-number" id="rw-tasks">0</div>
+                                <div class="stat-label-small">Tareas ✓</div>
+                            </div>
+                            <div class="stat-divider"></div>
+                            <div class="quick-stat-item">
+                                <div class="stat-number" id="rw-habits">0%</div>
+                                <div class="stat-label-small">Hábitos</div>
+                            </div>
+                            <div class="stat-divider"></div>
+                            <div class="quick-stat-item">
+                                <div class="stat-number" id="rw-streak">0🔥</div>
+                                <div class="stat-label-small">Racha</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="review-pending-banner" style="display:none;" class="card" style="background: linear-gradient(135deg,rgba(124,77,255,0.08),rgba(68,138,255,0.08)); border: 1.5px solid var(--primary-color); text-align:center; padding:1.5rem;">
+                </div>
+
+                <div style="margin: 1.5rem 0 1rem;">
+                    <button class="btn btn-primary" id="start-review-btn" style="font-size:1.05rem; padding:14px;">
+                        ✨ Iniciar revisión de esta semana
+                    </button>
+                </div>
+
+                <div class="section-title">
+                    <h3>Historial de revisiones 🗂️</h3>
+                </div>
+                <div id="reviews-history-container">
+                    <div style="text-align:center; padding:2rem; color:var(--text-secondary);">
+                        <div style="font-size:2rem; margin-bottom:0.5rem;">📭</div>
+                        <p>Aún no tienes revisiones guardadas.</p>
+                        <p style="font-size:0.85rem; margin-top:0.4rem;">Haz tu primera revisión para empezar el historial.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vista wizard de revisión -->
+            <div id="review-wizard" style="display:none;">
+                <div class="review-wizard-header">
+                    <div class="review-progress-dots" id="review-dots"></div>
+                    <div class="review-step-label" id="review-step-label">Paso 1 de 5</div>
+                </div>
+                <div id="review-step-container"></div>
+                <div class="review-wizard-footer">
+                    <button class="btn" id="review-back-btn" style="background:var(--bg-primary); color:var(--text-secondary); width:auto; padding:12px 24px;">← Atrás</button>
+                    <button class="btn btn-primary" id="review-next-btn" style="width:auto; padding:12px 32px;">Siguiente →</button>
+                </div>
+            </div>
+
+            <!-- Vista resumen final -->
+            <div id="review-summary" style="display:none;"></div>
+
+        </div>
+        <!-- Fin Sección Revisión Semanal -->
     </main>
 
     <!-- Navegación Inferior -->
@@ -1562,16 +2358,20 @@
             <span>Inicio</span>
         </a>
         <a href="#" class="nav-item" data-page="horario">
-            <div class="nav-icon">📅</div>
-            <span>Horario</span>
+            <div class="nav-icon">🔁</div>
+            <span>Rutinas</span>
         </a>
         <a href="#" class="nav-item" data-page="progreso">
-            <div class="nav-icon">📈</div>
-            <span>Progreso</span>
+            <div class="nav-icon">🎯</div>
+            <span>Metas</span>
         </a>
         <a href="#" class="nav-item" data-page="bienestar">
             <div class="nav-icon">🧘</div>
-            <span>Bienestar</span>
+            <span>Sentir</span>
+        </a>
+        <a href="#" class="nav-item" data-page="semana">
+            <div class="nav-icon">📋</div>
+            <span>Semana</span>
         </a>
     </nav>
 
@@ -1620,7 +2420,7 @@
             <form id="task-form">
                 <div class="form-group">
                     <label for="task-title">Título</label>
-                    <input type="text" id="task-title" class="form-control" placeholder="Ej: Proyecto de Programación" required>
+                    <input type="text" id="task-title" class="form-control" placeholder="Ej: Hacer ejercicio, llamar a un amigo..." required>
                 </div>
                 <div class="form-group">
                     <label for="task-description">Descripción</label>
@@ -1662,9 +2462,9 @@
                         <option value="Amigo/a">👫 Amigo/a</option>
                         <option value="Pareja">💑 Pareja</option>
                         <option value="Familiar">👨‍👩‍👧‍👦 Familiar</option>
-                        <option value="Compañero/a de clase">🎓 Compañero/a de clase</option>
-                        <option value="Profesor/a">👨‍🏫 Profesor/a</option>
+                        <option value="Colega">💼 Colega</option>
                         <option value="Mentor">🧠 Mentor</option>
+                        <option value="Conocido/a">🤝 Conocido/a</option>
                         <option value="Otro">❓ Otro</option>
                     </select>
                 </div>
@@ -1683,7 +2483,7 @@
             <form id="event-form">
                 <div class="form-group">
                     <label for="event-title">Título</label>
-                    <input type="text" id="event-title" class="form-control" placeholder="Ej: Clase de Programación" required>
+                    <input type="text" id="event-title" class="form-control" placeholder="Ej: Cita médica, café con amigos..." required>
                 </div>
                 <div class="form-group">
                     <label for="event-date">Fecha</label>
@@ -1706,13 +2506,13 @@
     <div class="modal" id="class-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Agregar Clase 📚</h3>
+                <h3>Agregar Rutina 🔁</h3>
                 <button class="close-modal">&times;</button>
             </div>
             <form id="class-form">
                 <div class="form-group">
-                    <label for="class-name">Nombre de la Clase</label>
-                    <input type="text" id="class-name" class="form-control" placeholder="Ej: Cálculo Diferencial" required>
+                    <label for="class-name">Nombre de la Rutina</label>
+                    <input type="text" id="class-name" class="form-control" placeholder="Ej: Ejercicio mañanero" required>
                 </div>
                 <div class="form-group">
                     <label for="class-day">Día de la Semana</label>
@@ -1732,9 +2532,9 @@
                 </div>
                 <div class="form-group">
                     <label for="class-location">Ubicación</label>
-                    <input type="text" id="class-location" class="form-control" placeholder="Ej: Aula 201" required>
+                    <input type="text" id="class-location" class="form-control" placeholder="Ej: Parque, Gym, Casa" required>
                 </div>
-                <button type="submit" class="btn btn-primary">Agregar Clase ✅</button>
+                <button type="submit" class="btn btn-primary">Agregar Rutina ✅</button>
             </form>
         </div>
     </div>
@@ -1743,23 +2543,23 @@
     <div class="modal" id="subject-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Agregar Materia 📖</h3>
+                <h3>Nueva Área de Vida 🌱</h3>
                 <button class="close-modal">&times;</button>
             </div>
             <form id="subject-form">
                 <div class="form-group">
-                    <label for="subject-name">Nombre de la Materia</label>
-                    <input type="text" id="subject-name" class="form-control" placeholder="Ej: Programación Avanzada" required>
+                    <label for="subject-name">Nombre del Área</label>
+                    <input type="text" id="subject-name" class="form-control" placeholder="Ej: Salud, Carrera, Finanzas" required>
                 </div>
                 <div class="form-group">
-                    <label for="subject-grade">Calificación (0-10)</label>
-                    <input type="number" id="subject-grade" class="form-control" min="0" max="10" step="0.1" placeholder="8.5" required>
+                    <label for="subject-grade">Progreso (0-10)</label>
+                    <input type="number" id="subject-grade" class="form-control" min="0" max="10" step="0.1" placeholder="7.5" required>
                 </div>
                 <div class="form-group">
-                    <label for="subject-credits">Créditos</label>
-                    <input type="number" id="subject-credits" class="form-control" min="1" max="12" placeholder="6" required>
+                    <label for="subject-credits">Importancia (1-10)</label>
+                    <input type="number" id="subject-credits" class="form-control" min="1" max="10" placeholder="8" required>
                 </div>
-                <button type="submit" class="btn btn-primary">Agregar Materia ✅</button>
+                <button type="submit" class="btn btn-primary">Agregar Área ✅</button>
             </form>
         </div>
     </div>
@@ -1779,50 +2579,103 @@
         </div>
     </div>
 
+    <!-- Modal para Crear Hábito -->
+    <div class="modal" id="habit-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Nuevo Hábito 🔥</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="habit-form">
+                <div class="form-group">
+                    <label>Elige un emoji</label>
+                    <div class="emoji-picker" id="habit-emoji-picker">
+                        <div class="emoji-option selected" data-emoji="⭐">⭐</div>
+                        <div class="emoji-option" data-emoji="💧">💧</div>
+                        <div class="emoji-option" data-emoji="🏋️">🏋️</div>
+                        <div class="emoji-option" data-emoji="📖">📖</div>
+                        <div class="emoji-option" data-emoji="🧘">🧘</div>
+                        <div class="emoji-option" data-emoji="🥗">🥗</div>
+                        <div class="emoji-option" data-emoji="💤">💤</div>
+                        <div class="emoji-option" data-emoji="🚶">🚶</div>
+                        <div class="emoji-option" data-emoji="🎯">🎯</div>
+                        <div class="emoji-option" data-emoji="💊">💊</div>
+                        <div class="emoji-option" data-emoji="🧹">🧹</div>
+                        <div class="emoji-option" data-emoji="💰">💰</div>
+                        <div class="emoji-option" data-emoji="📵">📵</div>
+                        <div class="emoji-option" data-emoji="✍️">✍️</div>
+                        <div class="emoji-option" data-emoji="🌅">🌅</div>
+                        <div class="emoji-option" data-emoji="🎵">🎵</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="habit-name">Nombre del hábito</label>
+                    <input type="text" id="habit-name" class="form-control" placeholder="Ej: Meditar 10 minutos" required maxlength="40">
+                </div>
+                <div class="form-group">
+                    <label>Categoría</label>
+                    <div class="category-pills" id="habit-category-pills">
+                        <button type="button" class="category-pill selected" data-category="salud">💪 Salud</button>
+                        <button type="button" class="category-pill" data-category="mente">🧠 Mente</button>
+                        <button type="button" class="category-pill" data-category="relaciones">❤️ Relaciones</button>
+                        <button type="button" class="category-pill" data-category="finanzas">💰 Finanzas</button>
+                        <button type="button" class="category-pill" data-category="trabajo">💼 Trabajo</button>
+                        <button type="button" class="category-pill" data-category="otro">✨ Otro</button>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Crear Hábito 🔥</button>
+            </form>
+        </div>
+    </div>
+
     <script>
         // ========== DATOS Y ESTADO ==========
         let appData = {
             tasks: [
-                { id: 1, title: "Proyecto de Bases de Datos", completed: false, priority: "high", deadline: "2023-10-20", description: "Entregar el proyecto final" },
-                { id: 2, title: "Ensayo de Ética", completed: false, priority: "medium", deadline: "2023-10-18", description: "Ensayo sobre dilemas éticos" },
-                { id: 3, title: "Ejercicios de Cálculo", completed: true, priority: "low", deadline: "2023-10-15", description: "Capítulo 5 ejercicios 1-10" }
+                { id: 1, title: "Llamar a mamá", completed: false, priority: "high", deadline: "", description: "Hablar con ella esta semana" },
+                { id: 2, title: "Ir al gimnasio", completed: false, priority: "medium", deadline: "", description: "Sesión de cardio 30 min" },
+                { id: 3, title: "Leer 20 páginas", completed: true, priority: "low", deadline: "", description: "Del libro que empecé" }
             ],
             events: [
-                { id: 1, title: "Clase de Programación", date: "2023-10-16", time: "15:30", description: "Aula 304" },
-                { id: 2, title: "Reunión equipo proyecto", date: "2023-10-16", time: "17:00", description: "Biblioteca central" },
-                { id: 3, title: "Entrega de tarea de Física", date: "2023-10-17", time: "23:59", description: "Subir al campus virtual" }
+                { id: 1, title: "Café con amigos", date: "2024-06-15", time: "17:00", description: "Plaza central" },
+                { id: 2, title: "Cita médica", date: "2024-06-17", time: "10:00", description: "Check-up anual" },
+                { id: 3, title: "Pago de renta", date: "2024-06-30", time: "12:00", description: "Transferencia mensual" }
             ],
             people: [
                 { id: 1, name: "Ana García", relation: "Amigo/a", emoji: "👫" },
                 { id: 2, name: "Carlos Mendoza", relation: "Pareja", emoji: "💑" },
-                { id: 3, name: "Prof. Rodríguez", relation: "Profesor/a", emoji: "👨‍🏫" }
+                { id: 3, name: "Laura Ruiz", relation: "Familiar", emoji: "👨‍👩‍👧‍👦" }
             ],
             emotions: [
                 { id: 1, person: "Ana García", date: "2023-10-15", emotions: ["Alegría", "Confianza"], description: "Pasamos un buen rato estudiando juntas" },
                 { id: 2, person: "Carlos Mendoza", date: "2023-10-14", emotions: ["Amor", "Alegría"], description: "Cenamos juntos y hablamos de nuestro futuro" },
-                { id: 3, person: "Prof. Rodríguez", date: "2023-10-12", emotions: ["Frustración", "Enojo"], description: "No entendí bien la explicación en clase" }
+                { id: 3, person: "Laura Ruiz", date: "2024-06-10", emotions: ["Frustración", "Enojo"], description: "Tuvimos un malentendido y no supe cómo resolverlo" }
             ],
             schedule: [
-                { id: 1, name: "Cálculo Diferencial", day: "Lunes", time: "08:00", location: "Aula 201" },
-                { id: 2, name: "Programación I", day: "Lunes", time: "10:00", location: "Lab 3" },
-                { id: 3, name: "Bases de Datos", day: "Lunes", time: "14:00", location: "Aula 305" },
-                { id: 4, name: "Ética Profesional", day: "Martes", time: "09:00", location: "Aula 102" },
-                { id: 5, name: "Física", day: "Martes", time: "11:00", location: "Aula 204" },
-                { id: 6, name: "Cálculo Diferencial", day: "Miércoles", time: "08:00", location: "Aula 201" },
-                { id: 7, name: "Programación I", day: "Miércoles", time: "10:00", location: "Lab 3" },
-                { id: 8, name: "Ética Profesional", day: "Jueves", time: "09:00", location: "Aula 102" },
-                { id: 9, name: "Bases de Datos", day: "Jueves", time: "14:00", location: "Aula 305" },
-                { id: 10, name: "Inglés", day: "Viernes", time: "10:00", location: "Aula 401" },
-                { id: 11, name: "Desarrollo Web", day: "Viernes", time: "12:00", location: "Lab 2" }
+                { id: 1, name: "Ejercicio matutino", day: "Lunes", time: "07:00", location: "Gym / Casa" },
+                { id: 2, name: "Revisión de correos", day: "Lunes", time: "09:00", location: "Trabajo" },
+                { id: 3, name: "Lectura 20 min", day: "Lunes", time: "21:00", location: "Casa" },
+                { id: 4, name: "Ejercicio matutino", day: "Miércoles", time: "07:00", location: "Gym / Casa" },
+                { id: 5, name: "Revisión de correos", day: "Miércoles", time: "09:00", location: "Trabajo" },
+                { id: 6, name: "Meditación", day: "Miércoles", time: "22:00", location: "Casa" },
+                { id: 7, name: "Ejercicio matutino", day: "Viernes", time: "07:00", location: "Gym / Casa" },
+                { id: 8, name: "Limpieza del hogar", day: "Sábado", time: "10:00", location: "Casa" },
+                { id: 9, name: "Tiempo en familia", day: "Domingo", time: "13:00", location: "Familia" }
             ],
             subjects: [
-                { id: 1, name: "Cálculo Diferencial", grade: 9.2, credits: 8 },
-                { id: 2, name: "Programación I", grade: 9.5, credits: 6 },
-                { id: 3, name: "Bases de Datos", grade: 8.8, credits: 6 },
-                { id: 4, name: "Ética Profesional", grade: 8.5, credits: 4 },
-                { id: 5, name: "Física", grade: 7.9, credits: 8 },
-                { id: 6, name: "Inglés", grade: 8.4, credits: 4 }
-            ]
+                { id: 1, name: "Salud & Ejercicio", grade: 7.5, credits: 9 },
+                { id: 2, name: "Carrera & Trabajo", grade: 8.5, credits: 9 },
+                { id: 3, name: "Finanzas", grade: 6.0, credits: 8 },
+                { id: 4, name: "Relaciones", grade: 8.0, credits: 8 },
+                { id: 5, name: "Desarrollo Personal", grade: 7.0, credits: 7 }
+            ],
+            habits: [
+                { id: 1, name: "Beber 2L de agua", emoji: "💧", frequency: "daily", completedDates: [], streak: 0, bestStreak: 0, category: "salud" },
+                { id: 2, name: "Hacer ejercicio", emoji: "🏋️", frequency: "daily", completedDates: [], streak: 0, bestStreak: 0, category: "salud" },
+                { id: 3, name: "Leer 20 minutos", emoji: "📖", frequency: "daily", completedDates: [], streak: 0, bestStreak: 0, category: "mente" },
+                { id: 4, name: "No redes sociales antes de dormir", emoji: "📵", frequency: "daily", completedDates: [], streak: 0, bestStreak: 0, category: "mente" }
+            ],
+            weeklyReviews: []
         };
 
         // Variables para el sistema de eliminación
@@ -1830,26 +2683,33 @@
         let deleteType = null;
 
         // ========== SISTEMA DE TEMAS ==========
+        const THEMES = {
+            violet:   { label: 'Violeta',   emoji: '🟣', gradient: 'linear-gradient(135deg,#222255 0%,#221188 100%)' },
+            navy:     { label: 'Marino',    emoji: '🔵', gradient: 'linear-gradient(135deg,#223377 0%,#116699 100%)' },
+            forest:   { label: 'Bosque',    emoji: '🟢', gradient: 'linear-gradient(135deg,#224433 0%,#225500 100%)' },
+            steel:    { label: 'Acero',     emoji: '🩵', gradient: 'linear-gradient(135deg,#116699 0%,#0066FF 100%)' },
+            electric: { label: 'Eléctrico', emoji: '⚡', gradient: 'linear-gradient(135deg,#0066FF 0%,#116699 100%)' },
+            dark:     { label: 'Oscuro',    emoji: '🌑', gradient: 'linear-gradient(135deg,#222255 0%,#221188 100%)' },
+        };
+
         function setTheme(themeName) {
-            if (themeName && themeName !== 'light') {
-                document.documentElement.setAttribute('data-theme', themeName);
-                localStorage.setItem('appTheme', themeName);
-            } else {
-                document.documentElement.removeAttribute('data-theme');
-                localStorage.setItem('appTheme', 'light');
-            }
+            // Quitar todos los atributos de tema existentes
+            document.documentElement.removeAttribute('data-theme');
+
+            const validThemes = Object.keys(THEMES);
+            const theme = validThemes.includes(themeName) ? themeName : 'violet';
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('appTheme', theme);
         }
 
         function loadTheme() {
-            const savedTheme = localStorage.getItem('appTheme') || 'light';
-            if (savedTheme !== 'light') {
-                document.documentElement.setAttribute('data-theme', savedTheme);
-            }
+            const saved = localStorage.getItem('appTheme') || 'violet';
+            setTheme(saved);
         }
 
-        // Compatibilidad con código anterior
+        // Compatibilidad legacy
         function toggleDarkMode(enabled) {
-            setTheme(enabled ? 'dark' : 'light');
+            setTheme(enabled ? 'dark' : 'violet');
         }
 
         // ========== INICIALIZACIÓN ==========
@@ -1955,6 +2815,18 @@
             if (!appData.emotions) {
                 appData.emotions = [];
             }
+            if (!appData.habits) {
+                appData.habits = [
+                    { id: 1, name: "Beber 2L de agua", emoji: "💧", frequency: "daily", completedDates: [], streak: 0, bestStreak: 0, category: "salud" },
+                    { id: 2, name: "Hacer ejercicio", emoji: "🏋️", frequency: "daily", completedDates: [], streak: 0, bestStreak: 0, category: "salud" },
+                    { id: 3, name: "Leer 20 minutos", emoji: "📖", frequency: "daily", completedDates: [], streak: 0, bestStreak: 0, category: "mente" }
+                ];
+                saveData();
+            }
+            if (!appData.weeklyReviews) {
+                appData.weeklyReviews = [];
+                saveData();
+            }
 
             // Actualizar fecha y hora
             updateDateTime();
@@ -1969,7 +2841,6 @@
             document.getElementById('add-task-btn').addEventListener('click', openTaskModal);
             document.getElementById('add-person-btn').addEventListener('click', openPersonModal);
             document.getElementById('add-event-btn').addEventListener('click', openEventModal);
-            document.getElementById('add-emotion-btn').addEventListener('click', openEmotionModal);
 
             // Formularios
             document.getElementById('task-form').addEventListener('submit', handleTaskSubmit);
@@ -2098,6 +2969,8 @@
             updateStats();
             renderSchedule();
             renderSubjects();
+            renderHabits();
+            updateHabitStats();
         }
 
         function renderSchedule() {
@@ -2162,7 +3035,7 @@
                     <div class="card">
                         <div class="empty-state">
                             <div class="empty-icon">📚</div>
-                            <p>No hay materias registradas</p>
+                            <p>No hay áreas de vida registradas</p>
                         </div>
                     </div>
                 `;
@@ -2188,7 +3061,7 @@
                                     <div style="flex: 1;">
                                         <span style="font-weight: 600; font-size: 0.95rem;">${subject.name}</span>
                                         <span style="font-size: 0.75rem; color: var(--text-secondary); margin-left: 8px;">
-                                            ${subject.credits} créditos
+                                            Importancia: <strong>${subject.credits}</strong>
                                         </span>
                                     </div>
                                     <div style="display: flex; align-items: center; gap: 8px;">
@@ -2224,17 +3097,41 @@
             }
 
             container.innerHTML = pendingTasks.map(task => `
-                <div class="card">
-                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 0.5rem;">
-                        <div class="task-priority priority-${task.priority}" style="white-space: nowrap;">
-                            ${task.priority === 'high' ? '🔴 Alta' : task.priority === 'medium' ? '🟡 Media' : '🟢 Baja'}
+                <div class="card" style="position:relative; padding-bottom:0.8rem;">
+                    <div style="display:flex; align-items:flex-start; gap:10px; margin-bottom:0.4rem;">
+                        <button onclick="toggleTaskComplete(${task.id})" style="
+                            width:24px; height:24px; border-radius:50%; border:2px solid var(--primary-color);
+                            background:transparent; cursor:pointer; flex-shrink:0; margin-top:1px;
+                            display:flex; align-items:center; justify-content:center; font-size:0.7rem;
+                            transition:var(--transition);" title="Completar">○</button>
+                        <div style="flex:1;">
+                            <div style="font-weight:600; font-size:0.95rem; line-height:1.3;">${task.title}</div>
+                            <div style="display:flex; gap:8px; align-items:center; margin-top:4px; flex-wrap:wrap;">
+                                <span class="task-priority priority-${task.priority}" style="font-size:0.75rem; white-space:nowrap;">
+                                    ${task.priority === 'high' ? '🔴 Alta' : task.priority === 'medium' ? '🟡 Media' : '🟢 Baja'}
+                                </span>
+                                ${task.deadline ? `<span style="font-size:0.75rem; color:var(--text-secondary);">📅 ${formatDate(task.deadline)}</span>` : ''}
+                            </div>
+                            ${task.description ? `<div style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;">${task.description}</div>` : ''}
                         </div>
-                        <div style="flex: 1; font-weight: 600; font-size: 0.95rem;">${task.title}</div>
+                        <button class="delete-btn" data-type="task" data-id="${task.id}" data-name="${task.title}"
+                            style="width:28px; height:28px; border-radius:8px; border:none; background:rgba(255,82,82,0.1);
+                            color:var(--danger-color); cursor:pointer; flex-shrink:0; font-size:0.9rem;
+                            display:flex; align-items:center; justify-content:center;" title="Eliminar">🗑️</button>
                     </div>
-                    ${task.deadline ? `<div style="font-size: 0.8rem; color: #777; margin-top: 5px;">📅 ${formatDate(task.deadline)}</div>` : ''}
-                    ${task.description ? `<div style="font-size: 0.8rem; color: #777; margin-top: 5px;">${task.description}</div>` : ''}
                 </div>
             `).join('');
+        }
+
+        function toggleTaskComplete(taskId) {
+            const task = appData.tasks.find(t => t.id === taskId);
+            if (!task) return;
+            task.completed = !task.completed;
+            saveData();
+            renderTasks();
+            updateStats();
+            updateHabitStats();
+            if (task.completed) showNotification(`✅ "${task.title}" completada`, 'success');
         }
 
         function renderEvents() {
@@ -2285,13 +3182,17 @@
             }
 
             container.innerHTML = appData.people.map(person => `
-                <div class="card">
-                    <div class="person-item">
+                <div class="card" style="position:relative;">
+                    <div class="person-item" style="align-items:center;">
                         <div class="person-avatar">${person.emoji}</div>
-                        <div class="person-info">
+                        <div class="person-info" style="flex:1;">
                             <div class="person-name">${person.name}</div>
                             <div class="person-relation">${person.relation}</div>
                         </div>
+                        <button class="delete-btn" data-type="person" data-id="${person.id}" data-name="${person.name}"
+                            style="width:30px; height:30px; border-radius:8px; border:none; background:rgba(255,82,82,0.1);
+                            color:var(--danger-color); cursor:pointer; font-size:0.9rem;
+                            display:flex; align-items:center; justify-content:center;" title="Eliminar">🗑️</button>
                     </div>
                 </div>
             `).join('');
@@ -2539,12 +3440,6 @@
 
         function scrollToEmotions() {
             navigateToPage('bienestar');
-            setTimeout(() => {
-                const emotionForm = document.getElementById('emotion-form-bienestar');
-                if (emotionForm) {
-                    emotionForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            }, 100);
         }
 
         function openEmotionModal() {
@@ -2629,7 +3524,7 @@
                 "Amigo/a": "👫",
                 "Pareja": "💑",
                 "Familiar": "👨‍👩‍👧‍👦",
-                "Compañero/a de clase": "🎓",
+                "Colega": "💼",
                 "Profesor/a": "👨‍🏫",
                 "Mentor": "🧠",
                 "Otro": "❓"
@@ -2684,7 +3579,7 @@
             saveData();
             renderSchedule();
             closeAllModals();
-            showNotification('¡Clase agregada correctamente! 📚');
+            showNotification('¡Rutina agregada correctamente! 🔁');
             e.target.reset();
         }
 
@@ -2702,7 +3597,7 @@
             saveData();
             renderSubjects();
             closeAllModals();
-            showNotification('¡Materia agregada correctamente! 📖');
+            showNotification('¡Área de vida agregada! 🌱');
             e.target.reset();
         }
 
@@ -2719,40 +3614,105 @@
         // ========== UTILIDADES ==========
         function updateDateTime() {
             const now = new Date();
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            const dateString = now.toLocaleDateString('es-ES', options);
-            
-            // Calcular días restantes del año
+
+            // Fecha: "domingo, 22 feb" — corta y elegante
+            const dateOpts = { weekday: 'long', day: 'numeric', month: 'short' };
+            const dateString = now.toLocaleDateString('es-ES', dateOpts);
+            // Capitalizar primera letra
+            const dateCap = dateString.charAt(0).toUpperCase() + dateString.slice(1);
+
+            // Días restantes del año
             const endOfYear = new Date(now.getFullYear(), 11, 31);
-            const timeDiff = endOfYear.getTime() - now.getTime();
-            const daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
-            
-            document.getElementById('current-date').textContent = `${dateString} • ${daysRemaining} días para fin de año 🎊`;
+            const daysRemaining = Math.ceil((endOfYear - now) / (1000 * 3600 * 24));
+
+            // Escribir en los nuevos elementos
+            const dateText = document.getElementById('current-date-text');
+            const countdown = document.getElementById('current-date-countdown');
+            // Compatibilidad con código viejo que usa 'current-date'
+            const legacyDate = document.getElementById('current-date');
+
+            if (dateText) dateText.textContent = dateCap;
+            if (countdown) countdown.innerHTML = `🎊 ${daysRemaining}d`;
+            if (legacyDate && !dateText) legacyDate.textContent = `${dateCap} · ${daysRemaining} días para fin de año 🎊`;
         }
 
         function updateWelcomeMessage() {
             const hour = new Date().getHours();
-            let message = '';
-            let motivation = '';
+            const day = new Date().getDay(); // 0=dom, 6=sab
 
-            if (hour < 12) {
-                message = 'Buenos días, es un gran día para aprender';
-                motivation = '¡Comienza el día con energía! El éxito está en cada pequeño paso.';
-            } else if (hour < 18) {
-                message = 'Buenas tardes, sigue adelante con tus metas';
-                motivation = 'Estás a mitad del camino. ¡Mantén el ritmo y alcanza tus objetivos!';
+            // Emoji y saludo según momento del día
+            let emoji, title, subtitle;
+
+            if (hour >= 5 && hour < 12) {
+                emoji = ['🌅','☀️','🌤️'][Math.floor(Math.random()*3)];
+                title = 'Buenos días';
+                subtitle = 'La mañana es tuya. ¿Qué mueves hoy?';
+            } else if (hour >= 12 && hour < 15) {
+                emoji = '⚡';
+                title = 'Buenas tardes';
+                subtitle = 'Mitad del día — tiempo de retomar el ritmo.';
+            } else if (hour >= 15 && hour < 19) {
+                emoji = '🎯';
+                title = 'Buenas tardes';
+                subtitle = 'La tarde es perfecta para cerrar pendientes.';
+            } else if (hour >= 19 && hour < 22) {
+                emoji = '🌙';
+                title = 'Buenas noches';
+                subtitle = 'Revisa lo que lograste hoy. Vale más de lo que crees.';
             } else {
-                message = 'Buenas noches, descansa y recarga energías';
-                motivation = 'Reflexiona sobre lo logrado hoy. Mañana será aún mejor.';
+                emoji = '🌌';
+                title = 'Buenas noches';
+                subtitle = 'Descansa. Mañana es otra oportunidad.';
             }
 
+            // Override en fin de semana
+            if (day === 6) { emoji = '✨'; subtitle = 'Sábado — recarga, muévete, disfruta.'; }
+            if (day === 0) { emoji = '🌿'; subtitle = 'Domingo — reflexiona y prepara la semana.'; }
+
+            // Frases de motivación rotativas basadas en datos reales
+            const habits = appData.habits || [];
+            const bestStreak = habits.reduce((max, h) => Math.max(max, h.streak || 0), 0);
+            const doneToday = habits.filter(h => isHabitCompletedToday(h)).length;
+            const pendingTasks = appData.tasks.filter(t => !t.completed).length;
+            const hasReview = hasReviewedThisWeek ? hasReviewedThisWeek() : false;
+
+            let motivation;
+            if (bestStreak >= 7) {
+                motivation = `🔥 ${bestStreak} días de racha. Eso no es suerte — es carácter.`;
+            } else if (doneToday === habits.length && habits.length > 0) {
+                motivation = `✅ Hábitos del día completados. Hoy ganaste.`;
+            } else if (pendingTasks === 0 && appData.tasks.length > 0) {
+                motivation = `🏆 Sin tareas pendientes. Limpio y listo para lo que sigue.`;
+            } else if (!hasReview && day === 0) {
+                motivation = `📋 Es domingo — buen momento para tu revisión semanal.`;
+            } else {
+                const frases = [
+                    'Un día a la vez. Eso es todo lo que se necesita.',
+                    'La consistencia supera al talento. Siempre.',
+                    'No tienes que sentirte bien para actuar bien.',
+                    'Lo que hagas hoy, te lo agradecerás mañana.',
+                    'Pequeños pasos, todos los días. Así se llega lejos.',
+                    'Hoy es una oportunidad disfrazada de día normal.',
+                ];
+                motivation = frases[new Date().getDate() % frases.length];
+            }
+
+            // Actualizar DOM
+            const emojiEl = document.getElementById('greeting-emoji');
+            const titleEl = document.getElementById('greeting-title');
             const welcomeEl = document.getElementById('welcome-message');
             const motivationEl = document.getElementById('motivation-message');
-            
-            if (welcomeEl) welcomeEl.textContent = message;
-            if (motivationEl) motivationEl.textContent = motivation;
+            const headerSubtitle = document.getElementById('header-subtitle');
 
-            // Actualizar quick stats
+            if (emojiEl) emojiEl.textContent = emoji;
+            if (titleEl) titleEl.textContent = title;
+            if (welcomeEl) welcomeEl.textContent = subtitle;
+            if (motivationEl) motivationEl.textContent = motivation;
+            if (headerSubtitle) {
+                const subtitles = ['Tu día, tu versión', 'Crece un día a la vez', 'Vive con intención', 'Tu mejor versión, hoy'];
+                headerSubtitle.textContent = subtitles[new Date().getDay() % subtitles.length];
+            }
+
             updateQuickStats();
         }
 
@@ -2772,33 +3732,26 @@
             const progressPercent = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
 
             const quickTasksEl = document.getElementById('quick-tasks-stat');
-            const quickEventsEl = document.getElementById('quick-events-stat');
+            const quickHabitsEl = document.getElementById('quick-habits-stat');
             const quickProgressEl = document.getElementById('quick-progress-stat');
-            
-            // Actualizar labels para que sean más descriptivos
-            const taskLabel = document.querySelector('.quick-stats .quick-stat-item:nth-child(1) .stat-label-small');
-            const eventLabel = document.querySelector('.quick-stats .quick-stat-item:nth-child(3) .stat-label-small');
 
             if (quickTasksEl) quickTasksEl.textContent = pendingTasks;
-            if (quickEventsEl) quickEventsEl.textContent = upcomingEvents;
+            if (quickHabitsEl) {
+                const doneToday = (appData.habits||[]).filter(h => isHabitCompletedToday(h)).length;
+                quickHabitsEl.textContent = doneToday;
+            }
             if (quickProgressEl) quickProgressEl.textContent = progressPercent + '%';
-            
-            if (taskLabel) taskLabel.textContent = 'Pendientes';
-            if (eventLabel) eventLabel.textContent = 'Próximos';
         }
 
         function updateStats() {
             const completedTasks = appData.tasks.filter(task => task.completed).length;
             const totalTasks = appData.tasks.length;
-            const progressPercentage = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
 
             const taskCountEl = document.getElementById('task-count');
             const emotionCountEl = document.getElementById('emotion-count');
-            const progressFillEl = document.getElementById('progress-fill');
 
             if (taskCountEl) taskCountEl.textContent = `${completedTasks}/${totalTasks}`;
             if (emotionCountEl) emotionCountEl.textContent = appData.emotions.length;
-            if (progressFillEl) progressFillEl.style.width = `${progressPercentage}%`;
         }
 
         function formatDate(dateString) {
@@ -2856,6 +3809,13 @@
                 populatePersonSelectsBienestar();
                 setupEmotionsFilters();
                 renderEmotionsHistoryBienestar();
+
+                // Botón gestionar emociones
+                const manageEmotionsBtn = document.getElementById('manage-emotions-btn');
+                if (manageEmotionsBtn && !manageEmotionsBtn._hasListener) {
+                    manageEmotionsBtn._hasListener = true;
+                    manageEmotionsBtn.addEventListener('click', showManageEmotionsModal);
+                }
             }
 
             if (pageName === 'horario') {
@@ -2993,7 +3953,7 @@
                 approvedSubjectsEl.textContent = approvedSubjects;
             }
 
-            // Calcular horas de estudio (estimado: 2h por crédito por semana)
+            // Calcular horas invertidas (estimado: basado en importancia)
             const studyHours = totalCredits * 2;
             const studyHoursEl = document.getElementById('study-hours');
             if (studyHoursEl) {
@@ -3006,65 +3966,85 @@
             const modal = document.createElement('div');
             modal.className = 'modal';
             modal.style.display = 'flex';
-            
-            const notificationsHTML = `
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3>Mis Pendientes 📋</h3>
-                        <button class="close-modal">&times;</button>
+
+            const pendingTasks = appData.tasks.filter(t => !t.completed);
+            const upcomingEvents = appData.events.filter(e => e.date >= getTodayString()).slice(0, 3);
+            const habits = appData.habits || [];
+            const habitsDoneToday = habits.filter(h => isHabitCompletedToday(h)).length;
+            const totalHabits = habits.length;
+            const hasAnything = pendingTasks.length > 0 || upcomingEvents.length > 0;
+
+            const priorityConfig = {
+                high:   { dot: '#ff5252', label: 'Alta',  icon: '🔴' },
+                medium: { dot: '#ffab00', label: 'Media', icon: '🟡' },
+                low:    { dot: '#00e676', label: 'Baja',  icon: '🟢' },
+            };
+
+            const tasksHTML = pendingTasks.slice(0, 4).map(task => {
+                const p = priorityConfig[task.priority] || priorityConfig.low;
+                return `
+                <div style="display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--border-color);">
+                    <div style="width:8px; height:8px; border-radius:50%; background:${p.dot}; flex-shrink:0;"></div>
+                    <div style="flex:1; min-width:0;">
+                        <div style="font-weight:600; font-size:0.92rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${task.title}</div>
+                        <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:2px;">${task.deadline ? '📅 ' + formatDate(task.deadline) : 'Sin fecha límite'} · ${p.label}</div>
                     </div>
-                    <div style="max-height: 400px; overflow-y: auto;">
-                        ${appData.tasks.filter(t => !t.completed && t.deadline).slice(0, 3).map(task => `
-                            <div style="padding: 1rem; border-bottom: 1px solid #eee;">
-                                <div style="display: flex; align-items: center; gap: 10px;">
-                                    <div style="background: var(--gradient); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem;">
-                                        📝
-                                    </div>
-                                    <div style="flex: 1;">
-                                        <div style="font-weight: 600;">${task.title}</div>
-                                        <div style="font-size: 0.8rem; color: #777;">Vence: ${formatDate(task.deadline)}</div>
-                                    </div>
-                                    <div class="task-priority priority-${task.priority}">
-                                        ${task.priority === 'high' ? '🔴' : task.priority === 'medium' ? '🟡' : '🟢'}
-                                    </div>
-                                </div>
-                            </div>
-                        `).join('')}
-                        ${appData.events.slice(0, 2).map(event => `
-                            <div style="padding: 1rem; border-bottom: 1px solid #eee;">
-                                <div style="display: flex; align-items: center; gap: 10px;">
-                                    <div style="background: var(--gradient); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem;">
-                                        📅
-                                    </div>
-                                    <div style="flex: 1;">
-                                        <div style="font-weight: 600;">${event.title}</div>
-                                        <div style="font-size: 0.8rem; color: #777;">${formatDate(event.date)} - ${event.time}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        `).join('')}
-                        ${(appData.tasks.filter(t => !t.completed && t.deadline).length === 0 && appData.events.length === 0) ? `
-                            <div class="empty-state">
-                                <div class="empty-icon">✅</div>
-                                <p>¡Todo al día! No tienes pendientes</p>
-                            </div>
-                        ` : ''}
+                </div>`;
+            }).join('');
+
+            const eventsHTML = upcomingEvents.map(event => `
+                <div style="display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--border-color);">
+                    <div style="width:36px; height:36px; border-radius:10px; background:var(--gradient); display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0;">📅</div>
+                    <div style="flex:1; min-width:0;">
+                        <div style="font-weight:600; font-size:0.92rem;">${event.title}</div>
+                        <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:2px;">${formatDate(event.date)} · ${event.time}</div>
                     </div>
-                </div>
-            `;
-            
-            modal.innerHTML = notificationsHTML;
+                </div>`).join('');
+
+            modal.innerHTML = `
+                <div class="modal-content" style="padding:0; overflow:hidden;">
+                    <div style="background:var(--gradient); padding:20px 20px 16px; position:relative;">
+                        <button class="close-modal" style="position:absolute; top:14px; right:14px; background:rgba(255,255,255,0.2); border:none; color:white; width:30px; height:30px; border-radius:50%; font-size:1.1rem; cursor:pointer; display:flex; align-items:center; justify-content:center;">&times;</button>
+                        <div style="font-size:1.5rem; margin-bottom:4px;">🔔</div>
+                        <h3 style="color:white; font-size:1.1rem; font-weight:700; margin:0;">Mis Pendientes</h3>
+                        <p style="color:rgba(255,255,255,0.8); font-size:0.8rem; margin:4px 0 0;">Resumen de lo que necesita tu atención</p>
+                    </div>
+
+                    <!-- Hábitos hoy -->
+                    <div style="margin:16px 20px 0; background:var(--bg-primary); border-radius:14px; padding:12px 14px; display:flex; align-items:center; gap:12px;">
+                        <div style="font-size:1.4rem;">🔥</div>
+                        <div style="flex:1;">
+                            <div style="font-size:0.82rem; font-weight:700; color:var(--text-primary);">Hábitos hoy</div>
+                            <div style="font-size:0.75rem; color:var(--text-secondary);">${habitsDoneToday} de ${totalHabits} completados</div>
+                        </div>
+                        <div style="font-size:1.1rem; font-weight:800; color:var(--primary-color);">${totalHabits > 0 ? Math.round(habitsDoneToday/totalHabits*100) : 0}%</div>
+                    </div>
+
+                    <div style="padding:0 20px 20px; max-height:340px; overflow-y:auto; margin-top:16px;">
+                        ${pendingTasks.length > 0 ? `
+                        <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-secondary); margin-bottom:4px;">
+                            📝 Tareas pendientes (${pendingTasks.length})
+                        </div>
+                        ${tasksHTML}` : ''}
+
+                        ${upcomingEvents.length > 0 ? `
+                        <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-secondary); margin:${pendingTasks.length > 0 ? '16px' : '0'} 0 4px;">
+                            🗓️ Próximos eventos
+                        </div>
+                        ${eventsHTML}` : ''}
+
+                        ${!hasAnything ? `
+                        <div style="text-align:center; padding:2rem 0; color:var(--text-secondary);">
+                            <div style="font-size:2.5rem; margin-bottom:0.5rem;">✅</div>
+                            <p style="font-weight:600;">Todo al día</p>
+                            <p style="font-size:0.82rem; margin-top:4px;">No tienes pendientes urgentes</p>
+                        </div>` : ''}
+                    </div>
+                </div>`;
+
             document.body.appendChild(modal);
-            
-            modal.querySelector('.close-modal').addEventListener('click', () => {
-                document.body.removeChild(modal);
-            });
-            
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    document.body.removeChild(modal);
-                }
-            });
+            modal.querySelector('.close-modal').addEventListener('click', () => document.body.removeChild(modal));
+            modal.addEventListener('click', e => { if (e.target === modal) document.body.removeChild(modal); });
         }
 
         // ========== MODAL DE AJUSTES ==========
@@ -3072,157 +4052,129 @@
             const modal = document.createElement('div');
             modal.className = 'modal';
             modal.style.display = 'flex';
-            
-            const currentInstitution = localStorage.getItem('institutionName') || 'UPMH';
-            
-            const settingsHTML = `
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3>Ajustes ⚙️</h3>
-                        <button class="close-modal">&times;</button>
+
+            const currentTheme = localStorage.getItem('appTheme') || 'violet';
+            const savedName = localStorage.getItem('institutionName') || '';
+
+            // Swatches de temas con paleta ChromaAudit
+            const themeSwatches = Object.entries(THEMES).map(([key, t]) => {
+                const isActive = key === currentTheme;
+                return `
+                <button class="theme-swatch" data-theme="${key}" style="
+                    position:relative; padding:0; border:none; cursor:pointer;
+                    border-radius:14px; overflow:hidden; aspect-ratio:1;
+                    box-shadow: ${isActive ? '0 0 0 3px var(--primary-color), 0 4px 12px rgba(0,0,0,0.2)' : '0 2px 8px rgba(0,0,0,0.1)'};
+                    transition:var(--transition);">
+                    <div style="width:100%; height:100%; background:${t.gradient}; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; padding:10px;">
+                        <span style="font-size:1.2rem;">${t.emoji}</span>
+                        <span style="font-size:0.68rem; font-weight:700; color:white; text-shadow:0 1px 3px rgba(0,0,0,0.4);">${t.label}</span>
                     </div>
-                    <div>
-                        <div style="padding: 1rem; border-bottom: 1px solid #eee;">
-                            <div style="margin-bottom: 0.5rem;">
-                                <div style="font-weight: 600; margin-bottom: 0.5rem;">Nombre de la Institución 🏫</div>
-                                <div style="font-size: 0.8rem; color: #777; margin-bottom: 0.8rem;">Personaliza el nombre de tu escuela o universidad</div>
-                                <input type="text" id="institution-name-input" class="form-control" placeholder="Ej: Mi Universidad" value="${currentInstitution}" maxlength="30">
-                                <button class="btn btn-primary" id="save-institution-btn" style="width: 100%; margin-top: 0.5rem;">
-                                    Guardar 💾
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div style="padding: 1rem; border-bottom: 1px solid #eee;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                                <div>
-                                    <div style="font-weight: 600;">Notificaciones</div>
-                                    <div style="font-size: 0.8rem; color: #777;">Recibe alertas de tareas y eventos</div>
-                                </div>
-                                <input type="checkbox" checked style="width: 20px; height: 20px; accent-color: var(--primary-color);">
-                            </div>
-                        </div>
-                        
-                        <div style="padding: 1rem; border-bottom: 1px solid #eee;">
-                            <div style="margin-bottom: 0.5rem;">
-                                <div style="font-weight: 600; margin-bottom: 0.5rem;">Tema de Color 🎨</div>
-                                <div style="font-size: 0.8rem; color: #777; margin-bottom: 0.8rem;">Personaliza el aspecto de la aplicación</div>
-                                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-bottom: 0.5rem;">
-                                    <button class="theme-option" data-theme="light" style="padding: 0.8rem; border: 2px solid var(--border-color); border-radius: 12px; background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%); cursor: pointer; transition: var(--transition); font-size: 0.8rem; font-weight: 600; color: #2d3436;">
-                                        ☀️ Claro
-                                    </button>
-                                    <button class="theme-option" data-theme="dark" style="padding: 0.8rem; border: 2px solid var(--border-color); border-radius: 12px; background: linear-gradient(135deg, #0f0c29 0%, #302b63 100%); cursor: pointer; transition: var(--transition); font-size: 0.8rem; font-weight: 600; color: #ecf0f1;">
-                                        🌙 Oscuro
-                                    </button>
-                                    <button class="theme-option" data-theme="pink" style="padding: 0.8rem; border: 2px solid var(--border-color); border-radius: 12px; background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%); cursor: pointer; transition: var(--transition); font-size: 0.8rem; font-weight: 600; color: white;">
-                                        🌸 Rosa
-                                    </button>
-                                    <button class="theme-option" data-theme="ocean" style="padding: 0.8rem; border: 2px solid var(--border-color); border-radius: 12px; background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%); cursor: pointer; transition: var(--transition); font-size: 0.8rem; font-weight: 600; color: white;">
-                                        🌊 Océano
-                                    </button>
-                                    <button class="theme-option" data-theme="forest" style="padding: 0.8rem; border: 2px solid var(--border-color); border-radius: 12px; background: linear-gradient(135deg, #059669 0%, #10b981 100%); cursor: pointer; transition: var(--transition); font-size: 0.8rem; font-weight: 600; color: white;">
-                                        🌲 Bosque
-                                    </button>
-                                    <button class="theme-option" data-theme="sunset" style="padding: 0.8rem; border: 2px solid var(--border-color); border-radius: 12px; background: linear-gradient(135deg, #ea580c 0%, #f97316 100%); cursor: pointer; transition: var(--transition); font-size: 0.8rem; font-weight: 600; color: white;">
-                                        🌅 Atardecer
-                                    </button>
-                                    <button class="theme-option" data-theme="lavender" style="padding: 0.8rem; border: 2px solid var(--border-color); border-radius: 12px; background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%); cursor: pointer; transition: var(--transition); font-size: 0.8rem; font-weight: 600; color: white;">
-                                        💜 Lavanda
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div style="padding: 1rem; border-bottom: 1px solid #eee;">
-                            <div style="font-weight: 600; margin-bottom: 0.5rem;">Datos de la Aplicación</div>
-                            <button class="btn btn-danger" id="clear-data-btn" style="width: 100%; margin-top: 0.5rem;">
-                                Borrar todos los datos 🗑️
+                    ${isActive ? `<div style="position:absolute; top:4px; right:4px; width:14px; height:14px; border-radius:50%; background:white; display:flex; align-items:center; justify-content:center; font-size:0.5rem; color:var(--primary-color); font-weight:900;">✓</div>` : ''}
+                </button>`;
+            }).join('');
+
+            modal.innerHTML = `
+                <div class="modal-content" style="padding:0; overflow:hidden;">
+                    <!-- Header del modal -->
+                    <div style="background:var(--gradient); padding:20px 20px 16px; position:relative;">
+                        <button class="close-modal" style="position:absolute; top:14px; right:14px; background:rgba(255,255,255,0.2); border:none; color:white; width:30px; height:30px; border-radius:50%; font-size:1.1rem; cursor:pointer; display:flex; align-items:center; justify-content:center;">&times;</button>
+                        <div style="font-size:1.5rem; margin-bottom:4px;">⚙️</div>
+                        <h3 style="color:white; font-size:1.1rem; font-weight:700; margin:0;">Ajustes de Rose</h3>
+                        <p style="color:rgba(255,255,255,0.8); font-size:0.8rem; margin:4px 0 0;">Personaliza tu experiencia</p>
+                    </div>
+
+                    <div style="padding:20px; display:flex; flex-direction:column; gap:20px; max-height:440px; overflow-y:auto;">
+
+                        <!-- Nombre de usuario -->
+                        <div>
+                            <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-secondary); margin-bottom:10px;">👤 Tu nombre</div>
+                            <input type="text" id="settings-name-input" class="form-control"
+                                placeholder="¿Cómo te llamas?"
+                                value="${savedName}" maxlength="24"
+                                style="margin-bottom:8px;">
+                            <button class="btn btn-primary" id="save-name-btn" style="padding:10px;">
+                                Guardar nombre ✓
                             </button>
                         </div>
-                        
-                        <div style="padding: 1rem;">
-                            <div style="text-align: center; color: #777; font-size: 0.9rem;">
-                                <p style="margin: 0.5rem 0;">Mi Vida Estudiantil v1.0</p>
-                                <p style="margin: 0.5rem 0;">© 2025</p>
+
+                        <!-- Selector de tema -->
+                        <div>
+                            <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-secondary); margin-bottom:10px;">🎨 Tema de color</div>
+                            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px;" id="theme-swatches-grid">
+                                ${themeSwatches}
                             </div>
+                            <p style="font-size:0.75rem; color:var(--text-secondary); margin-top:8px; text-align:center;">Paleta certificada WCAG AA/AAA · ChromaAudit</p>
+                        </div>
+
+                        <!-- Datos -->
+                        <div>
+                            <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-secondary); margin-bottom:10px;">🗄️ Datos</div>
+                            <div style="background:var(--bg-primary); border-radius:14px; padding:14px; display:flex; justify-content:space-between; align-items:center;">
+                                <div>
+                                    <div style="font-size:0.88rem; font-weight:600;">Tareas: ${appData.tasks.length} · Hábitos: ${(appData.habits||[]).length}</div>
+                                    <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:2px;">Revisiones: ${(appData.weeklyReviews||[]).length} · Personas: ${appData.people.length}</div>
+                                </div>
+                            </div>
+                            <button class="btn" id="clear-data-btn" style="width:100%; margin-top:10px; background:rgba(255,82,82,0.1); color:var(--danger-color); border:1px solid rgba(255,82,82,0.2); font-weight:600; padding:10px;">
+                                🗑️ Borrar todos los datos
+                            </button>
+                        </div>
+
+                        <!-- Versión -->
+                        <div style="text-align:center; padding-top:4px; border-top:1px solid var(--border-color);">
+                            <p style="font-size:0.78rem; color:var(--text-secondary);">Rose v2.0 · Hecho con ❤️</p>
                         </div>
                     </div>
-                </div>
-            `;
-            
-            modal.innerHTML = settingsHTML;
+                </div>`;
+
             document.body.appendChild(modal);
-            
-            modal.querySelector('.close-modal').addEventListener('click', () => {
-                document.body.removeChild(modal);
-            });
-            
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    document.body.removeChild(modal);
-                }
-            });
-            
-            // Marcar tema actual
-            const currentTheme = localStorage.getItem('appTheme') || 'light';
-            modal.querySelectorAll('.theme-option').forEach(btn => {
-                const theme = btn.getAttribute('data-theme');
-                if (theme === currentTheme) {
-                    btn.style.border = '3px solid var(--primary-color)';
-                    btn.style.boxShadow = '0 0 0 3px rgba(106, 17, 203, 0.2)';
-                }
-            });
-            
-            // Event listeners para cambiar tema
-            modal.querySelectorAll('.theme-option').forEach(btn => {
+
+            // Cerrar
+            modal.querySelector('.close-modal').addEventListener('click', () => document.body.removeChild(modal));
+            modal.addEventListener('click', e => { if (e.target === modal) document.body.removeChild(modal); });
+
+            // Cambiar tema
+            modal.querySelectorAll('.theme-swatch').forEach(btn => {
                 btn.addEventListener('click', function() {
-                    const newTheme = this.getAttribute('data-theme');
+                    const newTheme = this.dataset.theme;
                     setTheme(newTheme);
-                    
-                    // Actualizar estilos de selección
-                    modal.querySelectorAll('.theme-option').forEach(b => {
-                        b.style.border = '2px solid var(--border-color)';
-                        b.style.boxShadow = 'none';
+                    // Actualizar swatches visualmente
+                    modal.querySelectorAll('.theme-swatch').forEach(b => {
+                        const isNow = b.dataset.theme === newTheme;
+                        b.style.boxShadow = isNow
+                            ? '0 0 0 3px var(--primary-color), 0 4px 12px rgba(0,0,0,0.2)'
+                            : '0 2px 8px rgba(0,0,0,0.1)';
+                        const check = b.querySelector('div[style*="position:absolute"]');
+                        if (check) check.remove();
+                        if (isNow) {
+                            b.querySelector('div').insertAdjacentHTML('beforeend',
+                                `<div style="position:absolute; top:4px; right:4px; width:14px; height:14px; border-radius:50%; background:white; display:flex; align-items:center; justify-content:center; font-size:0.5rem; color:var(--primary-color); font-weight:900;">✓</div>`);
+                        }
                     });
-                    this.style.border = '3px solid var(--primary-color)';
-                    this.style.boxShadow = '0 0 0 3px rgba(106, 17, 203, 0.2)';
-                    
-                    const themeNames = {
-                        'light': 'Claro ☀️',
-                        'dark': 'Oscuro 🌙',
-                        'pink': 'Rosa 🌸',
-                        'ocean': 'Océano 🌊',
-                        'forest': 'Bosque 🌲',
-                        'sunset': 'Atardecer 🌅',
-                        'lavender': 'Lavanda 💜'
-                    };
-                    showNotification(`Tema ${themeNames[newTheme]} activado`, 'success');
+                    showNotification(`Tema ${THEMES[newTheme].label} ${THEMES[newTheme].emoji} activado`, 'success');
                 });
             });
-            
-            const clearDataBtn = modal.querySelector('#clear-data-btn');
-            clearDataBtn.addEventListener('click', () => {
-                if (confirm('¿Estás seguro de que quieres borrar todos los datos? Esta acción no se puede deshacer.')) {
-                    localStorage.removeItem('upmhAppData');
-                    showNotification('Datos eliminados. Recargando... 🔄', 'success');
-                    setTimeout(() => {
-                        location.reload();
-                    }, 1500);
-                }
-            });
-            
-            const saveInstitutionBtn = modal.querySelector('#save-institution-btn');
-            const institutionInput = modal.querySelector('#institution-name-input');
-            
-            saveInstitutionBtn.addEventListener('click', () => {
-                const newName = institutionInput.value.trim();
-                if (newName && newName.length > 0) {
-                    localStorage.setItem('institutionName', newName);
-                    updateInstitutionName(newName);
-                    showNotification('Nombre actualizado correctamente ✅', 'success');
+
+            // Guardar nombre
+            modal.querySelector('#save-name-btn').addEventListener('click', () => {
+                const name = modal.querySelector('#settings-name-input').value.trim();
+                if (name) {
+                    localStorage.setItem('institutionName', name);
+                    updateInstitutionName(name);
+                    showNotification(`¡Listo, ${name}! 👋`, 'success');
                     document.body.removeChild(modal);
                 } else {
-                    showNotification('Por favor ingresa un nombre válido', 'error');
+                    showNotification('Escribe tu nombre primero', 'error');
+                }
+            });
+
+            // Borrar datos
+            modal.querySelector('#clear-data-btn').addEventListener('click', () => {
+                if (confirm('¿Borrar todos los datos de Rose? Esta acción no se puede deshacer.')) {
+                    localStorage.removeItem('upmhAppData');
+                    localStorage.removeItem('institutionName');
+                    showNotification('Datos eliminados. Recargando... 🔄', 'success');
+                    setTimeout(() => location.reload(), 1500);
                 }
             });
         }
@@ -3324,22 +4276,22 @@
             const subjectsHTML = `
                 <div class="modal-content" style="max-width: 600px;">
                     <div class="modal-header">
-                        <h3>Gestionar Materias 🗑️</h3>
+                        <h3>Gestionar Áreas de Vida 🗑️</h3>
                         <button class="close-modal">&times;</button>
                     </div>
                     <div style="max-height: 500px; overflow-y: auto;">
                         ${appData.subjects.length === 0 ? `
                             <div class="empty-state">
                                 <div class="empty-icon">📚</div>
-                                <p>No tienes materias registradas</p>
+                                <p>No tienes áreas de vida registradas</p>
                             </div>
                         ` : appData.subjects.map(subject => `
                             <div style="padding: 1rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
                                 <div style="flex: 1;">
                                     <div style="font-weight: 600; font-size: 1rem; color: var(--text-primary);">${subject.name}</div>
                                     <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.3rem;">
-                                        Calificación: <strong style="color: var(--primary-color);">${subject.grade.toFixed(1)}</strong> • 
-                                        Créditos: <strong>${subject.credits}</strong>
+                                        Progreso: <strong style="color: var(--primary-color);">${subject.grade.toFixed(1)}</strong> • 
+                                        Importancia: <strong>${subject.credits}</strong>
                                     </div>
                                 </div>
                                 <button class="btn btn-danger manage-delete-subject-btn" data-id="${subject.id}" data-name="${subject.name}" style="padding: 10px 16px; font-size: 0.9rem;">
@@ -3351,7 +4303,7 @@
                     ${appData.subjects.length > 0 ? `
                         <div style="padding: 1rem; border-top: 2px solid var(--border-color); background: var(--bg-secondary);">
                             <button class="btn btn-danger" id="delete-all-subjects-btn" style="width: 100%;">
-                                🗑️ Borrar Todas las Materias
+                                🗑️ Borrar Todas las Áreas
                             </button>
                         </div>
                     ` : ''}
@@ -3383,7 +4335,7 @@
                         renderSubjects();
                         updateProgressStats();
                         document.body.removeChild(modal);
-                        showNotification('Materia eliminada correctamente 🗑️', 'success');
+                        showNotification('Área eliminada correctamente 🗑️', 'success');
                     }
                 });
             });
@@ -3398,25 +4350,22 @@
                         renderSubjects();
                         updateProgressStats();
                         document.body.removeChild(modal);
-                        showNotification('Todas las materias han sido eliminadas 🗑️', 'success');
+                        showNotification('Todas las áreas han sido eliminadas 🗑️', 'success');
                     }
                 });
             }
         }
 
-        // ========== ACTUALIZAR NOMBRE DE INSTITUCIÓN ==========
+        // ========== ACTUALIZAR NOMBRE DE USUARIO ==========
         function updateInstitutionName(name) {
-            const appTitle = document.querySelector('.app-title');
-            if (appTitle) {
-                appTitle.textContent = `Mi Vida ${name}`;
-            }
-            const mobileHeader = document.querySelector('.mobile-header');
-            if (mobileHeader) {
-                mobileHeader.style.background = 'var(--gradient)';
+            // En Rose, el nombre de institución se reemplazó por nombre de usuario
+            const headerSubtitle = document.getElementById('header-subtitle');
+            if (headerSubtitle && name) {
+                headerSubtitle.textContent = `Hola, ${name} 👋`;
             }
         }
         
-        // Cargar nombre de institución al iniciar
+        // Cargar nombre de usuario al iniciar
         function loadInstitutionName() {
             const savedName = localStorage.getItem('institutionName');
             if (savedName) {
@@ -3710,63 +4659,95 @@
         }
 
         // Formulario de emociones en página bienestar
-        function setupEmotionForm() {
-            const emotionFormBienestar = document.getElementById('emotion-form-bienestar');
-            if (!emotionFormBienestar) return;
+        function showManageEmotionsModal() {
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.style.display = 'flex';
 
-            // Remove existing listeners
-            const newForm = emotionFormBienestar.cloneNode(true);
-            emotionFormBienestar.parentNode.replaceChild(newForm, emotionFormBienestar);
-            
-            // Re-setup tags after cloning the form
-            setupEmotionTags();
+            const emotions = appData.emotions || [];
 
-            newForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                console.log('Submit attempt');
-
-                const selectedEmotions = Array.from(newForm.querySelectorAll('.emotion-tag.active'))
-                    .map(tag => tag.getAttribute('data-emotion'));
-
-                if (selectedEmotions.length === 0) {
-                    showNotification('Por favor selecciona al menos una emoción', 'error');
+            const renderList = () => {
+                const list = modal.querySelector('#emotions-manage-list');
+                if (!list) return;
+                if (emotions.length === 0) {
+                    list.innerHTML = `<div style="text-align:center; padding:2rem; color:var(--text-secondary);">
+                        <div style="font-size:2rem; margin-bottom:0.5rem;">💭</div>
+                        <p>No hay emociones registradas</p></div>`;
                     return;
                 }
+                list.innerHTML = emotions.map(em => `
+                    <div style="display:flex; align-items:flex-start; gap:12px; padding:12px 0; border-bottom:1px solid var(--border-color);">
+                        <div style="flex:1; min-width:0;">
+                            <div style="font-weight:600; font-size:0.88rem;">${em.person}</div>
+                            <div style="font-size:0.75rem; color:var(--text-secondary); margin:2px 0;">${em.emotions.join(', ')} · ${em.date ? em.date.split('T')[0] : ''}</div>
+                            <div style="font-size:0.8rem; color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${em.description || ''}</div>
+                        </div>
+                        <button class="delete-btn" data-type="emotion" data-id="${em.id}" data-name="esta emoción"
+                            style="width:30px; height:30px; border-radius:8px; border:none; background:rgba(255,82,82,0.1);
+                            color:var(--danger-color); cursor:pointer; font-size:0.9rem; flex-shrink:0;
+                            display:flex; align-items:center; justify-content:center;" title="Eliminar">🗑️</button>
+                    </div>
+                `).join('');
+            };
 
-                const personSelect = document.getElementById('person-select-bienestar');
-                if (!personSelect || !personSelect.value) {
-                    showNotification('Por favor selecciona una persona', 'error');
-                    return;
+            modal.innerHTML = `
+                <div class="modal-content" style="padding:0; overflow:hidden;">
+                    <div style="background:var(--gradient); padding:20px 20px 16px; position:relative;">
+                        <button class="close-modal" style="position:absolute; top:14px; right:14px; background:rgba(255,255,255,0.2); border:none; color:white; width:30px; height:30px; border-radius:50%; font-size:1.1rem; cursor:pointer; display:flex; align-items:center; justify-content:center;">&times;</button>
+                        <div style="font-size:1.5rem; margin-bottom:4px;">💝</div>
+                        <h3 style="color:white; font-size:1.1rem; font-weight:700; margin:0;">Gestionar Emociones</h3>
+                        <p style="color:rgba(255,255,255,0.8); font-size:0.8rem; margin:4px 0 0;">${emotions.length} registros</p>
+                    </div>
+                    <div style="padding:16px 20px 20px; max-height:420px; overflow-y:auto;" id="emotions-manage-list"></div>
+                    ${emotions.length > 0 ? `
+                    <div style="padding:0 20px 20px;">
+                        <button id="delete-all-emotions-btn" class="btn" style="width:100%; background:rgba(255,82,82,0.1); color:var(--danger-color); border:1px solid rgba(255,82,82,0.2); font-weight:600;">
+                            🗑️ Borrar todas las emociones
+                        </button>
+                    </div>` : ''}
+                </div>`;
+
+            document.body.appendChild(modal);
+            renderList();
+
+            modal.querySelector('.close-modal').addEventListener('click', () => document.body.removeChild(modal));
+            modal.addEventListener('click', e => { if (e.target === modal) document.body.removeChild(modal); });
+
+            const deleteAllBtn = modal.querySelector('#delete-all-emotions-btn');
+            if (deleteAllBtn) {
+                deleteAllBtn.addEventListener('click', () => {
+                    if (confirm('¿Borrar todas las emociones registradas?')) {
+                        appData.emotions = [];
+                        saveData();
+                        renderEmotionsHistoryBienestar();
+                        updateStats();
+                        document.body.removeChild(modal);
+                        showNotification('Todas las emociones eliminadas', 'info');
+                    }
+                });
+            }
+
+            // Delete individual emotion via delegation
+            modal.addEventListener('click', e => {
+                const btn = e.target.closest('.delete-btn');
+                if (!btn) return;
+                const id = parseInt(btn.dataset.id);
+                if (!id) return;
+                const em = appData.emotions.find(x => x.id === id);
+                if (!em) return;
+                if (confirm(`¿Eliminar esta emoción de "${em.person}"?`)) {
+                    appData.emotions = appData.emotions.filter(x => x.id !== id);
+                    saveData();
+                    renderEmotionsHistoryBienestar();
+                    updateStats();
+                    renderList();
+                    showNotification('Emoción eliminada', 'info');
                 }
-
-                const descriptionField = document.getElementById('emotion-description-bienestar');
-                const description = descriptionField ? descriptionField.value.trim() : '';
-                
-                if (!description) {
-                    showNotification('Por favor describe cómo te sientes', 'error');
-                    return;
-                }
-
-                const newEmotion = {
-                    id: Date.now(),
-                    person: personSelect.value,
-                    date: new Date().toISOString(),
-                    emotions: selectedEmotions,
-                    description: description
-                };
-
-                if (!Array.isArray(appData.emotions)) appData.emotions = [];
-
-                appData.emotions.unshift(newEmotion);
-                saveData();
-                populatePersonSelectsBienestar();
-                renderEmotionsHistoryBienestar();
-                updateStats();
-                showNotification('¡Emoción registrada correctamente! ❤️');
-                
-                newForm.reset();
-                newForm.querySelectorAll('.emotion-tag.active').forEach(tag => tag.classList.remove('active'));
             });
+        }
+
+        function setupEmotionForm() {
+            // Formulario inline fue reemplazado por modal openEmotionModal()
         }
 
         // Botón analizar en página bienestar
@@ -4454,23 +5435,712 @@
             });
         });
 
-        // ========== SISTEMA DE TUTORIAL ==========
-        const tutorialSteps = [
+        // ========== SISTEMA DE HÁBITOS ==========
+
+        function getTodayString() {
+            const d = new Date();
+            return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+        }
+
+        function getYesterdayString() {
+            const d = new Date();
+            d.setDate(d.getDate() - 1);
+            return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+        }
+
+        function isHabitCompletedToday(habit) {
+            return habit.completedDates.includes(getTodayString());
+        }
+
+        function recalcStreak(habit) {
+            if (habit.completedDates.length === 0) {
+                habit.streak = 0;
+                return;
+            }
+            // Ordenar fechas descendente
+            const sorted = [...habit.completedDates].sort((a, b) => b.localeCompare(a));
+            let streak = 0;
+            let check = getTodayString();
+            // Si no completó hoy, empezamos desde ayer
+            if (sorted[0] !== check) {
+                check = getYesterdayString();
+            }
+            for (let i = 0; i < sorted.length; i++) {
+                if (sorted[i] === check) {
+                    streak++;
+                    // retroceder un día
+                    const d = new Date(check);
+                    d.setDate(d.getDate() - 1);
+                    check = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+                } else {
+                    break;
+                }
+            }
+            habit.streak = streak;
+            if (streak > (habit.bestStreak || 0)) habit.bestStreak = streak;
+        }
+
+        function toggleHabitToday(habitId) {
+            const habit = appData.habits.find(h => h.id === habitId);
+            if (!habit) return;
+            const today = getTodayString();
+            const idx = habit.completedDates.indexOf(today);
+            if (idx === -1) {
+                habit.completedDates.push(today);
+                recalcStreak(habit);
+                saveData();
+                renderHabits();
+                updateHabitStats();
+                // Animación y feedback
+                const card = document.querySelector(`.habit-card[data-id="${habitId}"]`);
+                if (card) {
+                    card.classList.add('just-completed');
+                    card.addEventListener('animationend', () => card.classList.remove('just-completed'), { once: true });
+                }
+                const streak = habit.streak;
+                if (streak >= 7) {
+                    showNotification(`🔥 ¡${streak} días seguidos con "${habit.name}"! Increíble racha`, 'success');
+                } else if (streak >= 3) {
+                    showNotification(`⚡ ¡${streak} días seguidos! Sigue así`, 'success');
+                } else {
+                    showNotification(`✅ "${habit.name}" completado hoy`, 'success');
+                }
+            } else {
+                // Desmarcar
+                habit.completedDates.splice(idx, 1);
+                recalcStreak(habit);
+                saveData();
+                renderHabits();
+                updateHabitStats();
+                showNotification(`↩️ "${habit.name}" desmarcado`, 'info');
+            }
+        }
+
+        function deleteHabit(habitId) {
+            const habit = appData.habits.find(h => h.id === habitId);
+            if (!habit) return;
+            if (!confirm(`¿Eliminar el hábito "${habit.name}"? Se perderá su racha.`)) return;
+            appData.habits = appData.habits.filter(h => h.id !== habitId);
+            saveData();
+            renderHabits();
+            updateHabitStats();
+            showNotification('Hábito eliminado', 'info');
+        }
+
+        function renderHabits() {
+            const container = document.getElementById('habits-container');
+            const progressBar = document.getElementById('habits-day-progress-bar');
+            if (!container) return;
+
+            const habits = appData.habits || [];
+            const total = habits.length;
+            const doneToday = habits.filter(h => isHabitCompletedToday(h)).length;
+            const pct = total > 0 ? Math.round((doneToday / total) * 100) : 0;
+
+            // Barra de progreso del día
+            if (progressBar) {
+                let emoji = pct === 100 ? '🏆' : pct >= 50 ? '⚡' : '🌱';
+                progressBar.innerHTML = `
+                    <div class="habits-day-progress">
+                        <div class="habits-day-header">
+                            <span class="habits-day-title">${emoji} Progreso del día</span>
+                            <span class="habits-day-count">${doneToday}/${total} completados</span>
+                        </div>
+                        <div class="habits-progress-bar">
+                            <div class="habits-progress-fill" style="width: ${pct}%"></div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            if (total === 0) {
+                container.innerHTML = `
+                    <div style="text-align:center; padding: 2rem; color: var(--text-secondary);">
+                        <div style="font-size:2.5rem; margin-bottom:0.8rem;">🌱</div>
+                        <p style="font-weight:600; margin-bottom:0.4rem;">No tienes hábitos aún</p>
+                        <p style="font-size:0.85rem;">Los hábitos pequeños crean grandes cambios. ¡Empieza con uno!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Ordenar: primero los no completados, luego los completados
+            const sorted = [...habits].sort((a, b) => {
+                const aD = isHabitCompletedToday(a) ? 1 : 0;
+                const bD = isHabitCompletedToday(b) ? 1 : 0;
+                return aD - bD;
+            });
+
+            container.innerHTML = sorted.map(habit => {
+                const done = isHabitCompletedToday(habit);
+                const streak = habit.streak || 0;
+                const isOnFire = streak >= 3;
+                const streakLabel = streak > 0 ? `${isOnFire ? '🔥' : '⚡'} ${streak} día${streak !== 1 ? 's' : ''}` : '✨ Empieza hoy';
+                const categoryColors = {
+                    salud: '#00c853', mente: '#7c4dff', relaciones: '#ff4081',
+                    finanzas: '#ffab00', trabajo: '#2979ff', otro: '#78909c'
+                };
+                const catColor = categoryColors[habit.category] || '#7c4dff';
+
+                return `
+                    <div class="habit-card ${done ? 'completed-today' : ''}" data-id="${habit.id}">
+                        <button class="habit-delete-btn" onclick="deleteHabit(${habit.id})" title="Eliminar">✕</button>
+                        <div class="habit-emoji">${habit.emoji || '⭐'}</div>
+                        <div class="habit-info">
+                            <div class="habit-name">${habit.name}</div>
+                            <div class="habit-meta">
+                                <span class="habit-streak ${isOnFire ? 'on-fire' : ''}">${streakLabel}</span>
+                                <span class="habit-category-badge" style="color:${catColor}; background:${catColor}22">${habit.category || 'otro'}</span>
+                            </div>
+                        </div>
+                        <button class="habit-check-btn" onclick="toggleHabitToday(${habit.id})" title="${done ? 'Desmarcar' : 'Completar'}">
+                            ${done ? '✓' : '○'}
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateHabitStats() {
+            const habits = appData.habits || [];
+            const total = habits.length;
+            const doneToday = habits.filter(h => isHabitCompletedToday(h)).length;
+            const bestStreak = habits.reduce((max, h) => Math.max(max, h.bestStreak || 0), 0);
+
+            const habitsStat = document.getElementById('habits-today-stat');
+            const bestStreakStat = document.getElementById('best-streak-stat');
+            const quickHabitStat = document.getElementById('quick-habits-stat');
+
+            if (habitsStat) habitsStat.textContent = `${doneToday}/${total}`;
+            if (bestStreakStat) bestStreakStat.textContent = bestStreak > 0 ? `${bestStreak}🔥` : '0';
+            if (quickHabitStat) quickHabitStat.textContent = doneToday;
+        }
+
+        function openHabitModal() {
+            document.getElementById('habit-modal').style.display = 'flex';
+            document.getElementById('habit-name').value = '';
+            // Reset emoji selection
+            document.querySelectorAll('.emoji-option').forEach(el => el.classList.remove('selected'));
+            document.querySelector('.emoji-option[data-emoji="⭐"]')?.classList.add('selected');
+            // Reset category selection
+            document.querySelectorAll('.category-pill').forEach(el => el.classList.remove('selected'));
+            document.querySelector('.category-pill[data-category="salud"]')?.classList.add('selected');
+        }
+
+        // Emoji picker interactivity
+        document.addEventListener('click', function(e) {
+            const emojiOpt = e.target.closest('.emoji-option');
+            if (emojiOpt && emojiOpt.closest('#habit-emoji-picker')) {
+                document.querySelectorAll('.emoji-option').forEach(el => el.classList.remove('selected'));
+                emojiOpt.classList.add('selected');
+            }
+            const catPill = e.target.closest('.category-pill');
+            if (catPill && catPill.closest('#habit-category-pills')) {
+                document.querySelectorAll('.category-pill').forEach(el => el.classList.remove('selected'));
+                catPill.classList.add('selected');
+            }
+        });
+
+        // Habit form submit
+        document.getElementById('habit-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('habit-name').value.trim();
+            if (!name) return;
+            const selectedEmoji = document.querySelector('.emoji-option.selected')?.dataset.emoji || '⭐';
+            const selectedCategory = document.querySelector('.category-pill.selected')?.dataset.category || 'otro';
+            const newId = appData.habits.length > 0 ? Math.max(...appData.habits.map(h => h.id)) + 1 : 1;
+            appData.habits.push({
+                id: newId,
+                name,
+                emoji: selectedEmoji,
+                frequency: 'daily',
+                completedDates: [],
+                streak: 0,
+                bestStreak: 0,
+                category: selectedCategory
+            });
+            saveData();
+            renderHabits();
+            updateHabitStats();
+            closeAllModals();
+            showNotification(`🌱 Hábito "${name}" creado. ¡A construir la racha!`, 'success');
+        });
+
+        // Botones para abrir modal de hábito
+        document.getElementById('add-habit-btn').addEventListener('click', openHabitModal);
+        document.getElementById('add-habit-btn-2').addEventListener('click', openHabitModal);
+        document.getElementById('add-emotion-quick-btn').addEventListener('click', openEmotionModal);
+
+        // ========== REVISIÓN SEMANAL ==========
+
+        const REVIEW_QUESTIONS = [
             {
-                icon: '👋',
-                title: '¡Bienvenido a Mi Vida UPMH!',
-                description: 'Tu asistente personal para organizar tu vida universitaria',
-                features: [
-                    { icon: '📚', text: 'Organiza tus tareas y proyectos académicos' },
-                    { icon: '📅', text: 'Gestiona tu horario de clases' },
-                    { icon: '📊', text: 'Monitorea tu progreso académico' },
-                    { icon: '❤️', text: 'Cuida tu bienestar emocional' }
+                id: 'mood',
+                icon: '🌤️',
+                title: '¿Cómo fue tu semana en general?',
+                subtitle: 'Elige el estado de ánimo que mejor la describe',
+                type: 'mood',
+                options: [
+                    { value: 5, emoji: '🚀', label: 'Excelente' },
+                    { value: 4, emoji: '😊', label: 'Bien' },
+                    { value: 3, emoji: '😐', label: 'Regular' },
+                    { value: 2, emoji: '😔', label: 'Difícil' },
+                    { value: 1, emoji: '🌧️', label: 'Muy difícil' },
+                    { value: 0, emoji: '😶', label: 'Sin palabras' }
                 ]
             },
             {
-                icon: '📝',
-                title: 'Gestiona tus Tareas',
-                description: 'Nunca olvides una entrega importante',
+                id: 'wins',
+                icon: '🏆',
+                title: '¿Cuál fue tu mayor logro esta semana?',
+                subtitle: 'Puede ser algo pequeño — todo cuenta. Sé específico.',
+                type: 'textarea',
+                placeholder: 'Ej: Terminé ese proyecto pendiente, fui al gym 3 veces, tuve una conversación difícil que necesitaba...'
+            },
+            {
+                id: 'energy',
+                icon: '⚡',
+                title: '¿Cómo estuvo tu energía y bienestar?',
+                subtitle: 'Califica del 1 al 5 tu nivel de energía general',
+                type: 'stars',
+                max: 5
+            },
+            {
+                id: 'obstacle',
+                icon: '🧱',
+                title: '¿Qué te frenó esta semana?',
+                subtitle: 'Ser honesto aquí es lo que marca la diferencia',
+                type: 'textarea',
+                placeholder: 'Ej: La procrastinación, el ruido mental, un conflicto con alguien, no dormí bien...'
+            },
+            {
+                id: 'nextweek',
+                icon: '🎯',
+                title: '¿Cuál es tu intención para la próxima semana?',
+                subtitle: 'Una sola cosa. La más importante.',
+                type: 'textarea',
+                placeholder: 'Ej: Empezar a dormir antes de las 11pm, terminar el proyecto X, hablar con esa persona...'
+            }
+        ];
+
+        let reviewAnswers = {};
+        let reviewStep = 0;
+
+        function getWeekLabel() {
+            const now = new Date();
+            const dayOfWeek = now.getDay();
+            const diffToMonday = (dayOfWeek === 0 ? -6 : 1 - dayOfWeek);
+            const monday = new Date(now);
+            monday.setDate(now.getDate() + diffToMonday);
+            const sunday = new Date(monday);
+            sunday.setDate(monday.getDate() + 6);
+            const opts = { day: 'numeric', month: 'short' };
+            return `${monday.toLocaleDateString('es-ES', opts)} – ${sunday.toLocaleDateString('es-ES', opts)}`;
+        }
+
+        function getWeekKey() {
+            const now = new Date();
+            const dayOfWeek = now.getDay();
+            const diffToMonday = (dayOfWeek === 0 ? -6 : 1 - dayOfWeek);
+            const monday = new Date(now);
+            monday.setDate(now.getDate() + diffToMonday);
+            return monday.toISOString().split('T')[0];
+        }
+
+        function hasReviewedThisWeek() {
+            const key = getWeekKey();
+            return (appData.weeklyReviews || []).some(r => r.weekKey === key);
+        }
+
+        function initReviewPage() {
+            // Calcular stats de la semana
+            const habits = appData.habits || [];
+            const today = getTodayString();
+            const now = new Date();
+            const weekDays = [];
+            for (let i = 6; i >= 0; i--) {
+                const d = new Date(now);
+                d.setDate(now.getDate() - i);
+                weekDays.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`);
+            }
+
+            // % hábitos completados esta semana
+            let totalPossible = habits.length * 7;
+            let totalDone = 0;
+            habits.forEach(h => {
+                weekDays.forEach(d => { if (h.completedDates.includes(d)) totalDone++; });
+            });
+            const habitPct = totalPossible > 0 ? Math.round((totalDone / totalPossible) * 100) : 0;
+
+            // Tareas completadas esta semana (aproximación: completadas totales)
+            const completedTasks = appData.tasks.filter(t => t.completed).length;
+
+            // Mejor racha activa
+            const bestStreak = habits.reduce((max, h) => Math.max(max, h.streak || 0), 0);
+
+            const rwTasks = document.getElementById('rw-tasks');
+            const rwHabits = document.getElementById('rw-habits');
+            const rwStreak = document.getElementById('rw-streak');
+            if (rwTasks) rwTasks.textContent = completedTasks;
+            if (rwHabits) rwHabits.textContent = habitPct + '%';
+            if (rwStreak) rwStreak.textContent = bestStreak + (bestStreak > 0 ? '🔥' : '');
+
+            // Banner si ya hizo revisión esta semana
+            const banner = document.getElementById('review-pending-banner');
+            if (banner) {
+                if (hasReviewedThisWeek()) {
+                    banner.style.display = 'block';
+                    banner.innerHTML = `
+                        <div style="font-size:2rem; margin-bottom:0.5rem;">✅</div>
+                        <p style="font-weight:700; color:var(--success-color);">Ya hiciste tu revisión esta semana</p>
+                        <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.3rem;">Semana del ${getWeekLabel()}</p>
+                    `;
+                    document.getElementById('start-review-btn').textContent = '🔄 Hacer otra revisión';
+                } else {
+                    banner.style.display = 'block';
+                    banner.innerHTML = `
+                        <div style="font-size:2rem; margin-bottom:0.5rem;">⏰</div>
+                        <p style="font-weight:700; color:var(--primary-color);">Revisión pendiente</p>
+                        <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.3rem;">Semana del ${getWeekLabel()}</p>
+                    `;
+                }
+            }
+
+            renderReviewsHistory();
+        }
+
+        function renderReviewsHistory() {
+            const container = document.getElementById('reviews-history-container');
+            if (!container) return;
+            const reviews = (appData.weeklyReviews || []).slice().reverse();
+            if (reviews.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align:center; padding:2rem; color:var(--text-secondary);">
+                        <div style="font-size:2rem; margin-bottom:0.5rem;">📭</div>
+                        <p>Aún no tienes revisiones guardadas.</p>
+                        <p style="font-size:0.85rem; margin-top:0.4rem;">Haz tu primera revisión para empezar el historial.</p>
+                    </div>`;
+                return;
+            }
+            const moodEmojis = { 5:'🚀', 4:'😊', 3:'😐', 2:'😔', 1:'🌧️', 0:'😶' };
+            container.innerHTML = reviews.map(r => `
+                <div class="review-history-card" onclick="showReviewDetail('${r.weekKey}')">
+                    <div class="review-history-emoji">${moodEmojis[r.answers.mood] || '📋'}</div>
+                    <div class="review-history-info">
+                        <div class="review-history-date">Semana del ${r.weekLabel}</div>
+                        <div class="review-history-title">${r.answers.nextweek ? '"' + r.answers.nextweek.substring(0,45) + (r.answers.nextweek.length > 45 ? '…' : '') + '"' : 'Sin intención registrada'}</div>
+                    </div>
+                    <div class="review-history-score">${r.answers.energy || '-'}⭐</div>
+                </div>
+            `).join('');
+        }
+
+        function startReview() {
+            reviewAnswers = {};
+            reviewStep = 0;
+            document.getElementById('review-home').style.display = 'none';
+            document.getElementById('review-summary').style.display = 'none';
+            document.getElementById('review-wizard').style.display = 'block';
+            renderReviewStep();
+        }
+
+        function renderReviewStep() {
+            const q = REVIEW_QUESTIONS[reviewStep];
+            const total = REVIEW_QUESTIONS.length;
+
+            // Dots
+            const dotsEl = document.getElementById('review-dots');
+            if (dotsEl) {
+                dotsEl.innerHTML = REVIEW_QUESTIONS.map((_, i) => {
+                    let cls = 'review-dot';
+                    if (i < reviewStep) cls += ' done';
+                    else if (i === reviewStep) cls += ' active';
+                    return `<div class="${cls}"></div>`;
+                }).join('');
+            }
+
+            document.getElementById('review-step-label').textContent = `Paso ${reviewStep + 1} de ${total}`;
+
+            // Botón atrás
+            const backBtn = document.getElementById('review-back-btn');
+            backBtn.style.visibility = reviewStep === 0 ? 'hidden' : 'visible';
+
+            // Botón siguiente
+            const nextBtn = document.getElementById('review-next-btn');
+            nextBtn.textContent = reviewStep === total - 1 ? '✨ Ver mi resumen' : 'Siguiente →';
+
+            // Contenido del paso
+            let innerHtml = '';
+
+            // Caja de contexto en el primer paso
+            const completedTasks = appData.tasks.filter(t => t.completed).length;
+            const totalTasks = appData.tasks.length;
+            const habits = appData.habits || [];
+            const bestStreak = habits.reduce((max, h) => Math.max(max, h.streak || 0), 0);
+            const topHabit = habits.reduce((best, h) => (!best || (h.streak||0) > (best.streak||0)) ? h : best, null);
+
+            if (reviewStep === 0) {
+                innerHtml += `
+                    <div class="review-context-box">
+                        <div class="review-context-row">
+                            <span class="review-context-label">📝 Tareas completadas</span>
+                            <span class="review-context-value">${completedTasks}/${totalTasks}</span>
+                        </div>
+                        <div class="review-context-row">
+                            <span class="review-context-label">🔥 Mejor racha activa</span>
+                            <span class="review-context-value">${bestStreak} días</span>
+                        </div>
+                        ${topHabit ? `<div class="review-context-row">
+                            <span class="review-context-label">⭐ Hábito estrella</span>
+                            <span class="review-context-value">${topHabit.emoji} ${topHabit.name}</span>
+                        </div>` : ''}
+                    </div>`;
+            }
+
+            if (q.type === 'mood') {
+                const current = reviewAnswers[q.id];
+                innerHtml += `<div class="mood-grid">
+                    ${q.options.map(opt => `
+                        <button type="button" class="mood-btn ${current === opt.value ? 'selected' : ''}"
+                            onclick="selectMood(${opt.value})">
+                            <span class="mood-emoji">${opt.emoji}</span>${opt.label}
+                        </button>
+                    `).join('')}
+                </div>`;
+            } else if (q.type === 'stars') {
+                const current = reviewAnswers[q.id] || 0;
+                innerHtml += `<div class="stars-row" id="stars-row">
+                    ${[1,2,3,4,5].map(n => `
+                        <button type="button" class="star-btn ${n <= current ? 'active' : ''}"
+                            onclick="selectStars(${n})">⭐</button>
+                    `).join('')}
+                </div>
+                <p style="text-align:center; font-size:0.85rem; color:var(--text-secondary); margin-top:0.5rem;" id="stars-label">
+                    ${current > 0 ? starsLabel(current) : 'Toca una estrella'}
+                </p>`;
+            } else if (q.type === 'textarea') {
+                const current = reviewAnswers[q.id] || '';
+                innerHtml += `<textarea class="review-textarea" rows="5"
+                    placeholder="${q.placeholder}"
+                    id="review-textarea-input"
+                    onchange="reviewAnswers['${q.id}']=this.value"
+                    oninput="reviewAnswers['${q.id}']=this.value"
+                >${current}</textarea>`;
+            }
+
+            document.getElementById('review-step-container').innerHTML = `
+                <div class="review-step-card">
+                    <div class="review-step-icon">${q.icon}</div>
+                    <div class="review-step-title">${q.title}</div>
+                    <div class="review-step-subtitle">${q.subtitle}</div>
+                    ${innerHtml}
+                </div>`;
+        }
+
+        function starsLabel(n) {
+            return ['','😴 Muy baja energía','😓 Energía baja','😐 Energía regular','😊 Buena energía','🚀 Energía al máximo'][n] || '';
+        }
+
+        function selectMood(value) {
+            reviewAnswers['mood'] = value;
+            renderReviewStep();
+        }
+
+        function selectStars(value) {
+            reviewAnswers['energy'] = value;
+            // Re-render solo la parte de stars sin re-render completo
+            document.querySelectorAll('.star-btn').forEach((btn, i) => {
+                btn.classList.toggle('active', i < value);
+            });
+            const lbl = document.getElementById('stars-label');
+            if (lbl) lbl.textContent = starsLabel(value);
+        }
+
+        function reviewNext() {
+            const q = REVIEW_QUESTIONS[reviewStep];
+            // Validar que haya respuesta
+            if (q.type === 'mood' && reviewAnswers['mood'] === undefined) {
+                showNotification('Elige cómo fue tu semana 😊', 'info'); return;
+            }
+            if (q.type === 'stars' && !reviewAnswers['energy']) {
+                showNotification('Califica tu nivel de energía ⚡', 'info'); return;
+            }
+            if (q.type === 'textarea') {
+                const ta = document.getElementById('review-textarea-input');
+                if (ta) reviewAnswers[q.id] = ta.value.trim();
+                if (!reviewAnswers[q.id]) {
+                    showNotification('Escribe algo, aunque sea una palabra 📝', 'info'); return;
+                }
+            }
+
+            if (reviewStep < REVIEW_QUESTIONS.length - 1) {
+                reviewStep++;
+                renderReviewStep();
+            } else {
+                saveAndShowSummary();
+            }
+        }
+
+        function reviewBack() {
+            if (reviewStep > 0) {
+                reviewStep--;
+                renderReviewStep();
+            }
+        }
+
+        function saveAndShowSummary() {
+            const review = {
+                id: Date.now(),
+                weekKey: getWeekKey(),
+                weekLabel: getWeekLabel(),
+                date: new Date().toISOString(),
+                answers: { ...reviewAnswers },
+                snapshot: {
+                    completedTasks: appData.tasks.filter(t => t.completed).length,
+                    totalTasks: appData.tasks.length,
+                    bestStreak: (appData.habits || []).reduce((max, h) => Math.max(max, h.streak || 0), 0),
+                    totalHabits: (appData.habits || []).length
+                }
+            };
+            if (!appData.weeklyReviews) appData.weeklyReviews = [];
+            appData.weeklyReviews.push(review);
+            saveData();
+
+            document.getElementById('review-wizard').style.display = 'none';
+            renderReviewSummary(review);
+            document.getElementById('review-summary').style.display = 'block';
+        }
+
+        function renderReviewSummary(review) {
+            const moodEmojis = { 5:'🚀', 4:'😊', 3:'😐', 2:'😔', 1:'🌧️', 0:'😶' };
+            const moodLabels = { 5:'Excelente', 4:'Bien', 3:'Regular', 2:'Difícil', 1:'Muy difícil', 0:'Sin palabras' };
+            const mood = review.answers.mood;
+            const energy = review.answers.energy || 0;
+            const score = Math.round(((mood / 5) * 50) + (energy * 10));
+            const snap = review.snapshot;
+
+            // Generar insight personalizado
+            let insight = '';
+            if (score >= 80) {
+                insight = `Semana sobresaliente. ${snap.bestStreak > 0 ? `Tu racha de <span class="insight-highlight">${snap.bestStreak} días</span> lo confirma.` : ''} Identifica qué hiciste diferente y repítelo la próxima semana.`;
+            } else if (score >= 60) {
+                insight = `Semana sólida. ${snap.completedTasks > 0 ? `Completaste <span class="insight-highlight">${snap.completedTasks} tareas</span>.` : ''} Hay espacio para crecer — tu intención de esta semana ya es el primer paso.`;
+            } else if (score >= 40) {
+                insight = `Semana desafiante. Que hayas llegado hasta aquí a reflexionar ya es un logro. Lo que te frenó esta semana es exactamente lo que necesitas trabajar.`;
+            } else {
+                insight = `Semana difícil — y eso está bien. Reconocerlo es el acto más valiente. Descansa, sé amable contigo, y mañana es otro día.`;
+            }
+
+            const consistencyMsg = (appData.weeklyReviews || []).length >= 4
+                ? `🎖️ <strong>${appData.weeklyReviews.length} revisiones completadas</strong> — la consistencia es tu superpoder.`
+                : `Revisión #${appData.weeklyReviews.length}. Hazlo cada semana y verás patrones que cambian todo.`;
+
+            document.getElementById('review-summary').innerHTML = `
+                <div class="summary-hero">
+                    <div style="font-size:3rem; margin-bottom:0.5rem;">${moodEmojis[mood] || '📋'}</div>
+                    <div class="summary-score">${score}</div>
+                    <div class="summary-score-label">Puntuación semanal · ${moodLabels[mood] || ''}</div>
+                    <div style="margin-top:0.8rem; font-size:0.85rem; opacity:0.85;">Semana del ${review.weekLabel}</div>
+                </div>
+
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <div class="summary-card-icon">📝</div>
+                        <div class="summary-card-value">${snap.completedTasks}/${snap.totalTasks}</div>
+                        <div class="summary-card-label">Tareas completadas</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-card-icon">🔥</div>
+                        <div class="summary-card-value">${snap.bestStreak}</div>
+                        <div class="summary-card-label">Mejor racha (días)</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-card-icon">⚡</div>
+                        <div class="summary-card-value">${'⭐'.repeat(energy)}</div>
+                        <div class="summary-card-label">Energía de la semana</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-card-icon">🧘</div>
+                        <div class="summary-card-value">${snap.totalHabits}</div>
+                        <div class="summary-card-label">Hábitos activos</div>
+                    </div>
+                </div>
+
+                ${review.answers.wins ? `
+                <div class="insight-card">
+                    <div class="insight-card-title">🏆 Tu mayor logro</div>
+                    <div class="insight-card-content">${review.answers.wins}</div>
+                </div>` : ''}
+
+                ${review.answers.obstacle ? `
+                <div class="insight-card">
+                    <div class="insight-card-title">🧱 Lo que te frenó</div>
+                    <div class="insight-card-content">${review.answers.obstacle}</div>
+                </div>` : ''}
+
+                ${review.answers.nextweek ? `
+                <div class="insight-card" style="border-left: 4px solid var(--primary-color);">
+                    <div class="insight-card-title">🎯 Tu intención para la próxima semana</div>
+                    <div class="insight-card-content" style="font-weight:600; color:var(--primary-color);">${review.answers.nextweek}</div>
+                </div>` : ''}
+
+                <div class="insight-card" style="background: linear-gradient(135deg, rgba(124,77,255,0.06), rgba(68,138,255,0.04));">
+                    <div class="insight-card-title">✨ Reflexión de Rose</div>
+                    <div class="insight-card-content">${insight}</div>
+                    <div style="margin-top:0.8rem; font-size:0.82rem; color:var(--text-secondary);">${consistencyMsg}</div>
+                </div>
+
+                <button class="btn btn-primary" onclick="closeReviewSummary()" style="margin-bottom:1rem;">
+                    ← Volver al inicio
+                </button>
+            `;
+        }
+
+        function closeReviewSummary() {
+            document.getElementById('review-summary').style.display = 'none';
+            document.getElementById('review-home').style.display = 'block';
+            initReviewPage();
+        }
+
+        function showReviewDetail(weekKey) {
+            const review = (appData.weeklyReviews || []).find(r => r.weekKey === weekKey);
+            if (!review) return;
+            document.getElementById('review-home').style.display = 'none';
+            renderReviewSummary(review);
+            document.getElementById('review-summary').style.display = 'block';
+        }
+
+        // Event listeners revisión semanal
+        document.getElementById('start-review-btn').addEventListener('click', startReview);
+        document.getElementById('review-next-btn').addEventListener('click', reviewNext);
+        document.getElementById('review-back-btn').addEventListener('click', reviewBack);
+
+        // Integrar con navigateToPage
+        const _origNavigate = navigateToPage;
+        navigateToPage = function(pageName) {
+            _origNavigate(pageName);
+            if (pageName === 'semana') {
+                initReviewPage();
+            }
+        };
+
+        // ========== SISTEMA DE TUTORIAL ==========
+        const tutorialSteps = [
+            {
+                icon: '🌹',
+                title: '¡Bienvenido a Rose!',
+                description: 'Tu compañero de vida para crecer día a día',
+                features: [
+                    { icon: '✅', text: 'Organiza tus tareas y prioridades personales' },
+                    { icon: '🔁', text: 'Construye rutinas que transformen tu día' },
+                    { icon: '🎯', text: 'Define metas y mide tu progreso real' },
+                    { icon: '❤️', text: 'Cuida tu bienestar emocional y relaciones' }
+                ]
+            },
+            {
+                icon: '✅',
+                title: 'Gestiona lo que importa',
+                description: 'Nunca olvides lo que de verdad necesitas hacer',
                 features: [
                     { icon: '➕', text: 'Crea tareas con fechas límite y prioridades' },
                     { icon: '✅', text: 'Marca tareas como completadas' },
@@ -4479,24 +6149,24 @@
                 ]
             },
             {
-                icon: '📚',
-                title: 'Tu Horario y Calificaciones',
-                description: 'Todo tu semestre en un solo lugar',
+                icon: '🌱',
+                title: 'Tus Áreas de Vida',
+                description: 'Salud, trabajo, relaciones, finanzas — todo en un solo lugar',
                 features: [
-                    { icon: '🗓️', text: 'Registra tu horario de clases semanal' },
-                    { icon: '📊', text: 'Registra calificaciones por materia' },
-                    { icon: '🎯', text: 'Calcula tu promedio automáticamente' },
-                    { icon: '⏰', text: 'Ve cuál es tu próxima clase' }
+                    { icon: '🔁', text: 'Registra tus rutinas semanales' },
+                    { icon: '📊', text: 'Mide tu progreso por área de vida' },
+                    { icon: '🎯', text: 'Define qué importa más en este momento' },
+                    { icon: '⚡', text: 'Ve cuál es tu próxima rutina del día' }
                 ]
             },
             {
                 icon: '🎉',
-                title: '¡Listo para Comenzar!',
-                description: 'Empieza a organizar tu vida universitaria ahora',
+                title: '¡Listo para empezar!',
+                description: 'Rose crece contigo — úsalo todos los días',
                 features: [
-                    { icon: '🏠', text: 'Explora desde el inicio para ver todas las funciones' },
+                    { icon: '🏠', text: 'Explora desde Inicio para ver el resumen del día' },
                     { icon: '➕', text: 'Usa los botones + para agregar contenido' },
-                    { icon: '⚙️', text: 'Personaliza en Ajustes (icono de engranaje)' },
+                    { icon: '⚙️', text: 'Personaliza en Ajustes según tus preferencias' },
                     { icon: '🌙', text: 'Activa el modo oscuro si lo prefieres' }
                 ]
             }
@@ -4559,7 +6229,7 @@
             const overlay = document.getElementById('tutorial-overlay');
             overlay.style.display = 'none';
             localStorage.setItem('hasSeenTutorial', 'true');
-            showNotification('¡Bienvenido! Explora todas las funciones 🎉');
+            showNotification('¡Bienvenido a Rose! Explora todas las funciones 🌹');
         }
 
         // Event listeners para el tutorial
@@ -4574,28 +6244,8 @@
             }
         });
 
-        // Registrar Service Worker para PWA
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker
-                    .register('/sw.js')
-                    .then((registration) => {
-                        console.log('✅ Service Worker registrado:', registration.scope);
-                        
-                        registration.addEventListener('updatefound', () => {
-                            const newWorker = registration.installing;
-                            newWorker.addEventListener('statechange', () => {
-                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                    showNotification('Nueva versión disponible. Recarga la página para actualizar.', 'info');
-                                }
-                            });
-                        });
-                    })
-                    .catch((error) => {
-                        console.log('❌ Error al registrar Service Worker:', error);
-                    });
-            });
-        }
+        // Service Worker desactivado en entorno de previsualización
+        // (se activa al desplegar la app en un servidor propio con sw.js)
 
     </script>
 </body>
