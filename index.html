@@ -4145,13 +4145,9 @@
         //  FIREBASE AUTH + SYNC — Rose v2.1
         // ═══════════════════════════════════════════════════
         const FIREBASE_URL    = 'https://bdfirebase-62a1b-default-rtdb.firebaseio.com';
-        // ⚠️  IMPORTANTE: Reemplaza este valor con la API Key de tu proyecto Firebase.
-        //     La encuentras en: Firebase Console → Configuración del proyecto → General → Clave de API web
-        //     Ejemplo: 'AIzaSyABC123...'
-        const firebaseConfig = {
-  apiKey: "AIzaSyB1LozSlXJhESrDoC38ZE9ukNraulgyUkU",
+        const FIREBASE_API_KEY = 'AIzaSyB1LozSlXJhESrDoC38ZE9ukNraulgyUkU';
 
-};
+        // Estado de sesión
         let currentUser = null;   // { uid, email, displayName, idToken }
 
         // ── Cambiar tab login/registro ──
