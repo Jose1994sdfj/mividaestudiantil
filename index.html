@@ -4298,13 +4298,17 @@
             document.getElementById('sync-overlay').style.display = 'flex';
             document.getElementById('sync-message').textContent   = `Hola ${displayName}, cargando tus datos...`;
 
-            // Cargar datos desde Firebase
-            await loadAllDataFromFirebase();
+            try {
+                // Cargar datos desde Firebase (con timeout interno)
+                await loadAllDataFromFirebase();
+            } catch(err) {
+                console.warn('enterApp: carga Firebase falló, continuando con datos locales', err);
+            }
 
             // Guardar nombre
             localStorage.setItem('institutionName', displayName);
 
-            // Ocultar overlay y mostrar app
+            // Ocultar overlay y mostrar app — siempre, sin importar errores previos
             document.getElementById('sync-overlay').style.display = 'none';
             document.getElementById('app-header').style.display   = '';
             document.getElementById('app-main').style.display     = '';
@@ -4357,11 +4361,20 @@
             const path = userPath();
             if (!path) return;
             try {
-                const res = await fetch(`${path}/data.json`);
-                if (!res.ok) throw new Error('GET falló');
+                // idToken requerido por las reglas de auth de Firebase
+                const token = currentUser?.idToken || '';
+                const url   = `${path}/data.json${token ? '?auth=' + token : ''}`;
+
+                // Timeout de 8s para no quedarse colgado en Android/redes lentas
+                const controller = new AbortController();
+                const timeoutId  = setTimeout(() => controller.abort(), 8000);
+
+                const res = await fetch(url, { signal: controller.signal });
+                clearTimeout(timeoutId);
+
+                if (!res.ok) throw new Error('GET ' + res.status);
                 const remote = await res.json();
                 if (remote) {
-                    // Mezclar con defaults para que siempre existan todas las claves
                     appData = {
                         tasks:         remote.tasks         || [],
                         events:        remote.events        || [],
@@ -4373,14 +4386,12 @@
                         weeklyReviews: remote.weeklyReviews || [],
                         badges:        remote.badges        || {}
                     };
-                    // Persistir localmente también
                     localStorage.setItem('upmhAppData', JSON.stringify(appData));
                 }
             } catch(err) {
-                console.warn('No se pudo cargar desde Firebase, usando datos locales:', err.message);
-                // Fallback a localStorage
+                console.warn('Firebase load falló, usando datos locales:', err.message);
                 const saved = localStorage.getItem('upmhAppData');
-                if (saved) appData = JSON.parse(saved);
+                if (saved) try { appData = JSON.parse(saved); } catch(e) {}
             }
         }
 
@@ -4389,13 +4400,14 @@
             // 1. Siempre guardar localmente (instantáneo)
             localStorage.setItem('upmhAppData', JSON.stringify(appData));
             // 2. Sincronizar en Firebase en segundo plano (no bloquea la UI)
-            const path = userPath();
+            const path  = userPath();
+            const token = currentUser?.idToken || '';
             if (!path) return;
-            fetch(`${path}/data.json`, {
+            fetch(`${path}/data.json${token ? '?auth=' + token : ''}`, {
                 method:  'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body:    JSON.stringify(appData)
-            }).catch(err => console.warn('Firebase sync falló (se guardó localmente):', err.message));
+            }).catch(err => console.warn('Firebase sync falló (guardado localmente):', err.message));
         }
 
         // ── Funciones de emoción individual (compatibilidad con código anterior) ──
