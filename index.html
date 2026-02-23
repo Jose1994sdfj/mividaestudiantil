@@ -4271,67 +4271,35 @@
         async function enterApp(displayName) {
             document.getElementById('auth-screen').style.display  = 'none';
             document.getElementById('sync-overlay').style.display = 'flex';
-            document.getElementById('sync-message').textContent   = `Hola ${displayName}, cargando...`;
-
-            // Panel de debug visible en pantalla (para Android sin DevTools)
-            const dbg = document.createElement('div');
-            dbg.id = 'debug-panel';
-            dbg.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:rgba(0,0,0,0.85);color:#0f0;font-size:11px;font-family:monospace;padding:8px;z-index:99999;max-height:40vh;overflow-y:auto;';
-            document.body.appendChild(dbg);
-            function log(msg) {
-                const line = document.createElement('div');
-                line.textContent = new Date().toLocaleTimeString() + ' ' + msg;
-                dbg.appendChild(line);
-                dbg.scrollTop = dbg.scrollHeight;
-            }
-            window._dbgLog = log;
-            log('enterApp iniciado');
+            document.getElementById('sync-message').textContent   = `Hola ${displayName}, cargando tus datos...`;
 
             try {
-                log('cargando Firebase...');
                 await loadAllDataFromFirebase();
-                log('Firebase OK');
             } catch(err) {
-                log('Firebase ERROR: ' + err.message);
+                console.warn('Firebase load falló:', err.message);
             } finally {
-                log('mostrando app...');
                 document.getElementById('sync-overlay').style.display = 'none';
                 document.getElementById('app-header').style.display   = '';
                 document.getElementById('app-main').style.display     = '';
                 document.getElementById('app-nav').style.display      = '';
-                log('overlay oculto');
             }
 
             localStorage.setItem('institutionName', displayName);
 
             try {
-                log('loadTheme...');
                 loadTheme();
-                log('updateInstitutionName...');
                 updateInstitutionName(displayName);
-                log('initializeApp...');
                 initializeApp();
-                log('setupEventListeners...');
                 setupEventListeners();
-                log('renderAllData...');
                 renderAllData();
-                log('setupGlobalDeleteListeners...');
                 setupGlobalDeleteListeners();
-                log('initializeTutorial...');
                 initializeTutorial();
-                log('scheduleAllNotifications...');
                 scheduleAllNotifications();
-                log('checkTasksDueToday...');
                 checkTasksDueToday();
-                log('✅ App lista');
-                // Ocultar debug después de 15s si todo fue bien
-                setTimeout(() => { if (dbg.parentNode) dbg.parentNode.removeChild(dbg); }, 15000);
+                setTimeout(() => { evaluateBadges(); updateBadgeCounter(); }, 1200);
             } catch(initErr) {
-                log('❌ ERROR INIT: ' + initErr.message);
-                log('Stack: ' + (initErr.stack || '').substring(0, 200));
+                console.error('Error init:', initErr);
             }
-
-            setTimeout(() => { evaluateBadges(); updateBadgeCounter(); }, 1200);
         }
 
         // ── Traducir errores de Firebase Auth ──
@@ -6277,10 +6245,12 @@
         }
 
         function isHabitCompletedToday(habit) {
+            if (!habit || !habit.completedDates) return false;
             return habit.completedDates.includes(getTodayString());
         }
 
         function recalcStreak(habit) {
+            if (!habit.completedDates) habit.completedDates = [];
             if (habit.completedDates.length === 0) {
                 habit.streak = 0;
                 return;
@@ -6598,7 +6568,7 @@
             let totalPossible = habits.length * 7;
             let totalDone = 0;
             habits.forEach(h => {
-                weekDays.forEach(d => { if (h.completedDates.includes(d)) totalDone++; });
+                weekDays.forEach(d => { if ((h.completedDates||[]).includes(d)) totalDone++; });
             });
             const habitPct = totalPossible > 0 ? Math.round((totalDone / totalPossible) * 100) : 0;
 
