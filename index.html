@@ -3208,32 +3208,31 @@
             on('see-all-events',  'click', function(e) { e.preventDefault(); showAllItems('events'); });
             on('see-all-people',  'click', function(e) { e.preventDefault(); showAllItems('people'); });
 
-            // Delegación de eventos (click global)
+            // Delegación global — maneja todos los elementos dinámicos en un solo listener
             document.addEventListener('click', function(e) {
-                const id = e.target && e.target.id;
-                if (id === 'add-class-btn')      openClassModal();
-                if (id === 'add-subject-btn')    openSubjectModal();
-                if (id === 'manage-classes-btn') showManageClassesModal();
-                if (id === 'manage-subjects-btn') showManageSubjectsModal();
-
-                // Toggle emociones de persona (elementos dinámicos)
-                let target = e.target;
-                while (target && target !== document.body) {
-                    if (target.classList && target.classList.contains('toggle-person-emotions-btn')) {
-                        const personName = target.getAttribute('data-person');
-                        if (personName) togglePersonEmotions(personName);
-                        break;
-                    }
-                    target = target.parentElement;
-                }
-            });
-
-            // Hábitos — delegación para botones generados dinámicamente
-            document.addEventListener('click', function(e) {
+                // Hábitos
                 const checkBtn  = e.target.closest('[data-toggle-habit]');
                 const deleteBtn = e.target.closest('[data-delete-habit]');
-                if (checkBtn)  { e.stopPropagation(); toggleHabitToday(parseInt(checkBtn.dataset.toggleHabit)); }
-                if (deleteBtn) { e.stopPropagation(); deleteHabit(parseInt(deleteBtn.dataset.deleteHabit)); }
+                if (checkBtn)  { toggleHabitToday(parseInt(checkBtn.dataset.toggleHabit)); return; }
+                if (deleteBtn) { deleteHabit(parseInt(deleteBtn.dataset.deleteHabit)); return; }
+
+                // Botones de áreas/clases
+                const id = e.target && e.target.id;
+                if (id === 'add-class-btn')       { openClassModal();           return; }
+                if (id === 'add-subject-btn')     { openSubjectModal();         return; }
+                if (id === 'manage-classes-btn')  { showManageClassesModal();   return; }
+                if (id === 'manage-subjects-btn') { showManageSubjectsModal();  return; }
+
+                // Toggle emociones de persona
+                let t = e.target;
+                while (t && t !== document.body) {
+                    if (t.classList && t.classList.contains('toggle-person-emotions-btn')) {
+                        const personName = t.getAttribute('data-person');
+                        if (personName) togglePersonEmotions(personName);
+                        return;
+                    }
+                    t = t.parentElement;
+                }
             });
 
             addTouchSupport();
