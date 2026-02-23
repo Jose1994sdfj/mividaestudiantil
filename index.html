@@ -3208,35 +3208,53 @@
             on('see-all-events',  'click', function(e) { e.preventDefault(); showAllItems('events'); });
             on('see-all-people',  'click', function(e) { e.preventDefault(); showAllItems('people'); });
 
-            // Delegación global — maneja todos los elementos dinámicos en un solo listener
+            // ── ÚNICO listener global de click — maneja todos los elementos dinámicos ──
             document.addEventListener('click', function(e) {
+                const tgt = e.target;
+
                 // Hábitos
-                const checkBtn  = e.target.closest('[data-toggle-habit]');
-                const deleteBtn = e.target.closest('[data-delete-habit]');
-                if (checkBtn)  { toggleHabitToday(parseInt(checkBtn.dataset.toggleHabit)); return; }
-                if (deleteBtn) { deleteHabit(parseInt(deleteBtn.dataset.deleteHabit)); return; }
+                const toggleHabit = tgt.closest('[data-toggle-habit]');
+                if (toggleHabit) { toggleHabitToday(parseInt(toggleHabit.dataset.toggleHabit)); return; }
+
+                const deleteHabitBtn = tgt.closest('[data-delete-habit]');
+                if (deleteHabitBtn) { deleteHabit(parseInt(deleteHabitBtn.dataset.deleteHabit)); return; }
 
                 // Tareas — completar
-                const completeTask = e.target.closest('[data-complete-task]');
+                const completeTask = tgt.closest('[data-complete-task]');
                 if (completeTask) { toggleTaskComplete(parseInt(completeTask.dataset.completeTask)); return; }
 
-                // Botones de áreas/clases
-                const id = e.target && e.target.id;
-                if (id === 'add-class-btn')       { openClassModal();           return; }
-                if (id === 'add-subject-btn')     { openSubjectModal();         return; }
-                if (id === 'manage-classes-btn')  { showManageClassesModal();   return; }
-                if (id === 'manage-subjects-btn') { showManageSubjectsModal();  return; }
+                // Emoji picker en modal hábito
+                const emojiOpt = tgt.closest('.emoji-option');
+                if (emojiOpt && emojiOpt.closest('#habit-emoji-picker')) {
+                    document.querySelectorAll('.emoji-option').forEach(el => el.classList.remove('selected'));
+                    emojiOpt.classList.add('selected');
+                    return;
+                }
+
+                // Category pills en modal hábito
+                const catPill = tgt.closest('.category-pill');
+                if (catPill && catPill.closest('#habit-category-pills')) {
+                    document.querySelectorAll('.category-pill').forEach(el => el.classList.remove('selected'));
+                    catPill.classList.add('selected');
+                    return;
+                }
 
                 // Toggle emociones de persona
-                let t = e.target;
-                while (t && t !== document.body) {
-                    if (t.classList && t.classList.contains('toggle-person-emotions-btn')) {
-                        const personName = t.getAttribute('data-person');
-                        if (personName) togglePersonEmotions(personName);
-                        return;
-                    }
-                    t = t.parentElement;
+                const personEmotionBtn = tgt.closest('.toggle-person-emotions-btn');
+                if (personEmotionBtn) {
+                    const personName = personEmotionBtn.getAttribute('data-person');
+                    if (personName) togglePersonEmotions(personName);
+                    return;
                 }
+
+                // Botones por ID (dinámicos o duplicados)
+                const id = tgt.id;
+                if (id === 'add-class-btn')        { openClassModal();           return; }
+                if (id === 'add-subject-btn')      { openSubjectModal();         return; }
+                if (id === 'add-subject-btn-2')    { openSubjectModal();         return; }
+                if (id === 'manage-classes-btn')   { showManageClassesModal();   return; }
+                if (id === 'manage-subjects-btn')  { showManageSubjectsModal();  return; }
+                if (id === 'manage-subjects-btn-2'){ showManageSubjectsModal();  return; }
             });
 
             addTouchSupport();
@@ -5401,7 +5419,7 @@
                         ` : ''}
                         
                         <div style="margin-top: 1rem;">
-                            <button class="btn toggle-person-emotions-btn" onclick="togglePersonEmotions('${personName}')" style="width: 100%; background: var(--bg-primary); color: var(--text-primary); border: 1px solid var(--border-color); padding: 0.8rem;">
+                            <button class="btn toggle-person-emotions-btn" data-person="${personName}" style="width: 100%; background: var(--bg-primary); color: var(--text-primary); border: 1px solid var(--border-color); padding: 0.8rem;">
                                 <i class="fas fa-chevron-down"></i> Ver todos los registros
                             </button>
                             <div id="person-emotions-${personName.replace(/\s+/g, '-')}" style="display: none; margin-top: 1rem;">
@@ -6538,19 +6556,7 @@
             document.querySelector('.category-pill[data-category="salud"]')?.classList.add('selected');
         }
 
-        // Emoji picker interactivity
-        document.addEventListener('click', function(e) {
-            const emojiOpt = e.target.closest('.emoji-option');
-            if (emojiOpt && emojiOpt.closest('#habit-emoji-picker')) {
-                document.querySelectorAll('.emoji-option').forEach(el => el.classList.remove('selected'));
-                emojiOpt.classList.add('selected');
-            }
-            const catPill = e.target.closest('.category-pill');
-            if (catPill && catPill.closest('#habit-category-pills')) {
-                document.querySelectorAll('.category-pill').forEach(el => el.classList.remove('selected'));
-                catPill.classList.add('selected');
-            }
-        });
+        // Emoji picker y category pills — manejados en el listener global
 
         // Habit form submit
         document.getElementById('habit-form').addEventListener('submit', function(e) {
@@ -8110,15 +8116,7 @@
             if (mainContainer) container.innerHTML = mainContainer.innerHTML;
         }
 
-        // ── Conectar botones duplicados del tab áreas ──
-        document.addEventListener('click', function(e) {
-            if (e.target && e.target.id === 'add-subject-btn-2') {
-                document.getElementById('subject-modal').style.display = 'flex';
-            }
-            if (e.target && e.target.id === 'manage-subjects-btn-2') {
-                showManageSubjectsModal();
-            }
-        });
+        // Botones duplicados del tab áreas — manejados en el listener global
 
         // ── Re-dibujar al cambiar de tema (los colores cambian) ──
         const _origSetTheme = typeof setTheme === 'function' ? setTheme : null;
