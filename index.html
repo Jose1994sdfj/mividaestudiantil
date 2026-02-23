@@ -4148,8 +4148,16 @@
         // ⚠️  IMPORTANTE: Reemplaza este valor con la API Key de tu proyecto Firebase.
         //     La encuentras en: Firebase Console → Configuración del proyecto → General → Clave de API web
         //     Ejemplo: 'AIzaSyABC123...'
-        const FIREBASE_API_KEY = 'AIzaSyB1LozSlXJhESrDoC38ZE9ukNraulgyUkU';
-        // Estado de sesión
+        const firebaseConfig = {
+  apiKey: "AIzaSyB1LozSlXJhESrDoC38ZE9ukNraulgyUkU",
+  authDomain: "bdfirebase-62a1b.firebaseapp.com",
+  databaseURL: "https://bdfirebase-62a1b-default-rtdb.firebaseio.com",
+  projectId: "bdfirebase-62a1b",
+  storageBucket: "bdfirebase-62a1b.firebasestorage.app",
+  messagingSenderId: "862846715518",
+  appId: "1:862846715518:web:39d9b85b418c9dfccc3a2f",
+  measurementId: "G-Y2Q5JPNQC8"
+};
         let currentUser = null;   // { uid, email, displayName, idToken }
 
         // ── Cambiar tab login/registro ──
