@@ -3079,67 +3079,62 @@
             });
         }
 
+        let _appInitialized = false;
         function initializeApp() {
-            // Cargar datos guardados
+            // Cargar datos guardados solo si aún no se cargaron via Firebase
             const savedData = localStorage.getItem('upmhAppData');
-            if (savedData) {
-                appData = JSON.parse(savedData);
+            if (savedData && (!appData.tasks || appData.tasks.length === 0)) {
+                try { appData = JSON.parse(savedData); } catch(e) {}
             }
-            
+
             // Asegurar que existan las propiedades necesarias
-            if (!appData.people) {
-                appData.people = [
-                    { id: 1, name: "Ana García", relation: "Amigo/a", emoji: "👫" },
-                    { id: 2, name: "Carlos Mendoza", relation: "Pareja", emoji: "💑" },
-                    { id: 3, name: "Prof. Rodríguez", relation: "Profesor/a", emoji: "👨‍🏫" }
-                ];
-                saveData();
-            }
-            if (!appData.emotions) {
-                appData.emotions = [];
-            }
-            if (!appData.habits) {
-                appData.habits = [
-                    { id: 1, name: "Beber 2L de agua", emoji: "💧", frequency: "daily", completedDates: [], streak: 0, bestStreak: 0, category: "salud" },
-                    { id: 2, name: "Hacer ejercicio", emoji: "🏋️", frequency: "daily", completedDates: [], streak: 0, bestStreak: 0, category: "salud" },
-                    { id: 3, name: "Leer 20 minutos", emoji: "📖", frequency: "daily", completedDates: [], streak: 0, bestStreak: 0, category: "mente" }
-                ];
-                saveData();
-            }
-            if (!appData.weeklyReviews) {
-                appData.weeklyReviews = [];
-                saveData();
-            }
-            if (!appData.badges) {
-                appData.badges = {};
-                saveData();
-            }
+            if (!appData.people)       { appData.people = []; }
+            if (!appData.emotions)     { appData.emotions = []; }
+            if (!appData.habits)       { appData.habits = []; }
+            if (!appData.tasks)        { appData.tasks = []; }
+            if (!appData.events)       { appData.events = []; }
+            if (!appData.schedule)     { appData.schedule = []; }
+            if (!appData.subjects)     { appData.subjects = []; }
+            if (!appData.weeklyReviews){ appData.weeklyReviews = []; }
+            if (!appData.badges)       { appData.badges = {}; }
 
-            // Actualizar fecha y hora
+            // Actualizar fecha y hora (solo registrar el interval una vez)
             updateDateTime();
-            setInterval(updateDateTime, 60000);
+            if (!_appInitialized) {
+                setInterval(updateDateTime, 60000);
+                _appInitialized = true;
+            }
 
-            // Actualizar mensaje de bienvenida
             updateWelcomeMessage();
         }
 
+        let _listenersAttached = false;
         function setupEventListeners() {
-            // Modales
-            document.getElementById('add-task-btn').addEventListener('click', openTaskModal);
-            document.getElementById('add-person-btn').addEventListener('click', openPersonModal);
-            document.getElementById('add-event-btn').addEventListener('click', openEventModal);
+            // Evitar registrar listeners múltiples veces
+            if (_listenersAttached) return;
+            _listenersAttached = true;
+
+            // Helper seguro: no explota si el elemento no existe
+            function on(id, event, handler) {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener(event, handler);
+            }
+
+            // Modales de agregar
+            on('add-task-btn',   'click', openTaskModal);
+            on('add-person-btn', 'click', openPersonModal);
+            on('add-event-btn',  'click', openEventModal);
 
             // Formularios
-            document.getElementById('task-form').addEventListener('submit', handleTaskSubmit);
-            document.getElementById('person-form').addEventListener('submit', handlePersonSubmit);
-            document.getElementById('event-form').addEventListener('submit', handleEventSubmit);
-            
-            document.getElementById('class-form').addEventListener('submit', handleClassSubmit);
-            document.getElementById('subject-form').addEventListener('submit', handleSubjectSubmit);
+            on('task-form',    'submit', handleTaskSubmit);
+            on('person-form',  'submit', handlePersonSubmit);
+            on('event-form',   'submit', handleEventSubmit);
+            on('class-form',   'submit', handleClassSubmit);
+            on('subject-form', 'submit', handleSubjectSubmit);
 
             // Eliminación
-            document.getElementById('cancel-delete').addEventListener('click', closeDeleteModal);
-            document.getElementById('confirm-delete').addEventListener('click', confirmDelete);
+            on('cancel-delete',  'click', closeDeleteModal);
+            on('confirm-delete', 'click', confirmDelete);
 
             // Cerrar modales
             document.querySelectorAll('.close-modal').forEach(btn => {
@@ -3156,54 +3151,35 @@
             });
 
             // Botones del header
-            document.getElementById('notifications-btn').addEventListener('click', showNotificationsModal);
-            document.getElementById('settings-btn').addEventListener('click', showSettingsModal);
-            document.getElementById('badges-btn').addEventListener('click', showBadgesModal);
+            on('notifications-btn', 'click', showNotificationsModal);
+            on('settings-btn',      'click', showSettingsModal);
+            on('badges-btn',        'click', showBadgesModal);
 
             // Ver todos
-            document.getElementById('see-all-tasks').addEventListener('click', function(e) {
-                e.preventDefault();
-                showAllItems('tasks');
-            });
-            document.getElementById('see-all-events').addEventListener('click', function(e) {
-                e.preventDefault();
-                showAllItems('events');
-            });
-            document.getElementById('see-all-people').addEventListener('click', function(e) {
-                e.preventDefault();
-                showAllItems('people');
-            });
+            on('see-all-tasks',   'click', function(e) { e.preventDefault(); showAllItems('tasks'); });
+            on('see-all-events',  'click', function(e) { e.preventDefault(); showAllItems('events'); });
+            on('see-all-people',  'click', function(e) { e.preventDefault(); showAllItems('people'); });
 
-            // Botones de agregar y gestionar clase y materia (se agregan con delegación de eventos)
+            // Delegación de eventos (click global)
             document.addEventListener('click', function(e) {
-                if (e.target && e.target.id === 'add-class-btn') {
-                    openClassModal();
-                }
-                if (e.target && e.target.id === 'add-subject-btn') {
-                    openSubjectModal();
-                }
-                if (e.target && e.target.id === 'manage-classes-btn') {
-                    showManageClassesModal();
-                }
-                if (e.target && e.target.id === 'manage-subjects-btn') {
-                    showManageSubjectsModal();
-                }
-                
-                // Toggle person emotions (delegación para elementos dinámicos)
+                const id = e.target && e.target.id;
+                if (id === 'add-class-btn')      openClassModal();
+                if (id === 'add-subject-btn')    openSubjectModal();
+                if (id === 'manage-classes-btn') showManageClassesModal();
+                if (id === 'manage-subjects-btn') showManageSubjectsModal();
+
+                // Toggle emociones de persona (elementos dinámicos)
                 let target = e.target;
                 while (target && target !== document.body) {
                     if (target.classList && target.classList.contains('toggle-person-emotions-btn')) {
                         const personName = target.getAttribute('data-person');
-                        if (personName) {
-                            togglePersonEmotions(personName);
-                        }
+                        if (personName) togglePersonEmotions(personName);
                         break;
                     }
                     target = target.parentElement;
                 }
             });
 
-            // Agregar soporte para touch events en elementos interactivos
             addTouchSupport();
         }
 
@@ -4293,42 +4269,38 @@
 
         // ── Entrar a la app tras login/registro ──
         async function enterApp(displayName) {
-            // Mostrar overlay de carga
             document.getElementById('auth-screen').style.display  = 'none';
             document.getElementById('sync-overlay').style.display = 'flex';
             document.getElementById('sync-message').textContent   = `Hola ${displayName}, cargando tus datos...`;
 
             try {
-                // Cargar datos desde Firebase (con timeout interno)
                 await loadAllDataFromFirebase();
             } catch(err) {
                 console.warn('enterApp: carga Firebase falló, continuando con datos locales', err);
+            } finally {
+                // SIEMPRE ocultar overlay y mostrar app, sin importar lo que pasó
+                document.getElementById('sync-overlay').style.display = 'none';
+                document.getElementById('app-header').style.display   = '';
+                document.getElementById('app-main').style.display     = '';
+                document.getElementById('app-nav').style.display      = '';
             }
 
-            // Guardar nombre
             localStorage.setItem('institutionName', displayName);
 
-            // Ocultar overlay y mostrar app — siempre, sin importar errores previos
-            document.getElementById('sync-overlay').style.display = 'none';
-            document.getElementById('app-header').style.display   = '';
-            document.getElementById('app-main').style.display     = '';
-            document.getElementById('app-nav').style.display      = '';
-
-            // Inicializar la app normalmente
-            loadTheme();
-            updateInstitutionName(displayName);
-            initializeApp();
-            setupEventListeners();
-            renderAllData();
-            setupGlobalDeleteListeners();
-            initializeTutorial();
-
-            // Arrancar notificaciones programadas
-            scheduleAllNotifications();
-            checkTasksDueToday();
-
-            // Evaluar insignias al iniciar (por si hay nuevas con datos existentes)
-            setTimeout(() => { evaluateBadges(); updateBadgeCounter(); }, 1200);
+            try {
+                loadTheme();
+                updateInstitutionName(displayName);
+                initializeApp();
+                setupEventListeners();
+                renderAllData();
+                setupGlobalDeleteListeners();
+                initializeTutorial();
+                scheduleAllNotifications();
+                checkTasksDueToday();
+                setTimeout(() => { evaluateBadges(); updateBadgeCounter(); }, 1200);
+            } catch(initErr) {
+                console.error('Error inicializando la app:', initErr);
+            }
         }
 
         // ── Traducir errores de Firebase Auth ──
@@ -4425,20 +4397,46 @@
 
         // ── Verificar sesión existente al cargar la página ──
         async function checkExistingSession() {
-            loadTheme(); // Cargar tema inmediatamente para evitar flash
+            loadTheme();
             const saved = localStorage.getItem('roseSession');
-            if (saved) {
-                try {
-                    currentUser = JSON.parse(saved);
-                    const displayName = currentUser.displayName || currentUser.email.split('@')[0];
-                    await enterApp(displayName);
-                    return;
-                } catch(e) {
-                    localStorage.removeItem('roseSession');
-                }
+            if (!saved) {
+                document.getElementById('auth-screen').style.display = 'flex';
+                return;
             }
-            // Sin sesión → mostrar pantalla de login
-            document.getElementById('auth-screen').style.display = 'flex';
+
+            try {
+                currentUser = JSON.parse(saved);
+
+                // Refrescar el idToken (expira cada 1h) usando el refreshToken
+                if (currentUser.refreshToken) {
+                    try {
+                        const refreshRes = await fetch(
+                            `https://securetoken.googleapis.com/v1/token?key=${FIREBASE_API_KEY}`,
+                            { method: 'POST',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({ grant_type: 'refresh_token', refresh_token: currentUser.refreshToken }) }
+                        );
+                        const refreshData = await refreshRes.json();
+                        if (refreshData.id_token) {
+                            // Actualizar token en memoria y en localStorage
+                            currentUser.idToken      = refreshData.id_token;
+                            currentUser.refreshToken = refreshData.refresh_token || currentUser.refreshToken;
+                            localStorage.setItem('roseSession', JSON.stringify(currentUser));
+                        }
+                    } catch(refreshErr) {
+                        console.warn('No se pudo refrescar el token, se intentará con el existente:', refreshErr.message);
+                    }
+                }
+
+                const displayName = currentUser.displayName || currentUser.email?.split('@')[0] || 'Usuario';
+                await enterApp(displayName);
+
+            } catch(e) {
+                console.warn('Sesión inválida, volviendo al login:', e.message);
+                localStorage.removeItem('roseSession');
+                currentUser = null;
+                document.getElementById('auth-screen').style.display = 'flex';
+            }
         }
 
         function showNotification(message, type = 'success') {
