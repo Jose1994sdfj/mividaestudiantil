@@ -3227,6 +3227,14 @@
                 }
             });
 
+            // Hábitos — delegación para botones generados dinámicamente
+            document.addEventListener('click', function(e) {
+                const checkBtn  = e.target.closest('[data-toggle-habit]');
+                const deleteBtn = e.target.closest('[data-delete-habit]');
+                if (checkBtn)  { e.stopPropagation(); toggleHabitToday(parseInt(checkBtn.dataset.toggleHabit)); }
+                if (deleteBtn) { e.stopPropagation(); deleteHabit(parseInt(deleteBtn.dataset.deleteHabit)); }
+            });
+
             addTouchSupport();
         }
 
@@ -6431,7 +6439,7 @@
 
                 return `
                     <div class="habit-card ${done ? 'completed-today' : ''}" data-id="${habit.id}">
-                        <button class="habit-delete-btn" onclick="deleteHabit(${habit.id})" title="Eliminar">✕</button>
+                        <button class="habit-delete-btn" data-delete-habit="${habit.id}" title="Eliminar">✕</button>
                         <div class="habit-emoji">${habit.emoji || '⭐'}</div>
                         <div class="habit-info">
                             <div class="habit-name">${habit.name}</div>
@@ -6440,7 +6448,7 @@
                                 <span class="habit-category-badge" style="color:${catColor}; background:${catColor}22">${habit.category || 'otro'}</span>
                             </div>
                         </div>
-                        <button class="habit-check-btn" onclick="toggleHabitToday(${habit.id})" title="${done ? 'Desmarcar' : 'Completar'}">
+                        <button class="habit-check-btn" data-toggle-habit="${habit.id}" title="${done ? 'Desmarcar' : 'Completar'}">
                             ${done ? '✓' : '○'}
                         </button>
                     </div>
@@ -7582,12 +7590,6 @@
             const canvas = document.getElementById('confetti-canvas');
             if (canvas) canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
         }
-
-        // ── Integrar evaluateBadges en los puntos clave ──
-        // Se llama después de cada acción relevante en el código existente
-        // (se inyecta en toggleHabitToday, handleTaskSubmit, emotion submit, y al cerrar review)
-        const _origToggleHabit = toggleHabitToday;
-        // (ya parchamos desde toggleHabitToday directamente abajo)
 
         // Service Worker desactivado en entorno de previsualización
         // (se activa al desplegar la app en un servidor propio con sw.js)
