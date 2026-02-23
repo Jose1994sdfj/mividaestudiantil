@@ -806,11 +806,10 @@
 
         .cards-scroll {
             display: flex;
-            overflow-x: auto;
-            gap: 15px;
-            padding: 10px 0;
-            margin: 1rem 0;
-            scrollbar-width: none;
+            flex-direction: column;
+            gap: 12px;
+            padding: 4px 0;
+            margin: 0.5rem 0;
         }
 
         .cards-scroll::-webkit-scrollbar {
@@ -823,7 +822,7 @@
             -webkit-backdrop-filter: blur(10px);
             border-radius: var(--radius);
             padding: 1.5rem;
-            min-width: 300px;
+            width: 100%;
             box-shadow: 0 4px 24px rgba(106, 17, 203, 0.08);
             border: 1px solid var(--glass-border);
             transition: var(--transition);
@@ -1479,7 +1478,8 @@
             box-shadow: var(--card-shadow);
             transition: var(--transition);
             position: relative;
-            overflow: hidden;
+            overflow: visible;
+            touch-action: manipulation;
         }
 
         .habit-card.completed-today {
@@ -1542,8 +1542,8 @@
         }
 
         .habit-check-btn {
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             border: 2.5px solid var(--border-color);
             background: transparent;
@@ -1555,6 +1555,9 @@
             flex-shrink: 0;
             font-size: 1.2rem;
             color: var(--text-secondary);
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            z-index: 2;
         }
 
         .habit-card.completed-today .habit-check-btn {
@@ -2456,7 +2459,7 @@
             <!-- ══ TAB: HÁBITOS ══ -->
             <div id="tab-habitos" style="display:none;">
                 <div class="section-title" style="margin-top:0;"><h3>Heatmap de Hábitos 🔥</h3></div>
-                <div class="card" style="padding:16px;">
+                <div class="card" style="padding:16px; overflow-x:auto;">
                     <p style="font-size:0.82rem; color:var(--text-secondary); margin-bottom:14px;">Últimos 30 días — cada celda = un día</p>
                     <div id="habits-heatmap-container"></div>
                     <div style="display:flex; align-items:center; gap:6px; margin-top:14px; justify-content:flex-end;">
