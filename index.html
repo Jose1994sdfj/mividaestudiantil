@@ -1924,11 +1924,212 @@
         .review-history-title { font-size: 0.95rem; font-weight: 600; color: var(--text-primary); }
         .review-history-score { font-size: 1.4rem; font-weight: 800; color: var(--primary-color); }
 
+        /* ── Toggle switch estilo iOS para notificaciones ── */
+        .notif-toggle input:checked + .notif-slider { background: var(--gradient); }
+        .notif-toggle input:checked + .notif-slider:before { transform: translateX(20px); }
+        .notif-slider {
+            position: absolute; inset: 0;
+            background: var(--border-color);
+            border-radius: 24px;
+            transition: var(--transition);
+        }
+        .notif-slider:before {
+            content: '';
+            position: absolute;
+            width: 18px; height: 18px;
+            left: 3px; bottom: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: var(--transition);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+        }
+
     </style>
 </head>
 <body>
-    <!-- Header Móvil -->
-    <header class="mobile-header">
+    <!-- ═══════════════════════════════════════
+         PANTALLA DE AUTENTICACIÓN
+         ═══════════════════════════════════════ -->
+    <div id="auth-screen" style="
+        display:flex; flex-direction:column; align-items:center; justify-content:center;
+        min-height:100vh; padding:24px; background:var(--bg-primary);
+        position:fixed; inset:0; z-index:9999;">
+
+        <!-- Logo animado -->
+        <div style="text-align:center; margin-bottom:2rem; animation:fadeInUp 0.6s ease both;">
+            <div style="font-size:4rem; margin-bottom:0.5rem;">🌹</div>
+            <h1 style="font-size:2.2rem; font-weight:800; background:var(--gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin:0;">Rose</h1>
+            <p style="color:var(--text-secondary); margin-top:6px; font-size:0.95rem;">Tu compañero de vida</p>
+        </div>
+
+        <!-- Tarjeta de auth -->
+        <div style="width:100%; max-width:420px; background:var(--bg-secondary); border-radius:28px; padding:28px; box-shadow:var(--card-shadow); border:1px solid var(--border-color); animation:fadeInUp 0.6s ease 0.1s both;">
+
+            <!-- Tabs Login / Registro -->
+            <div style="display:flex; background:var(--bg-primary); border-radius:14px; padding:4px; margin-bottom:24px; gap:4px;">
+                <button id="tab-login" onclick="switchAuthTab('login')" style="flex:1; padding:10px; border:none; border-radius:10px; font-weight:600; font-size:0.9rem; cursor:pointer; background:var(--gradient); color:white; transition:var(--transition);">
+                    Entrar
+                </button>
+                <button id="tab-register" onclick="switchAuthTab('register')" style="flex:1; padding:10px; border:none; border-radius:10px; font-weight:600; font-size:0.9rem; cursor:pointer; background:transparent; color:var(--text-secondary); transition:var(--transition);">
+                    Crear cuenta
+                </button>
+            </div>
+
+            <!-- Formulario Login -->
+            <div id="auth-login-form">
+                <div style="display:flex; flex-direction:column; gap:14px;">
+                    <div>
+                        <label style="font-size:0.82rem; font-weight:600; color:var(--text-secondary); display:block; margin-bottom:6px;">✉️ Correo electrónico</label>
+                        <input id="login-email" type="email" placeholder="tu@correo.com" autocomplete="email"
+                            style="width:100%; padding:13px 16px; border-radius:12px; border:1.5px solid var(--border-color); background:var(--bg-primary); color:var(--text-primary); font-size:0.95rem; font-family:Poppins,sans-serif; outline:none; transition:var(--transition);"
+                            onfocus="this.style.borderColor='var(--primary-color)'" onblur="this.style.borderColor='var(--border-color)'">
+                    </div>
+                    <div style="position:relative;">
+                        <label style="font-size:0.82rem; font-weight:600; color:var(--text-secondary); display:block; margin-bottom:6px;">🔒 Contraseña</label>
+                        <input id="login-password" type="password" placeholder="Tu contraseña" autocomplete="current-password"
+                            style="width:100%; padding:13px 16px; border-radius:12px; border:1.5px solid var(--border-color); background:var(--bg-primary); color:var(--text-primary); font-size:0.95rem; font-family:Poppins,sans-serif; outline:none; transition:var(--transition);"
+                            onfocus="this.style.borderColor='var(--primary-color)'" onblur="this.style.borderColor='var(--border-color)'"
+                            onkeydown="if(event.key==='Enter') handleLogin()">
+                    </div>
+                    <button onclick="handleLogin()" id="login-btn" style="width:100%; padding:14px; background:var(--gradient); color:white; border:none; border-radius:14px; font-size:1rem; font-weight:700; cursor:pointer; transition:var(--transition); font-family:Poppins,sans-serif; margin-top:4px;">
+                        Entrar a Rose 🌹
+                    </button>
+                    <div id="login-error" style="display:none; color:var(--danger-color); font-size:0.85rem; text-align:center; padding:8px; background:rgba(255,82,82,0.08); border-radius:10px;"></div>
+                    <button onclick="handleForgotPassword()" style="background:none; border:none; color:var(--text-secondary); font-size:0.82rem; cursor:pointer; text-decoration:underline; font-family:Poppins,sans-serif;">
+                        Olvidé mi contraseña
+                    </button>
+                </div>
+            </div>
+
+            <!-- Formulario Registro -->
+            <div id="auth-register-form" style="display:none;">
+                <div style="display:flex; flex-direction:column; gap:14px;">
+                    <div>
+                        <label style="font-size:0.82rem; font-weight:600; color:var(--text-secondary); display:block; margin-bottom:6px;">👤 ¿Cómo te llamas?</label>
+                        <input id="register-name" type="text" placeholder="Tu nombre" autocomplete="name" maxlength="30"
+                            style="width:100%; padding:13px 16px; border-radius:12px; border:1.5px solid var(--border-color); background:var(--bg-primary); color:var(--text-primary); font-size:0.95rem; font-family:Poppins,sans-serif; outline:none; transition:var(--transition);"
+                            onfocus="this.style.borderColor='var(--primary-color)'" onblur="this.style.borderColor='var(--border-color)'">
+                    </div>
+                    <div>
+                        <label style="font-size:0.82rem; font-weight:600; color:var(--text-secondary); display:block; margin-bottom:6px;">✉️ Correo electrónico</label>
+                        <input id="register-email" type="email" placeholder="tu@correo.com" autocomplete="email"
+                            style="width:100%; padding:13px 16px; border-radius:12px; border:1.5px solid var(--border-color); background:var(--bg-primary); color:var(--text-primary); font-size:0.95rem; font-family:Poppins,sans-serif; outline:none; transition:var(--transition);"
+                            onfocus="this.style.borderColor='var(--primary-color)'" onblur="this.style.borderColor='var(--border-color)'">
+                    </div>
+                    <div>
+                        <label style="font-size:0.82rem; font-weight:600; color:var(--text-secondary); display:block; margin-bottom:6px;">🔒 Contraseña <span style="color:var(--text-secondary); font-weight:400;">(mín. 6 caracteres)</span></label>
+                        <input id="register-password" type="password" placeholder="Crea una contraseña" autocomplete="new-password"
+                            style="width:100%; padding:13px 16px; border-radius:12px; border:1.5px solid var(--border-color); background:var(--bg-primary); color:var(--text-primary); font-size:0.95rem; font-family:Poppins,sans-serif; outline:none; transition:var(--transition);"
+                            onfocus="this.style.borderColor='var(--primary-color)'" onblur="this.style.borderColor='var(--border-color)'"
+                            onkeydown="if(event.key==='Enter') handleRegister()">
+                    </div>
+                    <button onclick="handleRegister()" id="register-btn" style="width:100%; padding:14px; background:var(--gradient); color:white; border:none; border-radius:14px; font-size:1rem; font-weight:700; cursor:pointer; transition:var(--transition); font-family:Poppins,sans-serif; margin-top:4px;">
+                        Crear mi cuenta 🌹
+                    </button>
+                    <div id="register-error" style="display:none; color:var(--danger-color); font-size:0.85rem; text-align:center; padding:8px; background:rgba(255,82,82,0.08); border-radius:10px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <p style="margin-top:1.5rem; font-size:0.75rem; color:var(--text-secondary); text-align:center; animation:fadeInUp 0.6s ease 0.2s both;">
+            Tus datos se guardan de forma segura en la nube ☁️
+        </p>
+    </div>
+
+    <!-- Overlay de carga (sync) -->
+    <div id="sync-overlay" style="display:none; position:fixed; inset:0; background:var(--bg-primary); z-index:9998; flex-direction:column; align-items:center; justify-content:center; gap:16px;">
+        <div style="font-size:3rem; animation:wave 1.5s ease-in-out infinite; display:inline-block;">🌹</div>
+        <p id="sync-message" style="font-size:1rem; font-weight:600; color:var(--text-primary);">Cargando tu Rose...</p>
+        <div style="width:160px; height:4px; background:var(--border-color); border-radius:2px; overflow:hidden;">
+            <div style="height:100%; background:var(--gradient); border-radius:2px; animation:loadBar 1.5s ease-in-out infinite;"></div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes loadBar {
+            0%   { width:0%; transform:translateX(0); }
+            50%  { width:60%; }
+            100% { width:100%; transform:translateX(160px); }
+        }
+    </style>
+
+    <!-- Modal de insignia desbloqueada -->
+    <div id="badge-unlock-modal" style="
+        display:none; position:fixed; inset:0; z-index:10000;
+        align-items:center; justify-content:center;
+        background:rgba(0,0,0,0.6); backdrop-filter:blur(4px);">
+        <canvas id="confetti-canvas" style="position:absolute; inset:0; pointer-events:none; width:100%; height:100%;"></canvas>
+        <div id="badge-unlock-card" style="
+            position:relative; z-index:2;
+            background:var(--bg-secondary); border-radius:28px;
+            padding:2rem 2rem 1.5rem; max-width:320px; width:90%;
+            text-align:center; box-shadow:0 24px 80px rgba(0,0,0,0.35);
+            animation:badgePop 0.5s cubic-bezier(0.34,1.56,0.64,1) both;">
+            <div id="badge-unlock-icon" style="font-size:4.5rem; margin-bottom:0.5rem; animation:badgeBounce 0.6s ease 0.3s both; display:inline-block;">🏆</div>
+            <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--primary-color); margin-bottom:6px;">¡Insignia desbloqueada!</div>
+            <div id="badge-unlock-name" style="font-size:1.3rem; font-weight:800; color:var(--text-primary); margin-bottom:8px;">Nombre</div>
+            <div id="badge-unlock-desc" style="font-size:0.9rem; color:var(--text-secondary); line-height:1.5; margin-bottom:1.5rem;">Descripción</div>
+            <button onclick="closeBadgeModal()" style="
+                width:100%; padding:13px; background:var(--gradient); color:white;
+                border:none; border-radius:14px; font-size:1rem; font-weight:700;
+                cursor:pointer; font-family:Poppins,sans-serif;">
+                ¡Genial! 🎉
+            </button>
+        </div>
+    </div>
+
+    <style>
+        @keyframes badgePop {
+            from { opacity:0; transform:scale(0.5) translateY(40px); }
+            to   { opacity:1; transform:scale(1) translateY(0); }
+        }
+        @keyframes badgeBounce {
+            0%   { transform:scale(0) rotate(-20deg); }
+            60%  { transform:scale(1.2) rotate(8deg); }
+            100% { transform:scale(1) rotate(0deg); }
+        }
+        .badge-card {
+            background:var(--bg-secondary);
+            border:2px solid var(--border-color);
+            border-radius:20px;
+            padding:16px 14px;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            gap:8px;
+            text-align:center;
+            transition:var(--transition);
+            position:relative;
+            overflow:hidden;
+        }
+        .badge-card.unlocked {
+            border-color:var(--primary-color);
+            background:linear-gradient(135deg, rgba(124,77,255,0.06), rgba(68,138,255,0.04));
+            box-shadow:0 4px 20px rgba(124,77,255,0.15);
+        }
+        .badge-card.locked {
+            opacity:0.45;
+            filter:grayscale(0.6);
+        }
+        .badge-icon-wrap {
+            font-size:2.2rem;
+            width:56px; height:56px;
+            border-radius:50%;
+            display:flex; align-items:center; justify-content:center;
+            background:var(--bg-primary);
+        }
+        .badge-card.unlocked .badge-icon-wrap {
+            background:var(--gradient);
+        }
+        .badge-name  { font-size:0.82rem; font-weight:700; color:var(--text-primary); line-height:1.3; }
+        .badge-desc  { font-size:0.72rem; color:var(--text-secondary); line-height:1.4; }
+        .badge-date  { font-size:0.68rem; color:var(--primary-color); font-weight:600; }
+        .badge-lock  { position:absolute; top:6px; right:8px; font-size:0.75rem; opacity:0.5; }
+    </style>
+
+    <!-- Header Móvil (ya existente) -->
+    <header class="mobile-header" id="app-header" style="display:none;">
         <div class="header-content">
             <div class="header-main">
                 <div class="logo-section">
@@ -1939,6 +2140,7 @@
                     </div>
                 </div>
                 <div class="user-menu">
+                    <button id="badges-btn" aria-label="Insignias">🏆</button>
                     <button id="notifications-btn" aria-label="Pendientes">🔔</button>
                     <button id="settings-btn" aria-label="Ajustes">⚙️</button>
                 </div>
@@ -1983,7 +2185,7 @@
         </div>
     </div>
 
-    <main class="container">
+    <main class="container" id="app-main" style="display:none;">
         <!-- Sección de Inicio -->
         <div id="page-inicio" class="page-section">
         <!-- Tarjeta de Bienvenida -->
@@ -2166,63 +2368,105 @@
 
         <!-- Sección de Progreso -->
         <div id="page-progreso" class="page-section" style="display: none;">
-            <div class="section-title">
-                <h3>Mis Metas 🎯</h3>
-                <div style="display: flex; gap: 8px;">
-                    <button class="see-all" id="manage-subjects-btn" style="padding: 10px 18px; background: rgba(255, 107, 107, 0.15); color: var(--danger-color);">🗑️ Gestionar</button>
-                    <button class="see-all" id="add-subject-btn" style="padding: 10px 18px;">+ Agregar</button>
-                </div>
+
+            <!-- Header con tabs de navegación interna -->
+            <div style="display:flex; background:var(--bg-secondary); border-radius:16px; padding:4px; margin-bottom:20px; gap:4px; box-shadow:var(--card-shadow); border:1px solid var(--border-color);">
+                <button class="progreso-tab active-tab" data-tab="tab-resumen"   onclick="switchProgresoTab('tab-resumen')"  style="flex:1; padding:9px 4px; border:none; border-radius:12px; font-size:0.78rem; font-weight:600; cursor:pointer; background:var(--gradient); color:white; transition:var(--transition); font-family:Poppins,sans-serif;">📊 Resumen</button>
+                <button class="progreso-tab"            data-tab="tab-habitos"   onclick="switchProgresoTab('tab-habitos')"  style="flex:1; padding:9px 4px; border:none; border-radius:12px; font-size:0.78rem; font-weight:600; cursor:pointer; background:transparent; color:var(--text-secondary); transition:var(--transition); font-family:Poppins,sans-serif;">🔥 Hábitos</button>
+                <button class="progreso-tab"            data-tab="tab-emociones" onclick="switchProgresoTab('tab-emociones')" style="flex:1; padding:9px 4px; border:none; border-radius:12px; font-size:0.78rem; font-weight:600; cursor:pointer; background:transparent; color:var(--text-secondary); transition:var(--transition); font-family:Poppins,sans-serif;">❤️ Emociones</button>
+                <button class="progreso-tab"            data-tab="tab-areas"     onclick="switchProgresoTab('tab-areas')"    style="flex:1; padding:9px 4px; border:none; border-radius:12px; font-size:0.78rem; font-weight:600; cursor:pointer; background:transparent; color:var(--text-secondary); transition:var(--transition); font-family:Poppins,sans-serif;">🌱 Áreas</button>
             </div>
 
-            <div class="card" style="background: var(--gradient); color: white; text-align: center; padding: 2rem;">
-                <h3 style="margin-bottom: 1rem; opacity: 0.95;">Progreso General</h3>
-                <div style="font-size: 4rem; font-weight: 700; margin-bottom: 0.5rem; text-shadow: 0 4px 12px rgba(0,0,0,0.2);" id="overall-average">0.0</div>
-                <p style="opacity: 0.9; font-size: 1.1rem;" id="performance-message">Cargando...</p>
-                <div class="progress-bar" style="margin-top: 1rem; background: rgba(255,255,255,0.3);">
-                    <div class="progress-fill" id="overall-progress" style="width: 0%; background: white;"></div>
-                </div>
-            </div>
-
-            <div class="section-title">
-                <h3>Áreas de Vida 🌱</h3>
-            </div>
-
-            <div id="subjects-container"></div>
-
-            <div class="section-title">
-                <h3>Mis Estadísticas 📈</h3>
-            </div>
-
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="stat-icon">✅</div>
-                    <div class="stat-info">
-                        <div class="stat-value" id="completed-tasks-stat">0/0</div>
-                        <div class="stat-label">Tareas Completadas</div>
+            <!-- ══ TAB: RESUMEN ══ -->
+            <div id="tab-resumen">
+                <div class="section-title" style="margin-top:0;">
+                    <h3>Mis Metas 🎯</h3>
+                    <div style="display:flex; gap:8px;">
+                        <button class="see-all" id="manage-subjects-btn" style="padding:10px 18px; background:rgba(255,107,107,0.15); color:var(--danger-color);">🗑️ Gestionar</button>
+                        <button class="see-all" id="add-subject-btn" style="padding:10px 18px;">+ Agregar</button>
                     </div>
                 </div>
-                <div class="stat-item">
-                    <div class="stat-icon">🌱</div>
-                    <div class="stat-info">
-                        <div class="stat-value" id="total-subjects-stat">0</div>
-                        <div class="stat-label">Áreas Activas</div>
+
+                <div class="card" style="background:var(--gradient); color:white; text-align:center; padding:2rem;">
+                    <h3 style="margin-bottom:0.5rem; opacity:0.95;">Índice de Bienestar</h3>
+                    <p style="opacity:0.75; font-size:0.82rem; margin-bottom:1rem;">Promedio ponderado por prioridad de tus áreas de vida</p>
+                    <div style="font-size:4rem; font-weight:700; margin-bottom:0.5rem; text-shadow:0 4px 12px rgba(0,0,0,0.2);" id="overall-average">—</div>
+                    <p style="opacity:0.9; font-size:1rem;" id="performance-message">Agrega áreas de vida para ver tu índice</p>
+                    <div class="progress-bar" style="margin-top:1rem; background:rgba(255,255,255,0.3);">
+                        <div class="progress-fill" id="overall-progress" style="width:0%; background:white;"></div>
                     </div>
                 </div>
-                <div class="stat-item">
-                    <div class="stat-icon">🏆</div>
-                    <div class="stat-info">
-                        <div class="stat-value" id="approved-subjects">0</div>
-                        <div class="stat-label">Metas Logradas</div>
-                    </div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-icon">⏰</div>
-                    <div class="stat-info">
-                        <div class="stat-value" id="study-hours">0h</div>
-                        <div class="stat-label">Horas Invertidas</div>
-                    </div>
+
+                <div class="section-title"><h3>Áreas de Vida 🌱</h3></div>
+                <div id="subjects-container"></div>
+
+                <div class="section-title"><h3>Mis Estadísticas 📈</h3></div>
+                <div class="stats-grid">
+                    <div class="stat-item"><div class="stat-icon">✅</div><div class="stat-info"><div class="stat-value" id="completed-tasks-stat">0/0</div><div class="stat-label">Tareas Completadas</div></div></div>
+                    <div class="stat-item"><div class="stat-icon">🌱</div><div class="stat-info"><div class="stat-value" id="total-subjects-stat">0</div><div class="stat-label">Áreas Activas</div></div></div>
+                    <div class="stat-item"><div class="stat-icon">🎯</div><div class="stat-info"><div class="stat-value" id="approved-subjects">0</div><div class="stat-label">En buen camino</div></div></div>
+                    <div class="stat-item"><div class="stat-icon">⚠️</div><div class="stat-info"><div class="stat-value" id="study-hours">0</div><div class="stat-label">Necesitan atención</div></div></div>
                 </div>
             </div>
+
+            <!-- ══ TAB: HÁBITOS ══ -->
+            <div id="tab-habitos" style="display:none;">
+                <div class="section-title" style="margin-top:0;"><h3>Heatmap de Hábitos 🔥</h3></div>
+                <div class="card" style="padding:16px;">
+                    <p style="font-size:0.82rem; color:var(--text-secondary); margin-bottom:14px;">Últimos 30 días — cada celda = un día</p>
+                    <div id="habits-heatmap-container"></div>
+                    <div style="display:flex; align-items:center; gap:6px; margin-top:14px; justify-content:flex-end;">
+                        <span style="font-size:0.75rem; color:var(--text-secondary);">Menos</span>
+                        <div style="width:12px;height:12px;border-radius:3px;background:var(--border-color);"></div>
+                        <div style="width:12px;height:12px;border-radius:3px;background:rgba(124,77,255,0.25);"></div>
+                        <div style="width:12px;height:12px;border-radius:3px;background:rgba(124,77,255,0.55);"></div>
+                        <div style="width:12px;height:12px;border-radius:3px;background:rgba(124,77,255,0.85);"></div>
+                        <div style="width:12px;height:12px;border-radius:3px;background:var(--primary-color);"></div>
+                        <span style="font-size:0.75rem; color:var(--text-secondary);">Más</span>
+                    </div>
+                </div>
+
+                <div class="section-title"><h3>Rachas actuales ⚡</h3></div>
+                <div id="streaks-chart-container"></div>
+            </div>
+
+            <!-- ══ TAB: EMOCIONES ══ -->
+            <div id="tab-emociones" style="display:none;">
+                <div class="section-title" style="margin-top:0;"><h3>Estado emocional 📈</h3></div>
+                <div class="card" style="padding:16px;">
+                    <p style="font-size:0.82rem; color:var(--text-secondary); margin-bottom:14px;">Intensidad promedio por día — últimos 14 días</p>
+                    <canvas id="emotions-line-chart" style="width:100%; max-height:200px;"></canvas>
+                    <div id="emotions-chart-empty" style="display:none; text-align:center; padding:2rem; color:var(--text-secondary);">
+                        <div style="font-size:2rem; margin-bottom:0.5rem;">📭</div>
+                        <p style="font-size:0.9rem;">Registra emociones con intensidad para ver la gráfica</p>
+                    </div>
+                </div>
+
+                <div class="section-title"><h3>Frecuencia de emociones 🏷️</h3></div>
+                <div class="card" style="padding:16px;">
+                    <div id="emotions-frequency-chart"></div>
+                </div>
+            </div>
+
+            <!-- ══ TAB: ÁREAS ══ -->
+            <div id="tab-areas" style="display:none;">
+                <div class="section-title" style="margin-top:0;">
+                    <h3>Áreas de Vida 🌱</h3>
+                    <div style="display:flex; gap:8px;">
+                        <button class="see-all" id="manage-subjects-btn-2" style="padding:10px 18px; background:rgba(255,107,107,0.15); color:var(--danger-color);">🗑️ Gestionar</button>
+                        <button class="see-all" id="add-subject-btn-2" style="padding:10px 18px;">+ Agregar</button>
+                    </div>
+                </div>
+                <div class="card" style="padding:16px; margin-bottom:16px;">
+                    <canvas id="areas-bar-chart" style="width:100%; max-height:240px;"></canvas>
+                    <div id="areas-chart-empty" style="display:none; text-align:center; padding:2rem; color:var(--text-secondary);">
+                        <div style="font-size:2rem; margin-bottom:0.5rem;">📭</div>
+                        <p style="font-size:0.9rem;">Agrega áreas de vida para ver la gráfica</p>
+                    </div>
+                </div>
+                <div id="subjects-container-areas"></div>
+            </div>
+
         </div>
         <!-- Fin Sección de Progreso -->
 
@@ -2232,13 +2476,21 @@
                 <h3>Cómo me Siento ❤️</h3>
             </div>
 
-            <div class="card" style="text-align: center; padding: 2.5rem 1.5rem; background: var(--glass-bg); border: 2px dashed var(--primary-color); cursor: pointer;" onclick="openEmotionModal()">
-                <div style="font-size: 3rem; margin-bottom: 1rem;">💝</div>
-                <h3 style="color: var(--primary-color); margin-bottom: 0.5rem;">¿Cómo te sientes hoy?</h3>
-                <p style="color: var(--text-secondary); font-size: 0.9rem;">Toca aquí para registrar tus emociones y fortalecer tus relaciones.</p>
-                <button class="btn btn-primary" style="margin-top: 1.5rem; width: auto; padding: 12px 30px;">
-                    Registrar Emoción
-                </button>
+            <!-- Tarjeta principal: Registro de hoy -->
+            <div class="welcome-card-new" style="margin-top:0; cursor:pointer;" onclick="openEmotionModal()">
+                <div class="welcome-bg-pattern"></div>
+                <div class="welcome-content" style="padding:1.5rem;">
+                    <div class="welcome-greeting" style="margin-bottom:1rem;">
+                        <div class="greeting-emoji" style="font-size:2.8rem; animation:wave 2s ease-in-out infinite; display:inline-block;">💝</div>
+                        <h2 class="greeting-title" style="font-size:1.5rem;">¿Cómo te sientes hoy?</h2>
+                        <p class="greeting-subtitle">Registra tu estado emocional — sin necesidad de vincular a nadie.</p>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.2); border-radius:14px; padding:12px 16px; display:flex; align-items:center; gap:10px; border:1px solid rgba(255,255,255,0.3);">
+                        <span style="font-size:1.4rem;">✍️</span>
+                        <span style="color:white; font-size:0.9rem; font-weight:500;">Toca aquí para registrar cómo te sientes ahora mismo</span>
+                        <span style="color:rgba(255,255,255,0.7); margin-left:auto; font-size:1.1rem;">→</span>
+                    </div>
+                </div>
             </div>
 
             <div class="section-title" style="margin-top: 2rem;">
@@ -2352,7 +2604,7 @@
     </main>
 
     <!-- Navegación Inferior -->
-    <nav class="bottom-nav">
+    <nav class="bottom-nav" id="app-nav" style="display:none;">
         <a href="#" class="nav-item active" data-page="inicio">
             <div class="nav-icon">🏠</div>
             <span>Inicio</span>
@@ -2380,32 +2632,69 @@
     <div class="modal" id="emotion-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Registrar Emoción 💝</h3>
+                <h3>¿Cómo te sientes? 💝</h3>
                 <button class="close-modal">&times;</button>
             </div>
             <form id="emotion-form-modal">
+
+                <!-- Selector de modo: Yo / Alguien más -->
                 <div class="form-group">
+                    <label style="font-weight:600; color:var(--text-primary); margin-bottom:10px; display:block;">¿Este registro es sobre ti o sobre alguien?</label>
+                    <div style="display:flex; gap:10px; margin-bottom:6px;">
+                        <button type="button" id="emotion-mode-self" class="emotion-mode-btn active"
+                            style="flex:1; padding:12px 8px; border-radius:14px; border:2px solid var(--primary-color); background:var(--gradient); color:white; font-weight:600; font-size:0.9rem; cursor:pointer; transition:var(--transition);">
+                            🙋 Sobre mí
+                        </button>
+                        <button type="button" id="emotion-mode-other" class="emotion-mode-btn"
+                            style="flex:1; padding:12px 8px; border-radius:14px; border:2px solid var(--border-color); background:var(--bg-primary); color:var(--text-secondary); font-weight:600; font-size:0.9rem; cursor:pointer; transition:var(--transition);">
+                            👥 Sobre alguien
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Selector de persona (solo visible cuando modo = "alguien") -->
+                <div class="form-group" id="emotion-person-group" style="display:none;">
                     <label for="emotion-person-modal">Persona:</label>
-                    <select id="emotion-person-modal" class="form-control" required>
+                    <select id="emotion-person-modal" class="form-control">
                         <option value="">Selecciona una persona</option>
                     </select>
                 </div>
+
+                <!-- Emociones expandidas -->
                 <div class="form-group">
-                    <label>Emociones:</label>
-                    <div class="emotion-tags" id="emotion-tags-modal">
+                    <label>¿Qué estás sintiendo? <span style="font-size:0.8rem; color:var(--text-secondary);">(puedes elegir varias)</span></label>
+                    <div class="emotion-tags" id="emotion-tags-modal" style="display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;">
                         <span class="emotion-tag" data-emotion="Alegría">😊 Alegría</span>
-                        <span class="emotion-tag" data-emotion="Tristeza">😢 Tristeza</span>
-                        <span class="emotion-tag" data-emotion="Enojo">😠 Enojo</span>
+                        <span class="emotion-tag" data-emotion="Gratitud">🙏 Gratitud</span>
                         <span class="emotion-tag" data-emotion="Amor">❤️ Amor</span>
-                        <span class="emotion-tag" data-emotion="Frustración">😤 Frustración</span>
+                        <span class="emotion-tag" data-emotion="Paz">☮️ Paz</span>
+                        <span class="emotion-tag" data-emotion="Motivación">💪 Motivación</span>
                         <span class="emotion-tag" data-emotion="Confianza">🤝 Confianza</span>
+                        <span class="emotion-tag" data-emotion="Esperanza">🌟 Esperanza</span>
+                        <span class="emotion-tag" data-emotion="Tristeza">😢 Tristeza</span>
+                        <span class="emotion-tag" data-emotion="Ansiedad">😰 Ansiedad</span>
+                        <span class="emotion-tag" data-emotion="Enojo">😠 Enojo</span>
+                        <span class="emotion-tag" data-emotion="Frustración">😤 Frustración</span>
+                        <span class="emotion-tag" data-emotion="Miedo">😨 Miedo</span>
+                        <span class="emotion-tag" data-emotion="Soledad">🌧️ Soledad</span>
+                        <span class="emotion-tag" data-emotion="Cansancio">😴 Cansancio</span>
+                        <span class="emotion-tag" data-emotion="Sorpresa">😲 Sorpresa</span>
                     </div>
                 </div>
+
+                <!-- Intensidad -->
                 <div class="form-group">
-                    <label for="emotion-desc-modal">Descripción:</label>
-                    <textarea id="emotion-desc-modal" class="form-control" rows="4" placeholder="¿Cómo te sientes?" required></textarea>
+                    <label>Intensidad: <span id="intensity-label" style="font-weight:700; color:var(--primary-color);">5 / 10</span></label>
+                    <input type="range" id="emotion-intensity" min="1" max="10" value="5"
+                        style="width:100%; accent-color:var(--primary-color); margin-top:8px; cursor:pointer;">
                 </div>
-                <button type="submit" class="btn btn-primary">Guardar Emoción ✨</button>
+
+                <div class="form-group">
+                    <label for="emotion-desc-modal">¿Qué está pasando? <span style="font-size:0.8rem; color:var(--text-secondary);">(opcional)</span></label>
+                    <textarea id="emotion-desc-modal" class="form-control" rows="3" placeholder="Cuéntate a ti mismo lo que sientes..."></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Guardar emoción ✨</button>
             </form>
         </div>
     </div>
@@ -2539,7 +2828,7 @@
         </div>
     </div>
 
-    <!-- Modal para Agregar Materia -->
+    <!-- Modal para Agregar Área de Vida -->
     <div class="modal" id="subject-modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -2548,16 +2837,16 @@
             </div>
             <form id="subject-form">
                 <div class="form-group">
-                    <label for="subject-name">Nombre del Área</label>
+                    <label for="subject-name">¿Qué área de tu vida quieres trabajar?</label>
                     <input type="text" id="subject-name" class="form-control" placeholder="Ej: Salud, Carrera, Finanzas" required>
                 </div>
                 <div class="form-group">
-                    <label for="subject-grade">Progreso (0-10)</label>
-                    <input type="number" id="subject-grade" class="form-control" min="0" max="10" step="0.1" placeholder="7.5" required>
+                    <label for="subject-grade">¿Cómo estás en esta área hoy? <span style="font-size:0.8rem; color:var(--text-secondary);">(0 = muy mal · 10 = excelente)</span></label>
+                    <input type="number" id="subject-grade" class="form-control" min="0" max="10" step="0.5" placeholder="Ej: 6" required>
                 </div>
                 <div class="form-group">
-                    <label for="subject-credits">Importancia (1-10)</label>
-                    <input type="number" id="subject-credits" class="form-control" min="1" max="10" placeholder="8" required>
+                    <label for="subject-credits">¿Qué tan prioritaria es para ti ahora? <span style="font-size:0.8rem; color:var(--text-secondary);">(1 = poco · 10 = muy importante)</span></label>
+                    <input type="number" id="subject-credits" class="form-control" min="1" max="10" placeholder="Ej: 8" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Agregar Área ✅</button>
             </form>
@@ -2714,13 +3003,7 @@
 
         // ========== INICIALIZACIÓN ==========
         document.addEventListener('DOMContentLoaded', function() {
-            loadTheme();
-            loadInstitutionName();
-            initializeApp();
-            setupEventListeners();
-            renderAllData();
-            setupGlobalDeleteListeners();
-            initializeTutorial();
+            checkExistingSession();
         });
 
         // Event delegation global para todos los botones de eliminar
@@ -2768,7 +3051,7 @@
                     item = appData.schedule.find(c => c.id === id);
                     name = item ? item.name : '';
                 } else if (type === 'subject') {
-                    console.log('Buscando materia con ID:', id, 'en', appData.subjects.length, 'materias');
+                    console.log('Buscando área con ID:', id, 'en', appData.subjects.length, 'áreas');
                     item = appData.subjects.find(s => s.id === id);
                     name = item ? item.name : '';
                 } else if (type === 'task') {
@@ -2827,6 +3110,10 @@
                 appData.weeklyReviews = [];
                 saveData();
             }
+            if (!appData.badges) {
+                appData.badges = {};
+                saveData();
+            }
 
             // Actualizar fecha y hora
             updateDateTime();
@@ -2871,6 +3158,7 @@
             // Botones del header
             document.getElementById('notifications-btn').addEventListener('click', showNotificationsModal);
             document.getElementById('settings-btn').addEventListener('click', showSettingsModal);
+            document.getElementById('badges-btn').addEventListener('click', showBadgesModal);
 
             // Ver todos
             document.getElementById('see-all-tasks').addEventListener('click', function(e) {
@@ -3034,8 +3322,9 @@
                 container.innerHTML = `
                     <div class="card">
                         <div class="empty-state">
-                            <div class="empty-icon">📚</div>
-                            <p>No hay áreas de vida registradas</p>
+                            <div class="empty-icon">🌱</div>
+                            <p>Sin áreas de vida todavía</p>
+                            <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.4rem;">¿En qué partes de tu vida quieres crecer?</p>
                         </div>
                     </div>
                 `;
@@ -3043,33 +3332,50 @@
                 return;
             }
 
+            // Ordenar: más prioritarias primero
+            const sorted = [...appData.subjects].sort((a, b) => (b.credits || 1) - (a.credits || 1));
+
             container.innerHTML = `
                 <div class="card">
-                    ${appData.subjects.map(subject => {
-                        const percentage = (subject.grade / 10) * 100;
-                        let gradientColor = 'linear-gradient(90deg, var(--primary-color), var(--secondary-color))';
-                        
-                        if (subject.grade < 6) {
-                            gradientColor = 'linear-gradient(90deg, var(--danger-color), var(--warning-color))';
-                        } else if (subject.grade < 8) {
-                            gradientColor = 'linear-gradient(90deg, var(--warning-color), var(--primary-color))';
+                    ${sorted.map(subject => {
+                        const pct = Math.round(((subject.grade || 0) / 10) * 100);
+                        const priority = subject.credits || 1;
+
+                        // Estado según progreso
+                        let statusLabel, statusColor, barColor;
+                        if (pct >= 70) {
+                            statusLabel = '✅ Bien';
+                            statusColor = 'var(--success-color)';
+                            barColor    = 'linear-gradient(90deg, var(--success-color), #69f0ae)';
+                        } else if (pct >= 50) {
+                            statusLabel = '⚡ En proceso';
+                            statusColor = 'var(--warning-color)';
+                            barColor    = 'linear-gradient(90deg, var(--warning-color), #ffd740)';
+                        } else {
+                            statusLabel = '🔍 Necesita atención';
+                            statusColor = 'var(--danger-color)';
+                            barColor    = 'linear-gradient(90deg, var(--danger-color), #ff867f)';
                         }
 
+                        // Indicador de prioridad
+                        const priorityDots = '●'.repeat(Math.min(Math.round(priority / 2.5), 4));
+
                         return `
-                            <div style="margin-bottom: 1.2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                                    <div style="flex: 1;">
-                                        <span style="font-weight: 600; font-size: 0.95rem;">${subject.name}</span>
-                                        <span style="font-size: 0.75rem; color: var(--text-secondary); margin-left: 8px;">
-                                            Importancia: <strong>${subject.credits}</strong>
-                                        </span>
+                            <div style="margin-bottom:1.2rem; padding-bottom:1rem; border-bottom:1px solid var(--border-color);">
+                                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px; gap:8px;">
+                                    <div style="flex:1; min-width:0;">
+                                        <div style="font-weight:600; font-size:0.95rem; color:var(--text-primary);">${subject.name}</div>
+                                        <div style="display:flex; align-items:center; gap:8px; margin-top:3px; flex-wrap:wrap;">
+                                            <span style="font-size:0.72rem; color:${statusColor}; font-weight:700;">${statusLabel}</span>
+                                            <span style="font-size:0.7rem; color:var(--text-secondary);">Prioridad: <span style="color:var(--primary-color); letter-spacing:-1px;">${priorityDots}</span></span>
+                                        </div>
                                     </div>
-                                    <div style="display: flex; align-items: center; gap: 8px;">
-                                        <span style="font-weight: 700; font-size: 1.1rem; color: var(--primary-color);">${subject.grade.toFixed(1)}</span>
+                                    <div style="text-align:right; flex-shrink:0;">
+                                        <span style="font-weight:800; font-size:1.2rem; color:${statusColor};">${pct}%</span>
                                     </div>
                                 </div>
                                 <div class="progress-bar">
-                                    <div class="progress-fill" style="width: ${percentage}%; background: ${gradientColor};"></div>
+                                    <div class="progress-fill" style="width:${pct}%; background:${barColor}; transition:width 0.5s ease;"></div>
                                 </div>
                             </div>
                         `;
@@ -3078,6 +3384,9 @@
             `;
 
             updateProgressStats();
+            // Espejo en el tab de áreas
+            const areasContainer = document.getElementById('subjects-container-areas');
+            if (areasContainer) areasContainer.innerHTML = container.innerHTML;
         }
 
         function renderTasks() {
@@ -3132,6 +3441,7 @@
             updateStats();
             updateHabitStats();
             if (task.completed) showNotification(`✅ "${task.title}" completada`, 'success');
+            if (task.completed) setTimeout(evaluateBadges, 400);
         }
 
         function renderEvents() {
@@ -3219,7 +3529,7 @@
             } else if (type === 'class') {
                 typeText = 'clase';
             } else if (type === 'subject') {
-                typeText = 'materia';
+                typeText = 'área de vida';
             } else {
                 typeText = 'elemento';
             }
@@ -3265,8 +3575,11 @@
                 }
             } else if (deleteType === 'emotion') {
                 const before = appData.emotions.length;
+                const emotionIdToDelete = itemToDelete;
                 appData.emotions = appData.emotions.filter(emotion => emotion.id !== itemToDelete);
                 deleted = appData.emotions.length < before;
+                // Borrar también de Firebase
+                if (deleted) deleteEmotionFromFirebase(emotionIdToDelete);
             } else if (deleteType === 'class') {
                 const before = appData.schedule.length;
                 appData.schedule = appData.schedule.filter(cls => cls.id !== itemToDelete);
@@ -3276,7 +3589,7 @@
                 const before = appData.subjects.length;
                 appData.subjects = appData.subjects.filter(subj => subj.id !== itemToDelete);
                 deleted = appData.subjects.length < before;
-                console.log('Materias: antes=' + before + ', después=' + appData.subjects.length);
+                console.log('Áreas: antes=' + before + ', después=' + appData.subjects.length);
             }
 
             if (deleted) {
@@ -3445,8 +3758,44 @@
         function openEmotionModal() {
             populatePersonSelectsBienestar();
             document.getElementById('emotion-modal').style.display = 'flex';
+
+            // Resetear modo a "Sobre mí"
+            const btnSelf  = document.getElementById('emotion-mode-self');
+            const btnOther = document.getElementById('emotion-mode-other');
+            const personGroup = document.getElementById('emotion-person-group');
+
+            btnSelf.classList.add('active-mode');
+            btnSelf.style.cssText  = 'flex:1; padding:12px 8px; border-radius:14px; border:2px solid var(--primary-color); background:var(--gradient); color:white; font-weight:600; font-size:0.9rem; cursor:pointer; transition:var(--transition);';
+            btnOther.classList.remove('active-mode');
+            btnOther.style.cssText = 'flex:1; padding:12px 8px; border-radius:14px; border:2px solid var(--border-color); background:var(--bg-primary); color:var(--text-secondary); font-weight:600; font-size:0.9rem; cursor:pointer; transition:var(--transition);';
+            personGroup.style.display = 'none';
+
+            // Toggle de modo
+            btnSelf.onclick = function() {
+                btnSelf.classList.add('active-mode');
+                btnSelf.style.cssText  = 'flex:1; padding:12px 8px; border-radius:14px; border:2px solid var(--primary-color); background:var(--gradient); color:white; font-weight:600; font-size:0.9rem; cursor:pointer; transition:var(--transition);';
+                btnOther.classList.remove('active-mode');
+                btnOther.style.cssText = 'flex:1; padding:12px 8px; border-radius:14px; border:2px solid var(--border-color); background:var(--bg-primary); color:var(--text-secondary); font-weight:600; font-size:0.9rem; cursor:pointer; transition:var(--transition);';
+                personGroup.style.display = 'none';
+            };
+            btnOther.onclick = function() {
+                btnOther.classList.add('active-mode');
+                btnOther.style.cssText  = 'flex:1; padding:12px 8px; border-radius:14px; border:2px solid var(--primary-color); background:var(--gradient); color:white; font-weight:600; font-size:0.9rem; cursor:pointer; transition:var(--transition);';
+                btnSelf.classList.remove('active-mode');
+                btnSelf.style.cssText = 'flex:1; padding:12px 8px; border-radius:14px; border:2px solid var(--border-color); background:var(--bg-primary); color:var(--text-secondary); font-weight:600; font-size:0.9rem; cursor:pointer; transition:var(--transition);';
+                personGroup.style.display = 'block';
+            };
+
+            // Slider de intensidad
+            const slider = document.getElementById('emotion-intensity');
+            const label  = document.getElementById('intensity-label');
+            slider.value = 5;
+            label.textContent = '5 / 10';
+            slider.oninput = function() {
+                label.textContent = this.value + ' / 10';
+            };
             
-            // Setup tags inside modal
+            // Setup tags
             const tags = document.querySelectorAll('#emotion-tags-modal .emotion-tag');
             tags.forEach(tag => {
                 tag.classList.remove('active');
@@ -3457,27 +3806,40 @@
         }
 
         // Handle Emotion Modal Submit
-        document.getElementById('emotion-form-modal').addEventListener('submit', function(e) {
+        document.getElementById('emotion-form-modal').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            const person = document.getElementById('emotion-person-modal').value;
-            const description = document.getElementById('emotion-desc-modal').value;
+            // Determinar si es "sobre mí" o "sobre alguien"
+            const isSelf = document.getElementById('emotion-mode-self').classList.contains('active-mode');
+            const personSelect = document.getElementById('emotion-person-modal').value;
+            const person = isSelf ? '🙋 Yo mismo' : personSelect;
+            
+            if (!isSelf && !personSelect) {
+                showNotification('Selecciona una persona o elige "Sobre mí"', 'error');
+                return;
+            }
+
+            const description = document.getElementById('emotion-desc-modal').value || '';
+            const intensity = parseInt(document.getElementById('emotion-intensity').value) || 5;
             const emotions = Array.from(document.querySelectorAll('#emotion-tags-modal .emotion-tag.active'))
                                 .map(t => t.getAttribute('data-emotion'));
 
-            if (!person || emotions.length === 0 || !description) {
-                showNotification('Por favor completa todos los campos', 'error');
+            if (emotions.length === 0) {
+                showNotification('Selecciona al menos una emoción', 'error');
                 return;
             }
 
             const newEmotion = {
                 id: Date.now(),
                 person: person,
+                isSelf: isSelf,
                 date: new Date().toISOString(),
                 emotions: emotions,
+                intensity: intensity,
                 description: description
             };
 
+            // Guardar local primero (respuesta inmediata)
             appData.emotions.unshift(newEmotion);
             saveData();
             renderEmotionsHistoryBienestar();
@@ -3485,7 +3847,25 @@
             
             document.getElementById('emotion-modal').style.display = 'none';
             this.reset();
-            showNotification('¡Emoción registrada! ❤️');
+            // Resetear modo a "Sobre mí"
+            document.getElementById('emotion-mode-self').classList.add('active-mode');
+            document.getElementById('emotion-mode-self').style.cssText = 'flex:1; padding:12px 8px; border-radius:14px; border:2px solid var(--primary-color); background:var(--gradient); color:white; font-weight:600; font-size:0.9rem; cursor:pointer; transition:var(--transition);';
+            document.getElementById('emotion-mode-other').classList.remove('active-mode');
+            document.getElementById('emotion-mode-other').style.cssText = 'flex:1; padding:12px 8px; border-radius:14px; border:2px solid var(--border-color); background:var(--bg-primary); color:var(--text-secondary); font-weight:600; font-size:0.9rem; cursor:pointer; transition:var(--transition);';
+            document.getElementById('emotion-person-group').style.display = 'none';
+            document.getElementById('intensity-label').textContent = '5 / 10';
+            document.getElementById('emotion-intensity').value = 5;
+            document.querySelectorAll('#emotion-tags-modal .emotion-tag').forEach(t => t.classList.remove('active'));
+
+            showNotification('¡Emoción guardada! ❤️');
+
+            // Intentar subir a Firebase en segundo plano
+            saveEmotionToFirebase(newEmotion).then(ok => {
+                if (ok) console.log('✅ Emoción sincronizada con Firebase');
+            });
+
+            // Evaluar insignias
+            setTimeout(evaluateBadges, 400);
         });
 
         function closeAllModals() {
@@ -3514,6 +3894,8 @@
             renderAllData();
             closeAllModals();
             showNotification('¡Tarea agregada correctamente! ✅');
+            // Revisar si la nueva tarea vence hoy
+            if (newTask.deadline === getTodayString()) checkTasksDueToday();
             e.target.reset();
         }
 
@@ -3759,8 +4141,295 @@
             return new Date(dateString).toLocaleDateString('es-ES', options);
         }
 
+        // ═══════════════════════════════════════════════════
+        //  FIREBASE AUTH + SYNC — Rose v2.1
+        // ═══════════════════════════════════════════════════
+        const FIREBASE_URL    = 'https://bdfirebase-62a1b-default-rtdb.firebaseio.com';
+        // ⚠️  IMPORTANTE: Reemplaza este valor con la API Key de tu proyecto Firebase.
+        //     La encuentras en: Firebase Console → Configuración del proyecto → General → Clave de API web
+        //     Ejemplo: 'AIzaSyABC123...'
+        const FIREBASE_API_KEY = 'TU_API_KEY_AQUI';
+
+        // Estado de sesión
+        let currentUser = null;   // { uid, email, displayName, idToken }
+
+        // ── Cambiar tab login/registro ──
+        function switchAuthTab(tab) {
+            const isLogin = tab === 'login';
+            document.getElementById('auth-login-form').style.display    = isLogin ? 'block' : 'none';
+            document.getElementById('auth-register-form').style.display = isLogin ? 'none'  : 'block';
+            document.getElementById('tab-login').style.background    = isLogin ? 'var(--gradient)' : 'transparent';
+            document.getElementById('tab-login').style.color         = isLogin ? 'white' : 'var(--text-secondary)';
+            document.getElementById('tab-register').style.background = isLogin ? 'transparent' : 'var(--gradient)';
+            document.getElementById('tab-register').style.color      = isLogin ? 'var(--text-secondary)' : 'white';
+            document.getElementById('login-error').style.display    = 'none';
+            document.getElementById('register-error').style.display = 'none';
+        }
+
+        // ── Mostrar error en pantalla auth ──
+        function showAuthError(formType, msg) {
+            const el = document.getElementById(formType + '-error');
+            if (el) { el.textContent = msg; el.style.display = 'block'; }
+        }
+
+        // ── Estado de botón cargando ──
+        function setAuthLoading(btnId, loading, originalText) {
+            const btn = document.getElementById(btnId);
+            if (!btn) return;
+            btn.disabled  = loading;
+            btn.textContent = loading ? '⏳ Cargando...' : originalText;
+            btn.style.opacity = loading ? '0.7' : '1';
+        }
+
+        // ── Registrar usuario con email/password ──
+        async function handleRegister() {
+            const name     = document.getElementById('register-name').value.trim();
+            const email    = document.getElementById('register-email').value.trim();
+            const password = document.getElementById('register-password').value;
+
+            if (!name)          return showAuthError('register', 'Escribe tu nombre');
+            if (!email)         return showAuthError('register', 'Escribe tu correo');
+            if (password.length < 6) return showAuthError('register', 'La contraseña debe tener al menos 6 caracteres');
+
+            setAuthLoading('register-btn', true, 'Crear mi cuenta 🌹');
+            document.getElementById('register-error').style.display = 'none';
+
+            try {
+                // 1. Crear usuario en Firebase Auth
+                const authRes = await fetch(
+                    `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${FIREBASE_API_KEY}`,
+                    { method:'POST', headers:{'Content-Type':'application/json'},
+                      body: JSON.stringify({ email, password, returnSecureToken: true }) }
+                );
+                const authData = await authRes.json();
+                if (authData.error) throw new Error(translateAuthError(authData.error.message));
+
+                // 2. Actualizar displayName
+                await fetch(
+                    `https://identitytoolkit.googleapis.com/v1/accounts:update?key=${FIREBASE_API_KEY}`,
+                    { method:'POST', headers:{'Content-Type':'application/json'},
+                      body: JSON.stringify({ idToken: authData.idToken, displayName: name, returnSecureToken: false }) }
+                ).catch(() => {});
+
+                // 3. Guardar sesión y entrar
+                saveSession({ uid: authData.localId, email: authData.email, displayName: name, idToken: authData.idToken, refreshToken: authData.refreshToken });
+                await enterApp(name);
+
+            } catch(err) {
+                showAuthError('register', err.message || 'Error al crear la cuenta');
+            } finally {
+                setAuthLoading('register-btn', false, 'Crear mi cuenta 🌹');
+            }
+        }
+
+        // ── Login con email/password ──
+        async function handleLogin() {
+            const email    = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+
+            if (!email)    return showAuthError('login', 'Escribe tu correo');
+            if (!password) return showAuthError('login', 'Escribe tu contraseña');
+
+            setAuthLoading('login-btn', true, 'Entrar a Rose 🌹');
+            document.getElementById('login-error').style.display = 'none';
+
+            try {
+                const authRes = await fetch(
+                    `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${FIREBASE_API_KEY}`,
+                    { method:'POST', headers:{'Content-Type':'application/json'},
+                      body: JSON.stringify({ email, password, returnSecureToken: true }) }
+                );
+                const authData = await authRes.json();
+                if (authData.error) throw new Error(translateAuthError(authData.error.message));
+
+                const displayName = authData.displayName || email.split('@')[0];
+                saveSession({ uid: authData.localId, email: authData.email, displayName, idToken: authData.idToken, refreshToken: authData.refreshToken });
+                await enterApp(displayName);
+
+            } catch(err) {
+                showAuthError('login', err.message || 'Error al iniciar sesión');
+            } finally {
+                setAuthLoading('login-btn', false, 'Entrar a Rose 🌹');
+            }
+        }
+
+        // ── Recuperar contraseña ──
+        async function handleForgotPassword() {
+            const email = document.getElementById('login-email').value.trim();
+            if (!email) return showAuthError('login', 'Escribe tu correo primero');
+            try {
+                await fetch(
+                    `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${FIREBASE_API_KEY}`,
+                    { method:'POST', headers:{'Content-Type':'application/json'},
+                      body: JSON.stringify({ requestType:'PASSWORD_RESET', email }) }
+                );
+                document.getElementById('login-error').style.cssText = 'display:block; color:var(--success-color); background:rgba(0,230,118,0.1);';
+                document.getElementById('login-error').textContent = '✅ Correo de recuperación enviado';
+            } catch(e) {
+                showAuthError('login', 'No se pudo enviar el correo');
+            }
+        }
+
+        // ── Guardar sesión en localStorage ──
+        function saveSession(user) {
+            currentUser = user;
+            localStorage.setItem('roseSession', JSON.stringify(user));
+        }
+
+        // ── Cerrar sesión ──
+        function handleLogout() {
+            if (!confirm('¿Cerrar sesión? Tus datos están guardados en la nube.')) return;
+            currentUser = null;
+            localStorage.removeItem('roseSession');
+            // Limpiar datos locales para que no aparezcan al próximo usuario
+            appData = { tasks:[], events:[], people:[], emotions:[], habits:[], schedule:[], subjects:[], weeklyReviews:[] };
+            // Ocultar app, mostrar login
+            document.getElementById('app-header').style.display = 'none';
+            document.getElementById('app-main').style.display   = 'none';
+            document.getElementById('app-nav').style.display    = 'none';
+            document.getElementById('auth-screen').style.display = 'flex';
+            // Limpiar campos
+            document.getElementById('login-email').value    = '';
+            document.getElementById('login-password').value = '';
+            switchAuthTab('login');
+        }
+
+        // ── Entrar a la app tras login/registro ──
+        async function enterApp(displayName) {
+            // Mostrar overlay de carga
+            document.getElementById('auth-screen').style.display  = 'none';
+            document.getElementById('sync-overlay').style.display = 'flex';
+            document.getElementById('sync-message').textContent   = `Hola ${displayName}, cargando tus datos...`;
+
+            // Cargar datos desde Firebase
+            await loadAllDataFromFirebase();
+
+            // Guardar nombre
+            localStorage.setItem('institutionName', displayName);
+
+            // Ocultar overlay y mostrar app
+            document.getElementById('sync-overlay').style.display = 'none';
+            document.getElementById('app-header').style.display   = '';
+            document.getElementById('app-main').style.display     = '';
+            document.getElementById('app-nav').style.display      = '';
+
+            // Inicializar la app normalmente
+            loadTheme();
+            updateInstitutionName(displayName);
+            initializeApp();
+            setupEventListeners();
+            renderAllData();
+            setupGlobalDeleteListeners();
+            initializeTutorial();
+
+            // Arrancar notificaciones programadas
+            scheduleAllNotifications();
+            checkTasksDueToday();
+
+            // Evaluar insignias al iniciar (por si hay nuevas con datos existentes)
+            setTimeout(() => { evaluateBadges(); updateBadgeCounter(); }, 1200);
+        }
+
+        // ── Traducir errores de Firebase Auth ──
+        function translateAuthError(code) {
+            const map = {
+                'EMAIL_EXISTS':              'Este correo ya tiene una cuenta. Inicia sesión.',
+                'INVALID_EMAIL':             'Correo inválido.',
+                'WEAK_PASSWORD':             'La contraseña debe tener al menos 6 caracteres.',
+                'EMAIL_NOT_FOUND':           'No existe una cuenta con este correo.',
+                'INVALID_PASSWORD':          'Contraseña incorrecta.',
+                'USER_DISABLED':             'Esta cuenta fue deshabilitada.',
+                'TOO_MANY_ATTEMPTS_TRY_LATER':'Demasiados intentos. Intenta más tarde.',
+                'INVALID_LOGIN_CREDENTIALS': 'Correo o contraseña incorrectos.',
+                'MISSING_PASSWORD':          'Escribe tu contraseña.',
+            };
+            return map[code] || 'Error: ' + code;
+        }
+
+        // ═══════════════════════════════════════════════════
+        //  FIREBASE REALTIME DB — SYNC COMPLETO
+        // ═══════════════════════════════════════════════════
+
+        // Ruta base del usuario actual
+        function userPath() {
+            return currentUser ? `${FIREBASE_URL}/users/${currentUser.uid}` : null;
+        }
+
+        // ── Cargar TODOS los datos desde Firebase ──
+        async function loadAllDataFromFirebase() {
+            const path = userPath();
+            if (!path) return;
+            try {
+                const res = await fetch(`${path}/data.json`);
+                if (!res.ok) throw new Error('GET falló');
+                const remote = await res.json();
+                if (remote) {
+                    // Mezclar con defaults para que siempre existan todas las claves
+                    appData = {
+                        tasks:         remote.tasks         || [],
+                        events:        remote.events        || [],
+                        people:        remote.people        || [],
+                        emotions:      remote.emotions      || [],
+                        habits:        remote.habits        || [],
+                        schedule:      remote.schedule      || [],
+                        subjects:      remote.subjects      || [],
+                        weeklyReviews: remote.weeklyReviews || [],
+                        badges:        remote.badges        || {}
+                    };
+                    // Persistir localmente también
+                    localStorage.setItem('upmhAppData', JSON.stringify(appData));
+                }
+            } catch(err) {
+                console.warn('No se pudo cargar desde Firebase, usando datos locales:', err.message);
+                // Fallback a localStorage
+                const saved = localStorage.getItem('upmhAppData');
+                if (saved) appData = JSON.parse(saved);
+            }
+        }
+
+        // ── Guardar TODOS los datos en Firebase + localStorage ──
         function saveData() {
+            // 1. Siempre guardar localmente (instantáneo)
             localStorage.setItem('upmhAppData', JSON.stringify(appData));
+            // 2. Sincronizar en Firebase en segundo plano (no bloquea la UI)
+            const path = userPath();
+            if (!path) return;
+            fetch(`${path}/data.json`, {
+                method:  'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body:    JSON.stringify(appData)
+            }).catch(err => console.warn('Firebase sync falló (se guardó localmente):', err.message));
+        }
+
+        // ── Funciones de emoción individual (compatibilidad con código anterior) ──
+        async function saveEmotionToFirebase(emotion) {
+            saveData(); // Ahora saveData() ya sincroniza todo
+            return true;
+        }
+        async function deleteEmotionFromFirebase(emotionId) {
+            saveData(); // El estado ya está actualizado en appData antes de llamar aquí
+        }
+        async function loadEmotionsFromFirebase() {
+            // No hace falta: loadAllDataFromFirebase ya trae todo
+            return false;
+        }
+
+        // ── Verificar sesión existente al cargar la página ──
+        async function checkExistingSession() {
+            loadTheme(); // Cargar tema inmediatamente para evitar flash
+            const saved = localStorage.getItem('roseSession');
+            if (saved) {
+                try {
+                    currentUser = JSON.parse(saved);
+                    const displayName = currentUser.displayName || currentUser.email.split('@')[0];
+                    await enterApp(displayName);
+                    return;
+                } catch(e) {
+                    localStorage.removeItem('roseSession');
+                }
+            }
+            // Sin sesión → mostrar pantalla de login
+            document.getElementById('auth-screen').style.display = 'flex';
         }
 
         function showNotification(message, type = 'success') {
@@ -3808,6 +4477,10 @@
             if (pageName === 'bienestar') {
                 populatePersonSelectsBienestar();
                 setupEmotionsFilters();
+                // Intentar sincronizar desde Firebase primero
+                loadEmotionsFromFirebase().then(synced => {
+                    if (synced) renderEmotionsHistoryBienestar();
+                });
                 renderEmotionsHistoryBienestar();
 
                 // Botón gestionar emociones
@@ -3826,6 +4499,8 @@
             if (pageName === 'progreso') {
                 renderSubjects();
                 updateProgressStats();
+                // Pequeño delay para que el DOM esté visible antes de dibujar Canvas
+                setTimeout(() => renderAllCharts(), 80);
             }
         }
 
@@ -3896,69 +4571,66 @@
         }
 
         function updateProgressStats() {
-            // Calcular promedio general
-            let totalGrade = 0;
-            let totalCredits = 0;
-            
+            // Calcular índice de bienestar ponderado por prioridad
+            let totalWeighted = 0;
+            let totalWeight    = 0;
+
             appData.subjects.forEach(subject => {
-                totalGrade += subject.grade * subject.credits;
-                totalCredits += subject.credits;
+                const progress = subject.grade   || 0;   // 0-10: cómo estás
+                const weight   = subject.credits || 1;   // 1-10: prioridad
+                totalWeighted += progress * weight;
+                totalWeight   += weight;
             });
-            
-            const average = totalCredits > 0 ? (totalGrade / totalCredits) : 0;
-            
+
+            const index = totalWeight > 0 ? (totalWeighted / totalWeight) : 0;
+            // Mostrar como porcentaje (0-100%)
+            const indexPct = Math.round(index * 10);
+
             const averageEl = document.getElementById('overall-average');
             const progressEl = document.getElementById('overall-progress');
-            const messageEl = document.getElementById('performance-message');
-            
+            const messageEl  = document.getElementById('performance-message');
+
             if (averageEl) {
-                averageEl.textContent = average.toFixed(1);
+                averageEl.textContent = appData.subjects.length > 0 ? indexPct + '%' : '—';
             }
-            
             if (progressEl) {
-                progressEl.style.width = ((average / 10) * 100) + '%';
+                progressEl.style.width = indexPct + '%';
             }
-            
             if (messageEl) {
-                if (average >= 9) {
-                    messageEl.textContent = '¡Excelente rendimiento académico! 🌟';
-                } else if (average >= 8) {
-                    messageEl.textContent = 'Buen rendimiento académico 👍';
-                } else if (average >= 7) {
-                    messageEl.textContent = 'Rendimiento regular, ¡puedes mejorar! 💪';
-                } else if (average >= 6) {
-                    messageEl.textContent = 'Necesitas esforzarte más 📚';
+                if (appData.subjects.length === 0) {
+                    messageEl.textContent = 'Agrega áreas de vida para ver tu índice';
+                } else if (indexPct >= 80) {
+                    messageEl.textContent = 'Estás en una etapa muy sólida. Sigue así 🌟';
+                } else if (indexPct >= 65) {
+                    messageEl.textContent = 'Buen equilibrio general. Hay espacio para crecer 💪';
+                } else if (indexPct >= 50) {
+                    messageEl.textContent = 'Algunas áreas necesitan más atención 🔍';
+                } else if (indexPct >= 30) {
+                    messageEl.textContent = 'Momento de enfocarse. Pequeños pasos cuentan 🌱';
                 } else {
-                    messageEl.textContent = 'Situación crítica, busca apoyo 🆘';
+                    messageEl.textContent = 'Es un momento difícil. Un área a la vez 🤍';
                 }
             }
 
-            // Actualizar estadísticas del semestre
+            // Estadísticas
             const completedTasks = appData.tasks.filter(t => t.completed).length;
-            const totalTasks = appData.tasks.length;
-            
+            const totalTasks     = appData.tasks.length;
+
             const completedTasksEl = document.getElementById('completed-tasks-stat');
-            if (completedTasksEl) {
-                completedTasksEl.textContent = `${completedTasks}/${totalTasks}`;
-            }
+            if (completedTasksEl) completedTasksEl.textContent = `${completedTasks}/${totalTasks}`;
 
             const totalSubjectsEl = document.getElementById('total-subjects-stat');
-            if (totalSubjectsEl) {
-                totalSubjectsEl.textContent = appData.subjects.length;
-            }
+            if (totalSubjectsEl) totalSubjectsEl.textContent = appData.subjects.length;
 
-            const approvedSubjects = appData.subjects.filter(s => s.grade >= 6).length;
+            // "En buen camino" = áreas con progreso ≥ 7 (70%)
+            const onTrack = appData.subjects.filter(s => (s.grade || 0) >= 7).length;
             const approvedSubjectsEl = document.getElementById('approved-subjects');
-            if (approvedSubjectsEl) {
-                approvedSubjectsEl.textContent = approvedSubjects;
-            }
+            if (approvedSubjectsEl) approvedSubjectsEl.textContent = onTrack;
 
-            // Calcular horas invertidas (estimado: basado en importancia)
-            const studyHours = totalCredits * 2;
+            // "Necesitan atención" = áreas con progreso < 5 (50%)
+            const needWork = appData.subjects.filter(s => (s.grade || 0) < 5).length;
             const studyHoursEl = document.getElementById('study-hours');
-            if (studyHoursEl) {
-                studyHoursEl.textContent = studyHours + 'h';
-            }
+            if (studyHoursEl) studyHoursEl.textContent = needWork;
         }
 
         // ========== MODAL DE NOTIFICACIONES ==========
@@ -4054,7 +4726,7 @@
             modal.style.display = 'flex';
 
             const currentTheme = localStorage.getItem('appTheme') || 'violet';
-            const savedName = localStorage.getItem('institutionName') || '';
+            const savedName = currentUser ? (currentUser.displayName || currentUser.email.split('@')[0]) : (localStorage.getItem('institutionName') || '');
 
             // Swatches de temas con paleta ChromaAudit
             const themeSwatches = Object.entries(THEMES).map(([key, t]) => {
@@ -4106,6 +4778,79 @@
                             <p style="font-size:0.75rem; color:var(--text-secondary); margin-top:8px; text-align:center;">Paleta certificada WCAG AA/AAA · ChromaAudit</p>
                         </div>
 
+                        <!-- Notificaciones -->
+                        <div>
+                            <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-secondary); margin-bottom:10px;">🔔 Notificaciones</div>
+                            <div id="notif-permission-banner" style="display:none; background:rgba(255,234,0,0.12); border:1px solid rgba(255,234,0,0.4); border-radius:12px; padding:12px 14px; margin-bottom:10px; font-size:0.82rem; color:var(--text-primary);">
+                                ⚠️ Las notificaciones están bloqueadas en tu navegador. Actívalas desde la configuración del sitio para recibir recordatorios.
+                            </div>
+
+                            <!-- Toggle: hábitos -->
+                            <div style="background:var(--bg-primary); border-radius:14px; padding:14px; margin-bottom:8px;">
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                                    <div>
+                                        <div style="font-size:0.88rem; font-weight:600; color:var(--text-primary);">🔥 Recordatorio de hábitos</div>
+                                        <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:2px;">Aviso diario para completar tus hábitos</div>
+                                    </div>
+                                    <label class="notif-toggle" style="position:relative; display:inline-block; width:44px; height:24px; cursor:pointer;">
+                                        <input type="checkbox" id="notif-habits-toggle" style="opacity:0; width:0; height:0;">
+                                        <span class="notif-slider"></span>
+                                    </label>
+                                </div>
+                                <div id="notif-habits-time-row" style="display:none; align-items:center; gap:10px;">
+                                    <span style="font-size:0.82rem; color:var(--text-secondary);">⏰ Hora:</span>
+                                    <input type="time" id="notif-habits-time" value="08:00"
+                                        style="padding:6px 10px; border-radius:8px; border:1.5px solid var(--border-color); background:var(--bg-secondary); color:var(--text-primary); font-size:0.85rem; font-family:Poppins,sans-serif; outline:none;">
+                                    <button id="notif-habits-save" style="padding:6px 14px; background:var(--gradient); color:white; border:none; border-radius:8px; font-size:0.82rem; font-weight:600; cursor:pointer; font-family:Poppins,sans-serif;">Guardar</button>
+                                </div>
+                            </div>
+
+                            <!-- Toggle: tareas vencidas -->
+                            <div style="background:var(--bg-primary); border-radius:14px; padding:14px; margin-bottom:8px;">
+                                <div style="display:flex; justify-content:space-between; align-items:center;">
+                                    <div>
+                                        <div style="font-size:0.88rem; font-weight:600; color:var(--text-primary);">📝 Tareas por vencer hoy</div>
+                                        <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:2px;">Aviso al abrir la app si hay tareas que vencen hoy</div>
+                                    </div>
+                                    <label class="notif-toggle" style="position:relative; display:inline-block; width:44px; height:24px; cursor:pointer;">
+                                        <input type="checkbox" id="notif-tasks-toggle" style="opacity:0; width:0; height:0;">
+                                        <span class="notif-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Toggle: revisión semanal -->
+                            <div style="background:var(--bg-primary); border-radius:14px; padding:14px; margin-bottom:8px;">
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                                    <div>
+                                        <div style="font-size:0.88rem; font-weight:600; color:var(--text-primary);">📋 Revisión semanal</div>
+                                        <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:2px;">Recordatorio semanal para hacer tu revisión</div>
+                                    </div>
+                                    <label class="notif-toggle" style="position:relative; display:inline-block; width:44px; height:24px; cursor:pointer;">
+                                        <input type="checkbox" id="notif-review-toggle" style="opacity:0; width:0; height:0;">
+                                        <span class="notif-slider"></span>
+                                    </label>
+                                </div>
+                                <div id="notif-review-config-row" style="display:none; flex-wrap:wrap; gap:8px; align-items:center;">
+                                    <span style="font-size:0.82rem; color:var(--text-secondary);">📅 Día:</span>
+                                    <select id="notif-review-day" style="padding:6px 10px; border-radius:8px; border:1.5px solid var(--border-color); background:var(--bg-secondary); color:var(--text-primary); font-size:0.82rem; font-family:Poppins,sans-serif; outline:none;">
+                                        <option value="0">Domingo</option>
+                                        <option value="5">Viernes</option>
+                                        <option value="6">Sábado</option>
+                                    </select>
+                                    <span style="font-size:0.82rem; color:var(--text-secondary);">⏰ Hora:</span>
+                                    <input type="time" id="notif-review-time" value="19:00"
+                                        style="padding:6px 10px; border-radius:8px; border:1.5px solid var(--border-color); background:var(--bg-secondary); color:var(--text-primary); font-size:0.85rem; font-family:Poppins,sans-serif; outline:none;">
+                                    <button id="notif-review-save" style="padding:6px 14px; background:var(--gradient); color:white; border:none; border-radius:8px; font-size:0.82rem; font-weight:600; cursor:pointer; font-family:Poppins,sans-serif;">Guardar</button>
+                                </div>
+                            </div>
+
+                            <!-- Botón de prueba -->
+                            <button id="notif-test-btn" style="width:100%; padding:10px; background:rgba(124,77,255,0.1); color:var(--primary-color); border:1px solid rgba(124,77,255,0.25); border-radius:12px; font-weight:600; font-size:0.85rem; cursor:pointer; font-family:Poppins,sans-serif;">
+                                🔔 Enviar notificación de prueba
+                            </button>
+                        </div>
+
                         <!-- Datos -->
                         <div>
                             <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-secondary); margin-bottom:10px;">🗄️ Datos</div>
@@ -4122,8 +4867,22 @@
 
                         <!-- Versión -->
                         <div style="text-align:center; padding-top:4px; border-top:1px solid var(--border-color);">
-                            <p style="font-size:0.78rem; color:var(--text-secondary);">Rose v2.0 · Hecho con ❤️</p>
+                            <p style="font-size:0.78rem; color:var(--text-secondary);">Rose v2.1 · Hecho con ❤️</p>
                         </div>
+
+                        <!-- Cuenta -->
+                        ${currentUser ? `
+                        <div style="border-top:1px solid var(--border-color); padding-top:16px;">
+                            <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-secondary); margin-bottom:10px;">🔐 Tu cuenta</div>
+                            <div style="background:var(--bg-primary); border-radius:14px; padding:14px; margin-bottom:10px;">
+                                <div style="font-size:0.85rem; font-weight:600; color:var(--text-primary);">👤 ${currentUser.displayName || 'Usuario'}</div>
+                                <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:2px;">✉️ ${currentUser.email}</div>
+                                <div style="font-size:0.72rem; color:var(--success-color); margin-top:4px; font-weight:600;">☁️ Datos sincronizados en la nube</div>
+                            </div>
+                            <button class="btn" id="logout-btn" style="width:100%; background:rgba(255,82,82,0.1); color:var(--danger-color); border:1px solid rgba(255,82,82,0.2); font-weight:600; padding:10px;">
+                                🚪 Cerrar sesión
+                            </button>
+                        </div>` : ''}
                     </div>
                 </div>`;
 
@@ -4173,10 +4932,25 @@
                 if (confirm('¿Borrar todos los datos de Rose? Esta acción no se puede deshacer.')) {
                     localStorage.removeItem('upmhAppData');
                     localStorage.removeItem('institutionName');
-                    showNotification('Datos eliminados. Recargando... 🔄', 'success');
-                    setTimeout(() => location.reload(), 1500);
+                    appData = { tasks:[], events:[], people:[], emotions:[], habits:[], schedule:[], subjects:[], weeklyReviews:[] };
+                    saveData(); // Borra también en Firebase
+                    document.body.removeChild(modal);
+                    renderAllData();
+                    showNotification('Datos eliminados correctamente 🗑️', 'success');
                 }
             });
+
+            // Cerrar sesión
+            const logoutBtn = modal.querySelector('#logout-btn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', () => {
+                    document.body.removeChild(modal);
+                    handleLogout();
+                });
+            }
+
+            // ── Notificaciones: cargar estado guardado ──
+            initNotifSettingsUI(modal);
         }
         
         // ========== MODAL DE GESTIÓN DE CLASES ==========
@@ -4188,7 +4962,7 @@
             const classesHTML = `
                 <div class="modal-content" style="max-width: 600px;">
                     <div class="modal-header">
-                        <h3>Gestionar Clases 🗑️</h3>
+                        <h3>Gestionar Áreas de Vida 🗑️</h3>
                         <button class="close-modal">&times;</button>
                     </div>
                     <div style="max-height: 500px; overflow-y: auto;">
@@ -4290,8 +5064,8 @@
                                 <div style="flex: 1;">
                                     <div style="font-weight: 600; font-size: 1rem; color: var(--text-primary);">${subject.name}</div>
                                     <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.3rem;">
-                                        Progreso: <strong style="color: var(--primary-color);">${subject.grade.toFixed(1)}</strong> • 
-                                        Importancia: <strong>${subject.credits}</strong>
+                                        Cómo estás: <strong style="color: var(--primary-color);">${Math.round((subject.grade || 0) * 10)}%</strong> • 
+                                        Prioridad: <strong>${subject.credits}/10</strong>
                                     </div>
                                 </div>
                                 <button class="btn btn-danger manage-delete-subject-btn" data-id="${subject.id}" data-name="${subject.name}" style="padding: 10px 16px; font-size: 0.9rem;">
@@ -4329,7 +5103,7 @@
                     const id = parseInt(this.getAttribute('data-id'));
                     const name = this.getAttribute('data-name');
                     
-                    if (confirm(`¿Estás seguro de que quieres borrar la materia "${name}"?`)) {
+                    if (confirm(`¿Estás seguro de que quieres borrar el área "${name}"?`)) {
                         appData.subjects = appData.subjects.filter(subject => subject.id !== id);
                         saveData();
                         renderSubjects();
@@ -4344,7 +5118,7 @@
             const deleteAllBtn = modal.querySelector('#delete-all-subjects-btn');
             if (deleteAllBtn) {
                 deleteAllBtn.addEventListener('click', function() {
-                    if (confirm(`¿Estás seguro de que quieres borrar TODAS las ${appData.subjects.length} materias? Esta acción no se puede deshacer.`)) {
+                    if (confirm(`¿Estás seguro de que quieres borrar TODAS las ${appData.subjects.length} áreas? Esta acción no se puede deshacer.`)) {
                         appData.subjects = [];
                         saveData();
                         renderSubjects();
@@ -4402,12 +5176,9 @@
             const container = document.getElementById('emotions-timeline-view');
             if (!container) return;
             
-            // Asegurarnos de que appData.emotions sea un array
             if (!Array.isArray(appData.emotions)) appData.emotions = [];
             
-            const sortedEmotions = [...appData.emotions].sort((a, b) => {
-                return new Date(b.date) - new Date(a.date);
-            });
+            const sortedEmotions = [...appData.emotions].sort((a, b) => new Date(b.date) - new Date(a.date));
             
             if (sortedEmotions.length === 0) {
                 container.innerHTML = `
@@ -4415,16 +5186,41 @@
                         <div class="empty-state">
                             <div class="empty-icon">💭</div>
                             <p>No has registrado emociones aún</p>
+                            <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.5rem;">Toca "¿Cómo te sientes hoy?" para empezar</p>
                         </div>
                     </div>
                 `;
                 return;
             }
+
+            const emotionEmojis = {
+                'Alegría':'😊','Tristeza':'😢','Enojo':'😠','Amor':'❤️','Frustración':'😤',
+                'Confianza':'🤝','Miedo':'😨','Sorpresa':'😲','Gratitud':'🙏','Paz':'☮️',
+                'Motivación':'💪','Esperanza':'🌟','Ansiedad':'😰','Soledad':'🌧️','Cansancio':'😴'
+            };
             
             container.innerHTML = sortedEmotions.map(emotion => {
+                // Determinar avatar e identificador
+                const isSelf = emotion.isSelf || emotion.person === '🙋 Yo mismo';
                 const person = appData.people.find(p => p.name === emotion.person);
-                const emoji = person ? person.emoji : '👤';
-                
+                const avatar = isSelf ? '🙋' : (person ? person.emoji : '👤');
+                const personLabel = isSelf
+                    ? '<span style="font-weight:700; color:var(--primary-color);">Yo mismo</span>'
+                    : `<span style="font-weight:700;">${emotion.person}</span>`;
+
+                // Badge de intensidad (solo si existe)
+                const intensityBadge = emotion.intensity
+                    ? `<span style="font-size:0.75rem; padding:2px 10px; border-radius:20px; background:rgba(124,77,255,0.1); color:var(--primary-color); font-weight:600; margin-left:6px;">
+                        Intensidad ${emotion.intensity}/10
+                       </span>`
+                    : '';
+
+                // Barra de intensidad visual
+                const intensityBar = emotion.intensity ? `
+                    <div style="height:4px; border-radius:2px; background:var(--bg-primary); margin:8px 0 4px; overflow:hidden;">
+                        <div style="height:100%; width:${emotion.intensity * 10}%; background:var(--gradient); border-radius:2px; transition:width 0.5s ease;"></div>
+                    </div>` : '';
+
                 return `
                     <div class="card" style="margin-bottom: 1rem; position: relative; transition: var(--transition);">
                         <div class="card-actions">
@@ -4433,34 +5229,28 @@
                             </button>
                         </div>
                         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1rem;">
-                            <div style="font-size: 2rem;">${emoji}</div>
+                            <div style="font-size: 2rem; width:44px; height:44px; border-radius:50%; background:var(--bg-primary); display:flex; align-items:center; justify-content:center; flex-shrink:0;">${avatar}</div>
                             <div style="flex: 1;">
-                                <div style="font-weight: 700; font-size: 1rem; color: var(--text-primary);">${emotion.person}</div>
-                                <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                                <div style="display:flex; align-items:center; flex-wrap:wrap; gap:4px;">
+                                    ${personLabel}
+                                    ${intensityBadge}
+                                </div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top:2px;">
                                     📅 ${formatDate(emotion.date)}
                                 </div>
+                                ${intensityBar}
                             </div>
                         </div>
                         <div style="margin: 0.8rem 0; display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                            ${emotion.emotions.map(e => {
-                                const emotionEmojis = {
-                                    'Alegría': '😊',
-                                    'Tristeza': '😢',
-                                    'Enojo': '😠',
-                                    'Amor': '❤️',
-                                    'Frustración': '😤',
-                                    'Confianza': '🤝',
-                                    'Miedo': '😨',
-                                    'Sorpresa': '😲'
-                                };
-                                return `<span class="emotion-tag active" style="pointer-events: none;">
+                            ${emotion.emotions.map(e => `
+                                <span class="emotion-tag active" style="pointer-events: none;">
                                     <span class="emoji">${emotionEmojis[e] || '💭'}</span> ${e}
-                                </span>`;
-                            }).join('')}
+                                </span>`).join('')}
                         </div>
+                        ${emotion.description ? `
                         <p style="color: var(--text-secondary); font-size: 0.9rem; margin: 0; line-height: 1.5; padding: 0.8rem; background: var(--bg-primary); border-radius: 12px;">
                             "${emotion.description}"
-                        </p>
+                        </p>` : ''}
                     </div>
                 `;
             }).join('');
@@ -4485,17 +5275,17 @@
             // Agrupar por persona
             const groupedByPerson = {};
             appData.emotions.forEach(emotion => {
-                if (!groupedByPerson[emotion.person]) {
-                    groupedByPerson[emotion.person] = [];
-                }
-                groupedByPerson[emotion.person].push(emotion);
+                const key = emotion.person || '🙋 Yo mismo';
+                if (!groupedByPerson[key]) groupedByPerson[key] = [];
+                groupedByPerson[key].push(emotion);
             });
             
             container.innerHTML = Object.keys(groupedByPerson).sort().map(personName => {
                 const emotions = groupedByPerson[personName];
-                const person = appData.people.find(p => p.name === personName);
-                const emoji = person ? person.emoji : '👤';
-                const relation = person ? person.relation : 'Desconocido';
+                const isSelf = personName === '🙋 Yo mismo';
+                const person = isSelf ? null : appData.people.find(p => p.name === personName);
+                const emoji = isSelf ? '🙋' : (person ? person.emoji : '👤');
+                const relation = isSelf ? 'Registro personal' : (person ? person.relation : 'Desconocido');
                 
                 // Contar emociones totales
                 const emotionCounts = {};
@@ -5193,7 +5983,7 @@
                 ],
                 'Profesor/a': [
                     '👨‍🏫 <strong>Profesionalismo:</strong> Mantén límites apropiados mientras cultivas una relación de respeto mutuo.',
-                    '👨‍🏫 <strong>Aprovecha la oportunidad:</strong> Esta relación puede ser clave para tu desarrollo académico y profesional.'
+                    '🤝 <strong>Aprovecha la oportunidad:</strong> Esta relación puede ser clave para tu desarrollo personal y profesional.'
                 ]
             };
 
@@ -5505,6 +6295,8 @@
                 } else {
                     showNotification(`✅ "${habit.name}" completado hoy`, 'success');
                 }
+                // Evaluar insignias al completar hábito
+                setTimeout(evaluateBadges, 400);
             } else {
                 // Desmarcar
                 habit.completedDates.splice(idx, 1);
@@ -6005,6 +6797,7 @@
             if (!appData.weeklyReviews) appData.weeklyReviews = [];
             appData.weeklyReviews.push(review);
             saveData();
+            setTimeout(evaluateBadges, 400);
 
             document.getElementById('review-wizard').style.display = 'none';
             renderReviewSummary(review);
@@ -6244,8 +7037,986 @@
             }
         });
 
+        // ═══════════════════════════════════════════════════
+        //  SISTEMA DE NOTIFICACIONES PUSH — Rose v2.2
+        // ═══════════════════════════════════════════════════
+
+        // Configuración guardada en localStorage
+        const NOTIF_KEY = 'roseNotifConfig';
+
+        function getNotifConfig() {
+            try {
+                return JSON.parse(localStorage.getItem(NOTIF_KEY)) || {};
+            } catch { return {}; }
+        }
+        function saveNotifConfig(cfg) {
+            localStorage.setItem(NOTIF_KEY, JSON.stringify(cfg));
+        }
+
+        // ── Pedir permiso al navegador ──
+        async function requestNotifPermission() {
+            if (!('Notification' in window)) return 'unsupported';
+            if (Notification.permission === 'granted') return 'granted';
+            if (Notification.permission === 'denied')  return 'denied';
+            const result = await Notification.requestPermission();
+            return result;
+        }
+
+        // ── Mostrar una notificación nativa ──
+        function fireNotification(title, body, icon = '🌹') {
+            if (!('Notification' in window) || Notification.permission !== 'granted') return;
+            try {
+                const n = new Notification(title, {
+                    body,
+                    icon: '/icons/icon-192.png',
+                    badge: '/icons/icon-192.png',
+                    tag:  'rose-' + Date.now(),
+                    requireInteraction: false,
+                    silent: false
+                });
+                // Al hacer click abre la app
+                n.onclick = () => { window.focus(); n.close(); };
+                setTimeout(() => n.close(), 8000);
+            } catch(e) {
+                console.warn('Notificación fallida:', e.message);
+            }
+        }
+
+        // ── Inicializar UI de notificaciones en el modal de ajustes ──
+        function initNotifSettingsUI(modal) {
+            const cfg = getNotifConfig();
+            const perm = 'Notification' in window ? Notification.permission : 'unsupported';
+
+            // Banner de permiso bloqueado
+            const banner = modal.querySelector('#notif-permission-banner');
+            if (banner && perm === 'denied') banner.style.display = 'block';
+
+            // Toggle hábitos
+            const habitsToggle = modal.querySelector('#notif-habits-toggle');
+            const habitsTimeRow = modal.querySelector('#notif-habits-time-row');
+            const habitsTime    = modal.querySelector('#notif-habits-time');
+            const habitsSave    = modal.querySelector('#notif-habits-save');
+
+            if (habitsToggle) {
+                habitsToggle.checked = !!cfg.habits?.enabled;
+                habitsTimeRow.style.display = habitsToggle.checked ? 'flex' : 'none';
+                if (cfg.habits?.time) habitsTime.value = cfg.habits.time;
+
+                habitsToggle.addEventListener('change', async () => {
+                    if (habitsToggle.checked) {
+                        const p = await requestNotifPermission();
+                        if (p !== 'granted') {
+                            habitsToggle.checked = false;
+                            if (banner) banner.style.display = 'block';
+                            showNotification('Activa las notificaciones en tu navegador para continuar', 'error');
+                            return;
+                        }
+                        habitsTimeRow.style.display = 'flex';
+                        const c = getNotifConfig();
+                        c.habits = { ...(c.habits||{}), enabled: true };
+                        saveNotifConfig(c);
+                        showNotification('✅ Recordatorio de hábitos activado');
+                    } else {
+                        habitsTimeRow.style.display = 'none';
+                        const c = getNotifConfig();
+                        c.habits = { ...(c.habits||{}), enabled: false };
+                        saveNotifConfig(c);
+                        showNotification('Recordatorio de hábitos desactivado', 'info');
+                    }
+                    scheduleAllNotifications();
+                });
+
+                if (habitsSave) {
+                    habitsSave.addEventListener('click', () => {
+                        const c = getNotifConfig();
+                        c.habits = { ...(c.habits||{}), time: habitsTime.value, enabled: true };
+                        saveNotifConfig(c);
+                        scheduleAllNotifications();
+                        showNotification(`🔥 Recordatorio a las ${habitsTime.value} guardado`);
+                    });
+                }
+            }
+
+            // Toggle tareas
+            const tasksToggle = modal.querySelector('#notif-tasks-toggle');
+            if (tasksToggle) {
+                tasksToggle.checked = !!cfg.tasks?.enabled;
+                tasksToggle.addEventListener('change', async () => {
+                    if (tasksToggle.checked) {
+                        const p = await requestNotifPermission();
+                        if (p !== 'granted') {
+                            tasksToggle.checked = false;
+                            if (banner) banner.style.display = 'block';
+                            return;
+                        }
+                        const c = getNotifConfig(); c.tasks = { enabled: true }; saveNotifConfig(c);
+                        showNotification('✅ Aviso de tareas activado');
+                    } else {
+                        const c = getNotifConfig(); c.tasks = { enabled: false }; saveNotifConfig(c);
+                        showNotification('Aviso de tareas desactivado', 'info');
+                    }
+                    scheduleAllNotifications();
+                });
+            }
+
+            // Toggle revisión semanal
+            const reviewToggle    = modal.querySelector('#notif-review-toggle');
+            const reviewConfigRow = modal.querySelector('#notif-review-config-row');
+            const reviewDay       = modal.querySelector('#notif-review-day');
+            const reviewTime      = modal.querySelector('#notif-review-time');
+            const reviewSave      = modal.querySelector('#notif-review-save');
+
+            if (reviewToggle) {
+                reviewToggle.checked = !!cfg.review?.enabled;
+                reviewConfigRow.style.display = reviewToggle.checked ? 'flex' : 'none';
+                if (cfg.review?.day  !== undefined) reviewDay.value  = cfg.review.day;
+                if (cfg.review?.time !== undefined) reviewTime.value = cfg.review.time;
+
+                reviewToggle.addEventListener('change', async () => {
+                    if (reviewToggle.checked) {
+                        const p = await requestNotifPermission();
+                        if (p !== 'granted') {
+                            reviewToggle.checked = false;
+                            if (banner) banner.style.display = 'block';
+                            return;
+                        }
+                        reviewConfigRow.style.display = 'flex';
+                        const c = getNotifConfig();
+                        c.review = { ...(c.review||{}), enabled: true };
+                        saveNotifConfig(c);
+                        showNotification('✅ Recordatorio de revisión semanal activado');
+                    } else {
+                        reviewConfigRow.style.display = 'none';
+                        const c = getNotifConfig(); c.review = { ...(c.review||{}), enabled: false }; saveNotifConfig(c);
+                        showNotification('Recordatorio de revisión desactivado', 'info');
+                    }
+                    scheduleAllNotifications();
+                });
+
+                if (reviewSave) {
+                    reviewSave.addEventListener('click', () => {
+                        const days = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+                        const c = getNotifConfig();
+                        c.review = { enabled: true, day: parseInt(reviewDay.value), time: reviewTime.value };
+                        saveNotifConfig(c);
+                        scheduleAllNotifications();
+                        showNotification(`📋 Revisión semanal: ${days[reviewDay.value]} a las ${reviewTime.value}`);
+                    });
+                }
+            }
+
+            // Botón de prueba
+            const testBtn = modal.querySelector('#notif-test-btn');
+            if (testBtn) {
+                testBtn.addEventListener('click', async () => {
+                    const p = await requestNotifPermission();
+                    if (p !== 'granted') {
+                        if (banner) banner.style.display = 'block';
+                        showNotification('Activa las notificaciones en tu navegador primero', 'error');
+                        return;
+                    }
+                    const pending = (appData.tasks || []).filter(t => !t.completed).length;
+                    const habits  = (appData.habits || []).filter(h => !isHabitCompletedToday(h)).length;
+                    fireNotification(
+                        '🌹 Rose — Recordatorio',
+                        `Tienes ${pending} tarea${pending !== 1 ? 's' : ''} pendiente${pending !== 1 ? 's' : ''} y ${habits} hábito${habits !== 1 ? 's' : ''} por completar hoy.`
+                    );
+                    showNotification('Notificación de prueba enviada 🔔');
+                });
+            }
+        }
+
+        // ── Calcular ms hasta una hora HH:MM de hoy (o mañana si ya pasó) ──
+        function msUntilTime(timeStr) {
+            const [hh, mm] = timeStr.split(':').map(Number);
+            const now  = new Date();
+            const target = new Date(now);
+            target.setHours(hh, mm, 0, 0);
+            if (target <= now) target.setDate(target.getDate() + 1);
+            return target - now;
+        }
+
+        // ── Calcular ms hasta el próximo día de semana a una hora ──
+        function msUntilWeekdayTime(dayOfWeek, timeStr) {
+            const [hh, mm] = timeStr.split(':').map(Number);
+            const now  = new Date();
+            const diff = (dayOfWeek - now.getDay() + 7) % 7;
+            const target = new Date(now);
+            target.setDate(now.getDate() + (diff === 0 ? 7 : diff));
+            target.setHours(hh, mm, 0, 0);
+            if (target <= now) target.setDate(target.getDate() + 7);
+            return target - now;
+        }
+
+        // Timers activos (para cancelarlos si se reconfiguran)
+        const _notifTimers = {};
+
+        // ── Programar todas las notificaciones según la configuración ──
+        function scheduleAllNotifications() {
+            if (!('Notification' in window) || Notification.permission !== 'granted') return;
+            const cfg = getNotifConfig();
+
+            // Cancelar timers anteriores
+            Object.values(_notifTimers).forEach(id => clearTimeout(id));
+
+            // 1. Hábitos diarios
+            if (cfg.habits?.enabled && cfg.habits?.time) {
+                const delay = msUntilTime(cfg.habits.time);
+                _notifTimers.habits = setTimeout(function fire() {
+                    const pending = (appData.habits || []).filter(h => !isHabitCompletedToday(h));
+                    if (pending.length > 0) {
+                        fireNotification(
+                            `🔥 Tus hábitos de hoy, ${new Date().toLocaleDateString('es-ES', {weekday:'long'})}`,
+                            `Te faltan ${pending.length} hábito${pending.length !== 1 ? 's' : ''}: ${pending.slice(0,3).map(h => h.name).join(', ')}${pending.length > 3 ? '...' : ''}`
+                        );
+                    }
+                    // Reprogramar para mañana
+                    _notifTimers.habits = setTimeout(fire, 24 * 60 * 60 * 1000);
+                }, delay);
+            }
+
+            // 2. Tareas por vencer hoy (revisar al abrir la app)
+            if (cfg.tasks?.enabled) {
+                const today = getTodayString();
+                const dueToday = (appData.tasks || []).filter(t => !t.completed && t.deadline === today);
+                if (dueToday.length > 0) {
+                    // Pequeño delay para no disparar justo al abrir ajustes
+                    _notifTimers.tasks = setTimeout(() => {
+                        fireNotification(
+                            '📝 Tareas que vencen hoy',
+                            dueToday.slice(0,3).map(t => `• ${t.title}`).join('\n') + (dueToday.length > 3 ? `\n...y ${dueToday.length - 3} más` : '')
+                        );
+                    }, 3000);
+                }
+            }
+
+            // 3. Revisión semanal
+            if (cfg.review?.enabled && cfg.review?.time !== undefined && cfg.review?.day !== undefined) {
+                const delay = msUntilWeekdayTime(cfg.review.day, cfg.review.time);
+                _notifTimers.review = setTimeout(function fire() {
+                    fireNotification(
+                        '📋 ¿Ya hiciste tu revisión semanal?',
+                        '5 minutos de reflexión pueden cambiar tu próxima semana. Ábrela ahora en Rose 🌹'
+                    );
+                    _notifTimers.review = setTimeout(fire, 7 * 24 * 60 * 60 * 1000);
+                }, delay);
+            }
+        }
+
+        // ── Revisar tareas vencidas al iniciar la app ──
+        function checkTasksDueToday() {
+            const cfg = getNotifConfig();
+            if (!cfg.tasks?.enabled) return;
+            if (Notification.permission !== 'granted') return;
+            const today    = getTodayString();
+            const dueToday = (appData.tasks || []).filter(t => !t.completed && t.deadline === today);
+            if (dueToday.length > 0) {
+                setTimeout(() => {
+                    fireNotification(
+                        `📝 ${dueToday.length} tarea${dueToday.length !== 1 ? 's' : ''} vence${dueToday.length === 1 ? '' : 'n'} hoy`,
+                        dueToday.slice(0, 3).map(t => `• ${t.title}`).join('\n')
+                    );
+                }, 4000);
+            }
+        }
+
+        // ═══════════════════════════════════════════════════
+        //  SISTEMA DE INSIGNIAS Y CELEBRACIONES — Rose v2.3
+        // ═══════════════════════════════════════════════════
+
+        // ── Catálogo completo de insignias ──
+        const BADGES = [
+            // 🔥 Rachas
+            { id: 'streak_3',    icon: '⚡', name: 'Chispa',          category: 'Rachas',       desc: 'Completa un hábito 3 días seguidos',          check: () => (appData.habits||[]).some(h => (h.streak||0) >= 3)  },
+            { id: 'streak_7',    icon: '🔥', name: 'En llamas',       category: 'Rachas',       desc: 'Mantén una racha de 7 días en cualquier hábito', check: () => (appData.habits||[]).some(h => (h.streak||0) >= 7)  },
+            { id: 'streak_21',   icon: '💎', name: 'Diamante',        category: 'Rachas',       desc: '21 días seguidos — el hábito ya es tuyo',        check: () => (appData.habits||[]).some(h => (h.streak||0) >= 21) },
+            { id: 'streak_30',   icon: '👑', name: 'Leyenda',         category: 'Rachas',       desc: '30 días de racha. Eres imparable',               check: () => (appData.habits||[]).some(h => (h.streak||0) >= 30) },
+            // ✅ Tareas
+            { id: 'tasks_1',     icon: '🌱', name: 'Primer paso',     category: 'Productividad', desc: 'Completa tu primera tarea',                     check: () => (appData.tasks||[]).some(t => t.completed) },
+            { id: 'tasks_10',    icon: '📝', name: 'Ejecutor',        category: 'Productividad', desc: 'Completa 10 tareas',                            check: () => (appData.tasks||[]).filter(t => t.completed).length >= 10 },
+            { id: 'tasks_50',    icon: '🚀', name: 'Máquina',         category: 'Productividad', desc: '50 tareas completadas. Nada te detiene',        check: () => (appData.tasks||[]).filter(t => t.completed).length >= 50 },
+            // ❤️ Bienestar
+            { id: 'emotion_1',   icon: '💝', name: 'Autoconciencia',  category: 'Bienestar',    desc: 'Registra tu primera emoción',                    check: () => (appData.emotions||[]).length >= 1  },
+            { id: 'emotion_10',  icon: '🧠', name: 'Explorador',      category: 'Bienestar',    desc: 'Registra 10 emociones',                          check: () => (appData.emotions||[]).length >= 10 },
+            { id: 'emotion_self',icon: '🙋', name: 'Yo primero',      category: 'Bienestar',    desc: 'Registra una emoción sobre ti mismo',            check: () => (appData.emotions||[]).some(e => e.isSelf) },
+            // 📋 Reflexión
+            { id: 'review_1',    icon: '📋', name: 'Reflexivo',       category: 'Reflexión',    desc: 'Completa tu primera revisión semanal',           check: () => (appData.weeklyReviews||[]).length >= 1 },
+            { id: 'review_5',    icon: '🌟', name: 'Consistente',     category: 'Reflexión',    desc: '5 revisiones semanales completadas',             check: () => (appData.weeklyReviews||[]).length >= 5 },
+        ];
+
+        // ── Evaluar todas las insignias y desbloquear las nuevas ──
+        function evaluateBadges() {
+            if (!appData.badges) appData.badges = {};
+            let newlyUnlocked = [];
+
+            BADGES.forEach(badge => {
+                if (appData.badges[badge.id]) return; // ya desbloqueada
+                try {
+                    if (badge.check()) {
+                        appData.badges[badge.id] = { unlockedAt: new Date().toISOString() };
+                        newlyUnlocked.push(badge);
+                    }
+                } catch(e) {}
+            });
+
+            if (newlyUnlocked.length > 0) {
+                saveData();
+                // Mostrar celebraciones en secuencia
+                showBadgeUnlockSequence(newlyUnlocked);
+            }
+        }
+
+        // ── Mostrar insignias desbloqueadas en secuencia ──
+        let _badgeQueue = [];
+        let _badgeShowing = false;
+
+        function showBadgeUnlockSequence(badges) {
+            _badgeQueue.push(...badges);
+            if (!_badgeShowing) showNextBadge();
+        }
+
+        function showNextBadge() {
+            if (_badgeQueue.length === 0) { _badgeShowing = false; return; }
+            _badgeShowing = true;
+            const badge = _badgeQueue.shift();
+
+            document.getElementById('badge-unlock-icon').textContent = badge.icon;
+            document.getElementById('badge-unlock-name').textContent = badge.name;
+            document.getElementById('badge-unlock-desc').textContent = badge.desc;
+            document.getElementById('badge-unlock-modal').style.display = 'flex';
+
+            // Disparar confetti
+            startConfetti();
+            setTimeout(stopConfetti, 3500);
+
+            // También notificación push si está activada
+            fireNotification(`🏆 ¡Insignia desbloqueada: ${badge.name}!`, badge.desc);
+        }
+
+        function closeBadgeModal() {
+            document.getElementById('badge-unlock-modal').style.display = 'none';
+            stopConfetti();
+            // Pequeño delay antes del siguiente
+            setTimeout(showNextBadge, 300);
+        }
+
+        // ── Modal de todas las insignias ──
+        function showBadgesModal() {
+            if (!appData.badges) appData.badges = {};
+            const unlocked = Object.keys(appData.badges).length;
+            const total    = BADGES.length;
+
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.style.display = 'flex';
+
+            const categories = [...new Set(BADGES.map(b => b.category))];
+
+            modal.innerHTML = `
+                <div class="modal-content" style="padding:0; overflow:hidden; max-height:90vh;">
+                    <!-- Header -->
+                    <div style="background:var(--gradient); padding:20px 20px 16px; position:relative;">
+                        <button class="close-modal" style="position:absolute; top:14px; right:14px; background:rgba(255,255,255,0.2); border:none; color:white; width:30px; height:30px; border-radius:50%; font-size:1.1rem; cursor:pointer; display:flex; align-items:center; justify-content:center;">&times;</button>
+                        <div style="font-size:1.5rem; margin-bottom:4px;">🏆</div>
+                        <h3 style="color:white; font-size:1.1rem; font-weight:700; margin:0;">Mis Insignias</h3>
+                        <p style="color:rgba(255,255,255,0.85); font-size:0.82rem; margin:4px 0 0;">${unlocked} de ${total} desbloqueadas</p>
+                        <!-- Barra de progreso general -->
+                        <div style="height:5px; background:rgba(255,255,255,0.25); border-radius:3px; margin-top:10px; overflow:hidden;">
+                            <div style="height:100%; width:${Math.round(unlocked/total*100)}%; background:white; border-radius:3px; transition:width 0.5s ease;"></div>
+                        </div>
+                    </div>
+
+                    <div style="padding:16px; overflow-y:auto; max-height:calc(90vh - 120px);">
+                        ${categories.map(cat => {
+                            const catBadges = BADGES.filter(b => b.category === cat);
+                            const catEmojis = { 'Rachas':'🔥', 'Productividad':'✅', 'Bienestar':'❤️', 'Reflexión':'📋' };
+                            return `
+                            <div style="margin-bottom:20px;">
+                                <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-secondary); margin-bottom:10px; padding-left:2px;">
+                                    ${catEmojis[cat] || '🏅'} ${cat}
+                                </div>
+                                <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px;">
+                                    ${catBadges.map(badge => {
+                                        const isUnlocked = !!appData.badges[badge.id];
+                                        const unlockedAt = isUnlocked
+                                            ? new Date(appData.badges[badge.id].unlockedAt).toLocaleDateString('es-ES', {day:'numeric', month:'short'})
+                                            : null;
+                                        return `
+                                        <div class="badge-card ${isUnlocked ? 'unlocked' : 'locked'}">
+                                            ${!isUnlocked ? '<span class="badge-lock">🔒</span>' : ''}
+                                            <div class="badge-icon-wrap">${badge.icon}</div>
+                                            <div class="badge-name">${badge.name}</div>
+                                            <div class="badge-desc">${badge.desc}</div>
+                                            ${isUnlocked ? `<div class="badge-date">✅ ${unlockedAt}</div>` : ''}
+                                        </div>`;
+                                    }).join('')}
+                                </div>
+                            </div>`;
+                        }).join('')}
+                    </div>
+                </div>`;
+
+            document.body.appendChild(modal);
+            modal.querySelector('.close-modal').addEventListener('click', () => document.body.removeChild(modal));
+            modal.addEventListener('click', e => { if (e.target === modal) document.body.removeChild(modal); });
+        }
+
+        // ── Actualizar badge counter en el botón del header ──
+        function updateBadgeCounter() {
+            const btn = document.getElementById('badges-btn');
+            if (!btn) return;
+            const unlocked = Object.keys(appData.badges || {}).length;
+            const total    = BADGES.length;
+            btn.title = `${unlocked}/${total} insignias`;
+            // Highlight si hay insignias sin ver
+            btn.style.background = unlocked > 0 ? 'rgba(255,255,255,0.25)' : 'rgba(255,255,255,0.15)';
+        }
+
+        // ── CONFETTI ──
+        let _confettiAnim = null;
+        const _confettiParts = [];
+
+        function startConfetti() {
+            const canvas = document.getElementById('confetti-canvas');
+            if (!canvas) return;
+            canvas.width  = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const ctx = canvas.getContext('2d');
+            const colors = ['#7c4dff','#448aff','#00e676','#ffea00','#ff5252','#ff6d00','#e040fb'];
+            _confettiParts.length = 0;
+            for (let i = 0; i < 120; i++) {
+                _confettiParts.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    r: Math.random() * 6 + 3,
+                    d: Math.random() * 80 + 20,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    tilt: Math.floor(Math.random() * 10) - 10,
+                    tiltAngle: 0,
+                    tiltSpeed: Math.random() * 0.1 + 0.05,
+                    vx: (Math.random() - 0.5) * 2,
+                    vy: Math.random() * 3 + 2,
+                });
+            }
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                _confettiParts.forEach(p => {
+                    p.tiltAngle += p.tiltSpeed;
+                    p.x += p.vx + Math.sin(p.tiltAngle) * 0.5;
+                    p.y += p.vy;
+                    p.tilt = Math.sin(p.tiltAngle) * 12;
+                    if (p.y > canvas.height) {
+                        p.x = Math.random() * canvas.width;
+                        p.y = -10;
+                    }
+                    ctx.beginPath();
+                    ctx.lineWidth = p.r;
+                    ctx.strokeStyle = p.color;
+                    ctx.moveTo(p.x + p.tilt + p.r / 2, p.y);
+                    ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 2);
+                    ctx.stroke();
+                });
+                _confettiAnim = requestAnimationFrame(draw);
+            }
+            if (_confettiAnim) cancelAnimationFrame(_confettiAnim);
+            draw();
+        }
+
+        function stopConfetti() {
+            if (_confettiAnim) { cancelAnimationFrame(_confettiAnim); _confettiAnim = null; }
+            const canvas = document.getElementById('confetti-canvas');
+            if (canvas) canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // ── Integrar evaluateBadges en los puntos clave ──
+        // Se llama después de cada acción relevante en el código existente
+        // (se inyecta en toggleHabitToday, handleTaskSubmit, emotion submit, y al cerrar review)
+        const _origToggleHabit = toggleHabitToday;
+        // (ya parchamos desde toggleHabitToday directamente abajo)
+
         // Service Worker desactivado en entorno de previsualización
         // (se activa al desplegar la app en un servidor propio con sw.js)
+
+        // ═══════════════════════════════════════════════════
+        //  GRÁFICAS DE PROGRESO HISTÓRICO
+        // ═══════════════════════════════════════════════════
+
+        // ── Switch de tabs en sección Progreso ──
+        function switchProgresoTab(tabId) {
+            const tabs    = ['tab-resumen','tab-habitos','tab-emociones','tab-areas'];
+            const buttons = document.querySelectorAll('.progreso-tab');
+
+            tabs.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = id === tabId ? 'block' : 'none';
+            });
+
+            buttons.forEach(btn => {
+                const isActive = btn.dataset.tab === tabId;
+                btn.style.background = isActive ? 'var(--gradient)' : 'transparent';
+                btn.style.color      = isActive ? 'white' : 'var(--text-secondary)';
+            });
+
+            // Dibujar la gráfica correspondiente con delay para que el DOM esté visible
+            setTimeout(() => {
+                if (tabId === 'tab-habitos')   { renderHeatmap(); renderStreaksChart(); }
+                if (tabId === 'tab-emociones') { renderEmotionsLineChart(); renderEmotionsFrequency(); }
+                if (tabId === 'tab-areas')     { renderAreasBarChart(); renderSubjectsAreas(); }
+            }, 60);
+        }
+
+        // ── Punto de entrada: renderiza todas las gráficas visibles ──
+        function renderAllCharts() {
+            renderHeatmap();
+            renderStreaksChart();
+            renderEmotionsLineChart();
+            renderEmotionsFrequency();
+            renderAreasBarChart();
+            renderSubjectsAreas();
+        }
+
+        // ── Helpers de fecha ──
+        function getLast30Days() {
+            const days = [];
+            for (let i = 29; i >= 0; i--) {
+                const d = new Date();
+                d.setDate(d.getDate() - i);
+                days.push(d.toISOString().split('T')[0]);
+            }
+            return days;
+        }
+
+        function getLast14Days() {
+            const days = [];
+            for (let i = 13; i >= 0; i--) {
+                const d = new Date();
+                d.setDate(d.getDate() - i);
+                days.push(d.toISOString().split('T')[0]);
+            }
+            return days;
+        }
+
+        function shortDay(dateStr) {
+            const d   = new Date(dateStr + 'T12:00:00');
+            const day = d.getDate();
+            const mon = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'][d.getMonth()];
+            return `${day} ${mon}`;
+        }
+
+        // ══════════════════════════════════════════
+        //  1. HEATMAP DE HÁBITOS
+        // ══════════════════════════════════════════
+        function renderHeatmap() {
+            const container = document.getElementById('habits-heatmap-container');
+            if (!container) return;
+
+            const habits = appData.habits || [];
+            if (habits.length === 0) {
+                container.innerHTML = `<div style="text-align:center; padding:2rem; color:var(--text-secondary);"><div style="font-size:2rem;">📭</div><p style="margin-top:0.5rem; font-size:0.9rem;">No hay hábitos registrados aún</p></div>`;
+                return;
+            }
+
+            const days = getLast30Days();
+            // CSS vars no funcionan directo en Canvas — leemos los colores del DOM
+            const isDark     = document.documentElement.getAttribute('data-theme') === 'dark';
+            const cellEmpty  = isDark ? '#1e293b' : '#f0f2f5';
+            const textColor  = isDark ? '#94a3b8' : '#64748b';
+
+            // Paleta de intensidad usando primary-color con opacidad
+            const colorScale = ['#f0f2f5','rgba(124,77,255,0.2)','rgba(124,77,255,0.45)','rgba(124,77,255,0.7)','rgba(124,77,255,0.95)'];
+            if (isDark) colorScale[0] = '#1e293b';
+
+            const CELL = 14;   // tamaño celda px
+            const GAP  = 3;    // gap entre celdas
+            const LABEL_W = 110; // ancho para el nombre del hábito
+            const ROW_H   = CELL + GAP;
+
+            const W = LABEL_W + days.length * (CELL + GAP);
+            const H = habits.length * ROW_H + 28; // +28 para labels de fecha top
+
+            container.innerHTML = `<canvas id="heatmap-canvas" style="width:100%; max-width:${W}px;"></canvas>`;
+            const canvas = document.getElementById('heatmap-canvas');
+            canvas.width  = W;
+            canvas.height = H;
+
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, W, H);
+
+            // Labels de fecha (cada 7 días)
+            ctx.font = `500 10px Poppins, sans-serif`;
+            ctx.fillStyle = textColor;
+            ctx.textAlign = 'left';
+            for (let di = 0; di < days.length; di += 7) {
+                const x = LABEL_W + di * (CELL + GAP);
+                ctx.fillText(shortDay(days[di]).split(' ')[0], x, 11);
+            }
+
+            // Filas por hábito
+            habits.forEach((habit, hi) => {
+                const y    = 20 + hi * ROW_H;
+                const completed = new Set(habit.completedDates || []);
+
+                // Nombre del hábito (truncado)
+                ctx.font      = `500 11px Poppins, sans-serif`;
+                ctx.fillStyle = textColor;
+                ctx.textAlign = 'right';
+                const label   = `${habit.emoji || '•'} ${habit.name}`.substring(0, 16);
+                ctx.fillText(label, LABEL_W - 6, y + CELL - 3);
+
+                // Celdas
+                days.forEach((day, di) => {
+                    const done  = completed.has(day);
+                    const today = day === getTodayString();
+                    const x     = LABEL_W + di * (CELL + GAP);
+
+                    // Fondo celda
+                    ctx.fillStyle = done ? colorScale[4] : colorScale[0];
+                    ctx.beginPath();
+                    ctx.roundRect ? ctx.roundRect(x, y, CELL, CELL, 3) : ctx.rect(x, y, CELL, CELL);
+                    ctx.fill();
+
+                    // Borde "hoy"
+                    if (today) {
+                        ctx.strokeStyle = done ? 'rgba(255,255,255,0.6)' : 'rgba(124,77,255,0.6)';
+                        ctx.lineWidth   = 1.5;
+                        ctx.beginPath();
+                        ctx.roundRect ? ctx.roundRect(x, y, CELL, CELL, 3) : ctx.rect(x, y, CELL, CELL);
+                        ctx.stroke();
+                    }
+                });
+            });
+        }
+
+        // ══════════════════════════════════════════
+        //  2. BARRAS DE RACHAS
+        // ══════════════════════════════════════════
+        function renderStreaksChart() {
+            const container = document.getElementById('streaks-chart-container');
+            if (!container) return;
+
+            const habits = (appData.habits || []).filter(h => (h.streak || 0) > 0 || (h.bestStreak || 0) > 0);
+            if (habits.length === 0) {
+                container.innerHTML = `<div style="text-align:center; padding:1.5rem; color:var(--text-secondary); font-size:0.9rem;">Completa hábitos para ver tus rachas aquí 🔥</div>`;
+                return;
+            }
+
+            container.innerHTML = habits.map(h => {
+                const streak     = h.streak     || 0;
+                const bestStreak = h.bestStreak || 0;
+                const pct        = bestStreak > 0 ? Math.round((streak / bestStreak) * 100) : 100;
+                const fire       = streak >= 7 ? '🔥' : streak >= 3 ? '⚡' : '✅';
+                return `
+                <div class="card" style="margin-bottom:12px; padding:14px 16px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <span style="font-size:1.4rem;">${h.emoji || '•'}</span>
+                            <span style="font-weight:600; font-size:0.9rem; color:var(--text-primary);">${h.name}</span>
+                        </div>
+                        <div style="text-align:right;">
+                            <span style="font-size:1.1rem; font-weight:800; color:var(--primary-color);">${fire} ${streak}</span>
+                            <span style="font-size:0.75rem; color:var(--text-secondary); display:block;">racha actual</span>
+                        </div>
+                    </div>
+                    <div style="height:8px; background:var(--bg-primary); border-radius:4px; overflow:hidden; position:relative;">
+                        <div style="height:100%; width:${pct}%; background:var(--gradient); border-radius:4px; transition:width 0.6s cubic-bezier(0.4,0,0.2,1);"></div>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; margin-top:4px;">
+                        <span style="font-size:0.72rem; color:var(--text-secondary);">0</span>
+                        <span style="font-size:0.72rem; color:var(--text-secondary);">Mejor: ${bestStreak} días 🏆</span>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        // ══════════════════════════════════════════
+        //  3. GRÁFICA DE LÍNEA — INTENSIDAD EMOCIONAL
+        // ══════════════════════════════════════════
+        function renderEmotionsLineChart() {
+            const canvas = document.getElementById('emotions-line-chart');
+            const empty  = document.getElementById('emotions-chart-empty');
+            if (!canvas) return;
+
+            const days     = getLast14Days();
+            const emotions = appData.emotions || [];
+
+            // Calcular promedio de intensidad por día
+            const dataPoints = days.map(day => {
+                const dayEmotions = emotions.filter(e => e.date && e.date.startsWith(day) && e.intensity);
+                if (dayEmotions.length === 0) return null;
+                const avg = dayEmotions.reduce((s, e) => s + (e.intensity || 5), 0) / dayEmotions.length;
+                return Math.round(avg * 10) / 10;
+            });
+
+            const hasData = dataPoints.some(v => v !== null);
+            if (!hasData) {
+                canvas.style.display = 'none';
+                if (empty) empty.style.display = 'block';
+                return;
+            }
+            canvas.style.display = '';
+            if (empty) empty.style.display = 'none';
+
+            const isDark   = document.documentElement.getAttribute('data-theme') === 'dark';
+            const textClr  = isDark ? '#94a3b8' : '#64748b';
+            const gridClr  = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)';
+            const W = canvas.parentElement.clientWidth - 32 || 340;
+            const H = 180;
+            canvas.width  = W;
+            canvas.height = H;
+
+            const ctx  = canvas.getContext('2d');
+            const PAD  = { top:16, right:16, bottom:32, left:28 };
+            const gW   = W - PAD.left - PAD.right;
+            const gH   = H - PAD.top  - PAD.bottom;
+
+            ctx.clearRect(0, 0, W, H);
+
+            // Líneas de grid horizontales (0,2,4,6,8,10)
+            ctx.strokeStyle = gridClr;
+            ctx.lineWidth   = 1;
+            for (let v = 0; v <= 10; v += 2) {
+                const y = PAD.top + gH - (v / 10) * gH;
+                ctx.beginPath();
+                ctx.moveTo(PAD.left, y);
+                ctx.lineTo(PAD.left + gW, y);
+                ctx.stroke();
+                ctx.font      = '500 9px Poppins, sans-serif';
+                ctx.fillStyle = textClr;
+                ctx.textAlign = 'right';
+                ctx.fillText(v, PAD.left - 4, y + 3);
+            }
+
+            // Área bajo la línea (gradiente)
+            const grad = ctx.createLinearGradient(0, PAD.top, 0, PAD.top + gH);
+            grad.addColorStop(0,   'rgba(124,77,255,0.25)');
+            grad.addColorStop(1,   'rgba(124,77,255,0)');
+
+            // Construir path
+            const xStep  = gW / (days.length - 1);
+            const points = dataPoints.map((v, i) => ({
+                x: PAD.left + i * xStep,
+                y: v !== null ? PAD.top + gH - (v / 10) * gH : null
+            }));
+
+            // Rellenar nulos con interpolación visual (no se traza)
+            const validPoints = points.filter(p => p.y !== null);
+            if (validPoints.length < 2) {
+                canvas.style.display = 'none';
+                if (empty) empty.style.display = 'block';
+                return;
+            }
+
+            // Área rellena
+            ctx.beginPath();
+            ctx.fillStyle = grad;
+            let started = false;
+            let firstX, lastX;
+            points.forEach((p, i) => {
+                if (p.y === null) return;
+                if (!started) { ctx.moveTo(p.x, p.y); firstX = p.x; started = true; }
+                else ctx.lineTo(p.x, p.y);
+                lastX = p.x;
+            });
+            ctx.lineTo(lastX, PAD.top + gH);
+            ctx.lineTo(firstX, PAD.top + gH);
+            ctx.closePath();
+            ctx.fill();
+
+            // Línea principal
+            ctx.strokeStyle = 'rgba(124,77,255,0.9)';
+            ctx.lineWidth   = 2.5;
+            ctx.lineJoin    = 'round';
+            ctx.lineCap     = 'round';
+            ctx.beginPath();
+            started = false;
+            points.forEach(p => {
+                if (p.y === null) { started = false; return; }
+                if (!started) { ctx.moveTo(p.x, p.y); started = true; }
+                else ctx.lineTo(p.x, p.y);
+            });
+            ctx.stroke();
+
+            // Puntos
+            points.forEach(p => {
+                if (p.y === null) return;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(124,77,255,0.9)';
+                ctx.fill();
+                ctx.strokeStyle = isDark ? '#1e293b' : 'white';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            });
+
+            // Labels de fecha (cada 7 días)
+            ctx.font      = '500 9px Poppins, sans-serif';
+            ctx.fillStyle = textClr;
+            ctx.textAlign = 'center';
+            [0, 7, 13].forEach(i => {
+                const p = points[i];
+                if (p) ctx.fillText(shortDay(days[i]), p.x, H - 6);
+            });
+        }
+
+        // ══════════════════════════════════════════
+        //  4. FRECUENCIA DE EMOCIONES (barras horizontales)
+        // ══════════════════════════════════════════
+        function renderEmotionsFrequency() {
+            const container = document.getElementById('emotions-frequency-chart');
+            if (!container) return;
+
+            const emotions = appData.emotions || [];
+            if (emotions.length === 0) {
+                container.innerHTML = `<p style="text-align:center; color:var(--text-secondary); font-size:0.9rem; padding:1rem 0;">Sin emociones registradas aún</p>`;
+                return;
+            }
+
+            // Contar frecuencia
+            const counts = {};
+            const emojiMap = {
+                'Alegría':'😊','Tristeza':'😢','Enojo':'😠','Amor':'❤️','Frustración':'😤',
+                'Confianza':'🤝','Miedo':'😨','Sorpresa':'😲','Gratitud':'🙏','Paz':'☮️',
+                'Motivación':'💪','Esperanza':'🌟','Ansiedad':'😰','Soledad':'🌧️','Cansancio':'😴'
+            };
+            emotions.forEach(em => {
+                (em.emotions || []).forEach(e => { counts[e] = (counts[e] || 0) + 1; });
+            });
+
+            const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 8);
+            const max    = sorted[0][1];
+
+            container.innerHTML = sorted.map(([name, count]) => {
+                const pct   = Math.round((count / max) * 100);
+                const emoji = emojiMap[name] || '💭';
+                // Colores por tipo de emoción
+                const positive = ['Alegría','Amor','Confianza','Gratitud','Paz','Motivación','Esperanza'];
+                const color    = positive.includes(name) ? 'var(--success-color)' : 'var(--danger-color)';
+                return `
+                <div style="margin-bottom:10px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                        <span style="font-size:0.85rem; font-weight:600; color:var(--text-primary);">${emoji} ${name}</span>
+                        <span style="font-size:0.8rem; font-weight:700; color:var(--primary-color);">${count}×</span>
+                    </div>
+                    <div style="height:7px; background:var(--bg-primary); border-radius:4px; overflow:hidden;">
+                        <div style="height:100%; width:${pct}%; background:${color}; border-radius:4px; transition:width 0.5s ease;"></div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        // ══════════════════════════════════════════
+        //  5. BARRAS DE ÁREAS DE VIDA
+        // ══════════════════════════════════════════
+        function renderAreasBarChart() {
+            const canvas = document.getElementById('areas-bar-chart');
+            const empty  = document.getElementById('areas-chart-empty');
+            if (!canvas) return;
+
+            const subjects = appData.subjects || [];
+            if (subjects.length === 0) {
+                canvas.style.display = 'none';
+                if (empty) empty.style.display = 'block';
+                return;
+            }
+            canvas.style.display = '';
+            if (empty) empty.style.display = 'none';
+
+            const isDark  = document.documentElement.getAttribute('data-theme') === 'dark';
+            const textClr = isDark ? '#94a3b8' : '#64748b';
+            const gridClr = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)';
+
+            const W = canvas.parentElement.clientWidth - 32 || 340;
+            const H = Math.max(160, subjects.length * 44 + 32);
+            canvas.width  = W;
+            canvas.height = H;
+
+            const ctx  = canvas.getContext('2d');
+            const PAD  = { top:16, right:60, bottom:24, left:100 };
+            const gW   = W - PAD.left - PAD.right;
+            const gH   = H - PAD.top  - PAD.bottom;
+            const barH = Math.min(22, (gH / subjects.length) - 8);
+
+            ctx.clearRect(0, 0, W, H);
+
+            // Líneas grid verticales (0, 25, 50, 75, 100)
+            ctx.strokeStyle = gridClr;
+            ctx.lineWidth   = 1;
+            [0,25,50,75,100].forEach(v => {
+                const x = PAD.left + (v / 100) * gW;
+                ctx.beginPath();
+                ctx.moveTo(x, PAD.top);
+                ctx.lineTo(x, PAD.top + gH);
+                ctx.stroke();
+                ctx.font      = '500 9px Poppins, sans-serif';
+                ctx.fillStyle = textClr;
+                ctx.textAlign = 'center';
+                ctx.fillText(v + '%', x, H - 6);
+            });
+
+            // Barras
+            subjects.forEach((subj, i) => {
+                const pct = Math.min(100, (subj.grade / 10) * 100);
+                const y   = PAD.top + i * (barH + 10);
+
+                // Nombre
+                ctx.font      = `500 11px Poppins, sans-serif`;
+                ctx.fillStyle = textClr;
+                ctx.textAlign = 'right';
+                const label   = subj.name.length > 12 ? subj.name.substring(0, 12) + '…' : subj.name;
+                ctx.fillText(label, PAD.left - 6, y + barH - 4);
+
+                // Fondo barra
+                ctx.fillStyle = isDark ? '#1e293b' : '#f0f2f5';
+                ctx.beginPath();
+                ctx.roundRect ? ctx.roundRect(PAD.left, y, gW, barH, 4) : ctx.rect(PAD.left, y, gW, barH);
+                ctx.fill();
+
+                // Barra coloreada
+                const barW = (pct / 100) * gW;
+                const grad = ctx.createLinearGradient(PAD.left, 0, PAD.left + barW, 0);
+                grad.addColorStop(0,   pct >= 70 ? 'rgba(0,230,118,0.9)' : pct >= 40 ? 'rgba(255,234,0,0.9)' : 'rgba(255,82,82,0.85)');
+                grad.addColorStop(1,   pct >= 70 ? 'rgba(0,230,118,0.6)' : pct >= 40 ? 'rgba(255,234,0,0.6)' : 'rgba(255,82,82,0.55)');
+                ctx.fillStyle = grad;
+                ctx.beginPath();
+                ctx.roundRect ? ctx.roundRect(PAD.left, y, barW, barH, 4) : ctx.rect(PAD.left, y, barW, barH);
+                ctx.fill();
+
+                // Porcentaje al final
+                ctx.font      = `700 10px Poppins, sans-serif`;
+                ctx.fillStyle = textClr;
+                ctx.textAlign = 'left';
+                ctx.fillText(`${pct}%`, PAD.left + gW + 6, y + barH - 4);
+            });
+        }
+
+        // ── Renderizar subjects también en el tab de áreas ──
+        function renderSubjectsAreas() {
+            const container = document.getElementById('subjects-container-areas');
+            if (!container) return;
+            const mainContainer = document.getElementById('subjects-container');
+            if (mainContainer) container.innerHTML = mainContainer.innerHTML;
+        }
+
+        // ── Conectar botones duplicados del tab áreas ──
+        document.addEventListener('click', function(e) {
+            if (e.target && e.target.id === 'add-subject-btn-2') {
+                document.getElementById('subject-modal').style.display = 'flex';
+            }
+            if (e.target && e.target.id === 'manage-subjects-btn-2') {
+                showManageSubjectsModal();
+            }
+        });
+
+        // ── Re-dibujar al cambiar de tema (los colores cambian) ──
+        const _origSetTheme = typeof setTheme === 'function' ? setTheme : null;
+        if (_origSetTheme) {
+            const __setTheme = setTheme;
+            setTheme = function(theme) {
+                __setTheme(theme);
+                const progresoVisible = document.getElementById('page-progreso')?.style?.display !== 'none';
+                if (progresoVisible) setTimeout(renderAllCharts, 120);
+            };
+        }
 
     </script>
 </body>
