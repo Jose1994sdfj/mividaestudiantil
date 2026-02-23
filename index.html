@@ -2343,29 +2343,23 @@
         <!-- Tareas Pendientes -->
         <div class="section-title">
             <h3>Tareas Pendientes 📋</h3>
-            <button class="see-all" id="see-all-tasks">Ver todas</button>
+            <button class="see-all" id="see-all-tasks" onclick="showAllItems('tasks')">Ver todas</button>
         </div>
-        <div class="cards-scroll" id="tasks-scroll">
-            <!-- Las tareas se cargarán dinámicamente -->
-        </div>
+        <div class="cards-scroll" id="tasks-scroll"></div>
 
         <!-- Próximos Eventos -->
         <div class="section-title">
             <h3>Próximos Eventos 🗓️</h3>
-            <button class="see-all" id="see-all-events">Ver todos</button>
+            <button class="see-all" id="see-all-events" onclick="showAllItems('events')">Ver todos</button>
         </div>
-        <div class="cards-scroll" id="events-scroll">
-            <!-- Los eventos se cargarán dinámicamente -->
-        </div>
+        <div class="cards-scroll" id="events-scroll"></div>
 
         <!-- Personas Especiales -->
         <div class="section-title">
             <h3>Personas Especiales 👨‍👩‍👧‍👦</h3>
-            <button class="see-all" id="see-all-people">Ver todas</button>
+            <button class="see-all" id="see-all-people" onclick="showAllItems('people')">Ver todas</button>
         </div>
-        <div class="cards-scroll" id="people-scroll">
-            <!-- Las personas se cargarán dinámicamente -->
-        </div>
+        <div class="cards-scroll" id="people-scroll"></div>
 
         
         </div>
@@ -3230,21 +3224,6 @@
             setupHabitsContainerListener();
             setupTasksContainerListener();
 
-            // Listener persistente en app-main para botones "ver todas"
-            const appMain = document.getElementById('app-main');
-            if (appMain) {
-                function handleSeeAll(e) {
-                    const btn = e.target.closest('button, a');
-                    if (!btn) return;
-                    const id = btn.id;
-                    if (id === 'see-all-tasks')  { if(e.cancelable) e.preventDefault(); showAllItems('tasks');  }
-                    if (id === 'see-all-events') { if(e.cancelable) e.preventDefault(); showAllItems('events'); }
-                    if (id === 'see-all-people') { if(e.cancelable) e.preventDefault(); showAllItems('people'); }
-                }
-                appMain.addEventListener('touchend', function(e) { handleSeeAll(e); }, { passive: false });
-                appMain.addEventListener('click',    function(e) { handleSeeAll(e); });
-            }
-
             addTouchSupport();
         }
 
@@ -3432,66 +3411,66 @@
 
         function renderTasks() {
             const container = document.getElementById('tasks-scroll');
-            const pendingTasks = appData.tasks.filter(task => !task.completed);
-
-            if (pendingTasks.length === 0) {
+            if (!container) return;
+            const pending = (appData.tasks || []).filter(t => !t.completed);
+            if (pending.length === 0) {
                 container.innerHTML = `
-                    <div class="card">
-                        <div class="empty-state">
-                            <div class="empty-icon">🎉</div>
-                            <p>¡No tienes tareas pendientes!</p>
+                    <div class="habit-card" style="flex-direction:row; align-items:center; gap:14px; opacity:0.7;">
+                        <div style="font-size:2rem;">🎉</div>
+                        <div>
+                            <div style="font-weight:600; font-size:0.95rem;">¡Sin tareas pendientes!</div>
+                            <div style="font-size:0.8rem; color:var(--text-secondary); margin-top:2px;">Disfruta el día o agrega una nueva</div>
                         </div>
-                    </div>
-                `;
+                    </div>`;
                 return;
             }
-
-            container.innerHTML = pendingTasks.map(task => `
-                <div class="card" style="position:relative; padding-bottom:0.8rem;">
-                    <div style="display:flex; align-items:flex-start; gap:10px; margin-bottom:0.4rem;">
-                        <button id="complete-task-${task.id}" style="
-                            width:24px; height:24px; border-radius:50%; border:2px solid var(--primary-color);
-                            background:transparent; cursor:pointer; flex-shrink:0; margin-top:1px;
-                            display:flex; align-items:center; justify-content:center; font-size:0.7rem;
-                            touch-action:manipulation; transition:var(--transition);" title="Completar">○</button>
-                        <div style="flex:1;">
-                            <div style="font-weight:600; font-size:0.95rem; line-height:1.3;">${task.title}</div>
-                            <div style="display:flex; gap:8px; align-items:center; margin-top:4px; flex-wrap:wrap;">
-                                <span class="task-priority priority-${task.priority}" style="font-size:0.75rem; white-space:nowrap;">
-                                    ${task.priority === 'high' ? '🔴 Alta' : task.priority === 'medium' ? '🟡 Media' : '🟢 Baja'}
-                                </span>
-                                ${task.deadline ? `<span style="font-size:0.75rem; color:var(--text-secondary);">📅 ${formatDate(task.deadline)}</span>` : ''}
-                            </div>
-                            ${task.description ? `<div style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;">${task.description}</div>` : ''}
+            container.innerHTML = pending.map(task => {
+                const colors = { high: '#ff5252', medium: '#ffab00', low: '#00c853' };
+                const labels = { high: '🔴 Alta', medium: '🟡 Media', low: '🟢 Baja' };
+                const color  = colors[task.priority] || '#7c4dff';
+                return `
+                <div class="habit-card" style="flex-direction:row; align-items:center; gap:14px;" data-task-id="${task.id}">
+                    <button id="complete-task-${task.id}" style="
+                        width:44px; height:44px; border-radius:50%; border:2.5px solid ${color};
+                        background:transparent; cursor:pointer; flex-shrink:0;
+                        display:flex; align-items:center; justify-content:center;
+                        font-size:1.1rem; color:${color}; touch-action:manipulation;
+                        transition:all 0.2s ease;">○</button>
+                    <div style="flex:1; min-width:0;">
+                        <div style="font-weight:600; font-size:0.95rem; color:var(--text-primary); line-height:1.3;">${task.title}</div>
+                        <div style="display:flex; gap:6px; align-items:center; margin-top:4px; flex-wrap:wrap;">
+                            <span style="font-size:0.72rem; font-weight:700; color:${color}; background:${color}18; padding:2px 8px; border-radius:20px;">${labels[task.priority] || task.priority}</span>
+                            ${task.deadline ? `<span style="font-size:0.72rem; color:var(--text-secondary);">📅 ${formatDate(task.deadline)}</span>` : ''}
                         </div>
-                        <button class="delete-btn" id="del-task-${task.id}" data-type="task" data-id="${task.id}" data-name="${task.title}"
-                            style="width:28px; height:28px; border-radius:8px; border:none; background:rgba(255,82,82,0.1);
-                            color:var(--danger-color); cursor:pointer; flex-shrink:0; font-size:0.9rem;
-                            display:flex; align-items:center; justify-content:center;" title="Eliminar">🗑️</button>
+                        ${task.description ? `<div style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px; line-height:1.4;">${task.description}</div>` : ''}
                     </div>
-                </div>
-            `).join('');
+                    <button class="delete-btn" data-type="task" data-id="${task.id}" data-name="${task.title}"
+                        style="width:36px; height:36px; border-radius:10px; border:none; background:rgba(255,82,82,0.1);
+                        color:var(--danger-color); cursor:pointer; flex-shrink:0; font-size:1rem;
+                        display:flex; align-items:center; justify-content:center; touch-action:manipulation;">🗑️</button>
+                </div>`;
+            }).join('');
         }
 
-        // ── Listener persistente en el contenedor de tareas ──
         function setupTasksContainerListener() {
             const container = document.getElementById('tasks-scroll');
             if (!container || container._listenerSet) return;
             container._listenerSet = true;
-            container.addEventListener('touchend', function(e) {
-                const btn = e.target.closest('button[id^="complete-task-"]');
-                if (btn) { e.preventDefault(); toggleTaskComplete(parseInt(btn.id.replace('complete-task-', ''))); }
-            }, { passive: false });
-            container.addEventListener('click', function(e) {
-                const btn = e.target.closest('button[id^="complete-task-"]');
-                if (btn) toggleTaskComplete(parseInt(btn.id.replace('complete-task-', '')));
-            });
+            function handle(e) {
+                const btn = e.target.closest('[id^="complete-task-"]');
+                if (btn) {
+                    if (e.type === 'touchend') e.preventDefault();
+                    toggleTaskComplete(parseInt(btn.id.replace('complete-task-', '')));
+                }
+            }
+            container.addEventListener('touchend', handle, { passive: false });
+            container.addEventListener('click',    handle);
         }
 
         function toggleTaskComplete(taskId) {
             try {
-                const task = appData.tasks.find(t => t.id === taskId);
-                if (!task) { showNotification('Tarea no encontrada', 'error'); return; }
+                const task = (appData.tasks || []).find(t => t.id === taskId);
+                if (!task) return;
                 task.completed = !task.completed;
                 saveData();
                 renderTasks();
@@ -3506,66 +3485,92 @@
 
         function renderEvents() {
             const container = document.getElementById('events-scroll');
-            const today = new Date().toISOString().split('T')[0];
-            const upcomingEvents = appData.events.filter(event => event.date >= today)
+            if (!container) return;
+            const today  = new Date().toISOString().split('T')[0];
+            const events = (appData.events || [])
+                .filter(e => e.date >= today)
                 .sort((a, b) => new Date(a.date) - new Date(b.date))
-                .slice(0, 3);
-
-            if (upcomingEvents.length === 0) {
+                .slice(0, 5);
+            if (events.length === 0) {
                 container.innerHTML = `
-                    <div class="card">
-                        <div class="empty-state">
-                            <div class="empty-icon">📅</div>
-                            <p>No hay eventos próximos</p>
+                    <div class="habit-card" style="flex-direction:row; align-items:center; gap:14px; opacity:0.7;">
+                        <div style="font-size:2rem;">📅</div>
+                        <div>
+                            <div style="font-weight:600; font-size:0.95rem;">Sin eventos próximos</div>
+                            <div style="font-size:0.8rem; color:var(--text-secondary); margin-top:2px;">Agrega eventos para no olvidarlos</div>
                         </div>
-                    </div>
-                `;
+                    </div>`;
                 return;
             }
-
-            container.innerHTML = upcomingEvents.map(event => `
-                <div class="card">
-                    <div class="event-item">
-                        <div class="event-time">${event.time}</div>
-                        <div class="event-text">${event.title}</div>
+            container.innerHTML = events.map(ev => {
+                const d    = new Date(ev.date + 'T00:00:00');
+                const days = Math.round((d - new Date().setHours(0,0,0,0)) / 86400000);
+                const badge = days === 0 ? '🔴 Hoy' : days === 1 ? '🟡 Mañana' : `📆 En ${days}d`;
+                return `
+                <div class="habit-card" style="flex-direction:row; align-items:center; gap:14px;" data-event-id="${ev.id}">
+                    <div style="width:44px; height:44px; border-radius:14px; background:rgba(124,77,255,0.12);
+                        display:flex; flex-direction:column; align-items:center; justify-content:center; flex-shrink:0;">
+                        <div style="font-size:0.65rem; font-weight:700; color:var(--primary-color); text-transform:uppercase;">${d.toLocaleDateString('es',{month:'short'})}</div>
+                        <div style="font-size:1.1rem; font-weight:800; color:var(--primary-color); line-height:1;">${d.getDate()}</div>
                     </div>
-                    <div style="font-size: 0.8rem; color: #777; margin-top: 5px;">
-                        📅 ${formatDate(event.date)} ${event.description ? `• ${event.description}` : ''}
+                    <div style="flex:1; min-width:0;">
+                        <div style="font-weight:600; font-size:0.95rem; color:var(--text-primary); line-height:1.3;">${ev.title}</div>
+                        <div style="display:flex; gap:6px; align-items:center; margin-top:4px; flex-wrap:wrap;">
+                            <span style="font-size:0.72rem; font-weight:700; color:var(--primary-color); background:rgba(124,77,255,0.1); padding:2px 8px; border-radius:20px;">${badge}</span>
+                            ${ev.time ? `<span style="font-size:0.72rem; color:var(--text-secondary);">🕐 ${ev.time}</span>` : ''}
+                        </div>
+                        ${ev.description ? `<div style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;">${ev.description}</div>` : ''}
                     </div>
-                </div>
-            `).join('');
+                    <button class="delete-btn" data-type="event" data-id="${ev.id}" data-name="${ev.title}"
+                        style="width:36px; height:36px; border-radius:10px; border:none; background:rgba(255,82,82,0.1);
+                        color:var(--danger-color); cursor:pointer; flex-shrink:0; font-size:1rem;
+                        display:flex; align-items:center; justify-content:center; touch-action:manipulation;">🗑️</button>
+                </div>`;
+            }).join('');
         }
 
         function renderPeople() {
             const container = document.getElementById('people-scroll');
-
-            if (appData.people.length === 0) {
+            if (!container) return;
+            const people = appData.people || [];
+            if (people.length === 0) {
                 container.innerHTML = `
-                    <div class="card">
-                        <div class="empty-state">
-                            <div class="empty-icon">👥</div>
-                            <p>No hay personas agregadas</p>
+                    <div class="habit-card" style="flex-direction:row; align-items:center; gap:14px; opacity:0.7;">
+                        <div style="font-size:2rem;">👥</div>
+                        <div>
+                            <div style="font-weight:600; font-size:0.95rem;">Sin personas agregadas</div>
+                            <div style="font-size:0.8rem; color:var(--text-secondary); margin-top:2px;">Agrega personas importantes en tu vida</div>
                         </div>
-                    </div>
-                `;
+                    </div>`;
                 return;
             }
-
-            container.innerHTML = appData.people.map(person => `
-                <div class="card" style="position:relative;">
-                    <div class="person-item" style="align-items:center;">
-                        <div class="person-avatar">${person.emoji}</div>
-                        <div class="person-info" style="flex:1;">
-                            <div class="person-name">${person.name}</div>
-                            <div class="person-relation">${person.relation}</div>
+            const relationColors = {
+                'Pareja':'#ff4081','Amigo/a':'#7c4dff','Familiar':'#00c853',
+                'Compañero/a':'#2979ff','Profesor/a':'#ffab00','Mentor/a':'#ff6b35'
+            };
+            container.innerHTML = people.map(person => {
+                const color = relationColors[person.relation] || '#7c4dff';
+                const lastEmotion = (appData.emotions || [])
+                    .filter(e => e.person === person.name)
+                    .sort((a,b) => b.date?.localeCompare(a.date||''))
+                    .slice(0,1)[0];
+                return `
+                <div class="habit-card" style="flex-direction:row; align-items:center; gap:14px;" data-person-id="${person.id}">
+                    <div style="width:48px; height:48px; border-radius:16px; background:${color}18;
+                        display:flex; align-items:center; justify-content:center; font-size:1.6rem; flex-shrink:0;">${person.emoji}</div>
+                    <div style="flex:1; min-width:0;">
+                        <div style="font-weight:600; font-size:0.95rem; color:var(--text-primary);">${person.name}</div>
+                        <div style="display:flex; gap:6px; align-items:center; margin-top:4px; flex-wrap:wrap;">
+                            <span style="font-size:0.72rem; font-weight:700; color:${color}; background:${color}18; padding:2px 8px; border-radius:20px;">${person.relation}</span>
+                            ${lastEmotion ? `<span style="font-size:0.72rem; color:var(--text-secondary);">Último estado: ${lastEmotion.emotion}</span>` : ''}
                         </div>
-                        <button class="delete-btn" data-type="person" data-id="${person.id}" data-name="${person.name}"
-                            style="width:30px; height:30px; border-radius:8px; border:none; background:rgba(255,82,82,0.1);
-                            color:var(--danger-color); cursor:pointer; font-size:0.9rem;
-                            display:flex; align-items:center; justify-content:center;" title="Eliminar">🗑️</button>
                     </div>
-                </div>
-            `).join('');
+                    <button class="delete-btn" data-type="person" data-id="${person.id}" data-name="${person.name}"
+                        style="width:36px; height:36px; border-radius:10px; border:none; background:rgba(255,82,82,0.1);
+                        color:var(--danger-color); cursor:pointer; flex-shrink:0; font-size:1rem;
+                        display:flex; align-items:center; justify-content:center; touch-action:manipulation;">🗑️</button>
+                </div>`;
+            }).join('');
         }
 
         // ========== FUNCIONALIDADES DE ELIMINACIÓN ==========
