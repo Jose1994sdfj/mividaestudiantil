@@ -138,6 +138,7 @@
             max-width: 500px;
             margin: 0 auto;
             padding: 0 20px;
+            padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
         }
 
         /* App Header */
@@ -312,36 +313,79 @@
         /* Bottom Nav App Style */
         .bottom-nav {
             position: fixed;
-            bottom: 20px;
-            left: 20px;
-            right: 20px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            border-radius: 30px;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
             display: flex;
             justify-content: space-around;
-            padding: 15px;
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            align-items: stretch;
+            padding: 0;
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+            box-shadow: 0 -4px 24px rgba(0,0,0,0.08);
+            z-index: 1000;
+            height: calc(60px + env(safe-area-inset-bottom, 0px));
         }
 
         .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
             color: var(--text-secondary);
-            font-size: 1.2rem;
-            width: 50px;
-            height: 50px;
+            text-decoration: none;
+            padding: 8px 4px 6px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            transition: color 0.2s ease;
+            position: relative;
+            min-width: 0;
+        }
+
+        .nav-item .nav-icon {
+            font-size: 1.35rem;
+            line-height: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 50%;
-            transition: var(--transition);
+            width: 32px;
+            height: 28px;
+            border-radius: 10px;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        .nav-item .nav-label {
+            font-size: 0.62rem;
+            font-weight: 500;
+            letter-spacing: 0.2px;
+            line-height: 1;
+            white-space: nowrap;
+            font-family: 'Poppins', sans-serif;
         }
 
         .nav-item.active {
+            color: var(--primary-color);
+        }
+
+        .nav-item.active .nav-icon {
+            background: rgba(124, 77, 255, 0.12);
+            transform: scale(1.05);
+        }
+
+        /* Línea indicadora arriba del tab activo */
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 25%;
+            right: 25%;
+            height: 2.5px;
             background: var(--gradient);
-            color: white;
-            transform: translateY(-10px);
-            box-shadow: 0 8px 15px rgba(124, 77, 255, 0.3);
+            border-radius: 0 0 4px 4px;
         }
 
         /* Sección de Bienvenida */
@@ -2607,23 +2651,23 @@
     <nav class="bottom-nav" id="app-nav" style="display:none;">
         <a href="#" class="nav-item active" data-page="inicio">
             <div class="nav-icon">🏠</div>
-            <span>Inicio</span>
+            <span class="nav-label">Inicio</span>
         </a>
         <a href="#" class="nav-item" data-page="horario">
             <div class="nav-icon">🔁</div>
-            <span>Rutinas</span>
+            <span class="nav-label">Rutinas</span>
         </a>
         <a href="#" class="nav-item" data-page="progreso">
             <div class="nav-icon">🎯</div>
-            <span>Metas</span>
+            <span class="nav-label">Metas</span>
         </a>
         <a href="#" class="nav-item" data-page="bienestar">
             <div class="nav-icon">🧘</div>
-            <span>Sentir</span>
+            <span class="nav-label">Sentir</span>
         </a>
         <a href="#" class="nav-item" data-page="semana">
             <div class="nav-icon">📋</div>
-            <span>Semana</span>
+            <span class="nav-label">Semana</span>
         </a>
     </nav>
 
