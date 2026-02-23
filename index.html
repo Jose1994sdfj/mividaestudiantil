@@ -1472,8 +1472,9 @@
             border-radius: 20px;
             padding: 16px 18px;
             display: flex;
-            align-items: center;
-            gap: 14px;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0;
             border: 1.5px solid var(--border-color);
             box-shadow: var(--card-shadow);
             transition: var(--transition);
@@ -6427,29 +6428,81 @@
             });
 
             container.innerHTML = sorted.map(habit => {
-                const done = isHabitCompletedToday(habit);
-                const streak = habit.streak || 0;
-                const isOnFire = streak >= 3;
-                const streakLabel = streak > 0 ? `${isOnFire ? '🔥' : '⚡'} ${streak} día${streak !== 1 ? 's' : ''}` : '✨ Empieza hoy';
+                const done      = isHabitCompletedToday(habit);
+                const streak    = habit.streak || 0;
+                const best      = habit.bestStreak || streak || 1;
+                const streakPct = Math.min(100, Math.round((streak / Math.max(best, 1)) * 100));
+
+                // Últimos 7 días para los puntos visuales
+                const last7 = Array.from({length: 7}, (_, i) => {
+                    const d = new Date();
+                    d.setDate(d.getDate() - (6 - i));
+                    return d.toISOString().split('T')[0];
+                });
+                const completedSet = new Set(habit.completedDates || []);
+                const dots = last7.map(day => completedSet.has(day));
+
+                // Color según categoría
                 const categoryColors = {
                     salud: '#00c853', mente: '#7c4dff', relaciones: '#ff4081',
                     finanzas: '#ffab00', trabajo: '#2979ff', otro: '#78909c'
                 };
-                const catColor = categoryColors[habit.category] || '#7c4dff';
+                const catColor  = categoryColors[habit.category] || '#7c4dff';
+                const fireEmoji = streak >= 21 ? '💎' : streak >= 7 ? '🔥' : streak >= 3 ? '⚡' : '🌱';
 
                 return `
                     <div class="habit-card ${done ? 'completed-today' : ''}" data-id="${habit.id}">
                         <button class="habit-delete-btn" data-delete-habit="${habit.id}" title="Eliminar">✕</button>
-                        <div class="habit-emoji">${habit.emoji || '⭐'}</div>
-                        <div class="habit-info">
-                            <div class="habit-name">${habit.name}</div>
-                            <div class="habit-meta">
-                                <span class="habit-streak ${isOnFire ? 'on-fire' : ''}">${streakLabel}</span>
-                                <span class="habit-category-badge" style="color:${catColor}; background:${catColor}22">${habit.category || 'otro'}</span>
+
+                        <!-- Fila superior: emoji + info + racha -->
+                        <div style="display:flex; align-items:center; gap:12px; width:100%;">
+                            <div class="habit-emoji">${habit.emoji || '⭐'}</div>
+                            <div style="flex:1; min-width:0;">
+                                <div class="habit-name">${habit.name}</div>
+                                <span class="habit-category-badge" style="color:${catColor}; background:${catColor}22; margin-top:3px; display:inline-block;">${habit.category || 'otro'}</span>
+                            </div>
+                            <!-- Racha número -->
+                            <div style="text-align:center; flex-shrink:0;">
+                                <div style="font-size:1.5rem; line-height:1;">${fireEmoji}</div>
+                                <div style="font-size:1.1rem; font-weight:800; color:${done ? 'var(--success-color)' : streak > 0 ? catColor : 'var(--text-secondary)'}; line-height:1.2;">${streak}</div>
+                                <div style="font-size:0.62rem; color:var(--text-secondary); font-weight:600; text-transform:uppercase; letter-spacing:0.3px;">días</div>
                             </div>
                         </div>
-                        <button class="habit-check-btn" data-toggle-habit="${habit.id}" title="${done ? 'Desmarcar' : 'Completar'}">
-                            ${done ? '✓' : '○'}
+
+                        <!-- Barra de racha: últimos 7 días -->
+                        <div style="display:flex; align-items:center; gap:4px; width:100%; margin-top:10px;">
+                            <span style="font-size:0.68rem; color:var(--text-secondary); min-width:32px;">7d</span>
+                            <div style="display:flex; gap:3px; flex:1;">
+                                ${dots.map((filled, i) => {
+                                    const isToday = i === 6;
+                                    return `<div style="
+                                        flex:1; height:6px; border-radius:3px;
+                                        background:${filled ? catColor : 'var(--border-color)'};
+                                        ${isToday && !filled ? `border:1.5px solid ${catColor}; background:transparent;` : ''}
+                                        ${isToday && filled ? `box-shadow:0 0 6px ${catColor}80;` : ''}
+                                        opacity:${filled ? 1 : 0.4};
+                                    "></div>`;
+                                }).join('')}
+                            </div>
+                            <span style="font-size:0.68rem; color:var(--text-secondary); min-width:46px; text-align:right;">mejor: ${best}d</span>
+                        </div>
+
+                        <!-- Botón confirmar hoy -->
+                        <button data-toggle-habit="${habit.id}" style="
+                            width:100%; margin-top:12px;
+                            padding: ${done ? '10px' : '13px'};
+                            border-radius:14px; border:none; cursor:pointer;
+                            font-size:0.92rem; font-weight:700;
+                            font-family:Poppins,sans-serif;
+                            touch-action:manipulation;
+                            transition:all 0.2s ease;
+                            background:${done
+                                ? 'rgba(0,230,118,0.12)'
+                                : `linear-gradient(135deg, ${catColor}, ${catColor}cc)`};
+                            color:${done ? 'var(--success-color)' : 'white'};
+                            box-shadow:${done ? 'none' : `0 4px 14px ${catColor}55`};
+                        ">
+                            ${done ? '✅ Completado hoy — toca para desmarcar' : '○  Marcar como completado hoy'}
                         </button>
                     </div>
                 `;
