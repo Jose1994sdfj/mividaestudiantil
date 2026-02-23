@@ -3208,55 +3208,6 @@
             on('see-all-events',  'click', function(e) { e.preventDefault(); showAllItems('events'); });
             on('see-all-people',  'click', function(e) { e.preventDefault(); showAllItems('people'); });
 
-            // ── ÚNICO listener global de click — maneja todos los elementos dinámicos ──
-            document.addEventListener('click', function(e) {
-                const tgt = e.target;
-
-                // Hábitos
-                const toggleHabit = tgt.closest('[data-toggle-habit]');
-                if (toggleHabit) { toggleHabitToday(parseInt(toggleHabit.dataset.toggleHabit)); return; }
-
-                const deleteHabitBtn = tgt.closest('[data-delete-habit]');
-                if (deleteHabitBtn) { deleteHabit(parseInt(deleteHabitBtn.dataset.deleteHabit)); return; }
-
-                // Tareas — completar
-                const completeTask = tgt.closest('[data-complete-task]');
-                if (completeTask) { toggleTaskComplete(parseInt(completeTask.dataset.completeTask)); return; }
-
-                // Emoji picker en modal hábito
-                const emojiOpt = tgt.closest('.emoji-option');
-                if (emojiOpt && emojiOpt.closest('#habit-emoji-picker')) {
-                    document.querySelectorAll('.emoji-option').forEach(el => el.classList.remove('selected'));
-                    emojiOpt.classList.add('selected');
-                    return;
-                }
-
-                // Category pills en modal hábito
-                const catPill = tgt.closest('.category-pill');
-                if (catPill && catPill.closest('#habit-category-pills')) {
-                    document.querySelectorAll('.category-pill').forEach(el => el.classList.remove('selected'));
-                    catPill.classList.add('selected');
-                    return;
-                }
-
-                // Toggle emociones de persona
-                const personEmotionBtn = tgt.closest('.toggle-person-emotions-btn');
-                if (personEmotionBtn) {
-                    const personName = personEmotionBtn.getAttribute('data-person');
-                    if (personName) togglePersonEmotions(personName);
-                    return;
-                }
-
-                // Botones por ID (dinámicos o duplicados)
-                const id = tgt.id;
-                if (id === 'add-class-btn')        { openClassModal();           return; }
-                if (id === 'add-subject-btn')      { openSubjectModal();         return; }
-                if (id === 'add-subject-btn-2')    { openSubjectModal();         return; }
-                if (id === 'manage-classes-btn')   { showManageClassesModal();   return; }
-                if (id === 'manage-subjects-btn')  { showManageSubjectsModal();  return; }
-                if (id === 'manage-subjects-btn-2'){ showManageSubjectsModal();  return; }
-            });
-
             addTouchSupport();
         }
 
@@ -3461,7 +3412,7 @@
             container.innerHTML = pendingTasks.map(task => `
                 <div class="card" style="position:relative; padding-bottom:0.8rem;">
                     <div style="display:flex; align-items:flex-start; gap:10px; margin-bottom:0.4rem;">
-                        <button data-complete-task="${task.id}" style="
+                        <button id="complete-task-${task.id}" style="
                             width:24px; height:24px; border-radius:50%; border:2px solid var(--primary-color);
                             background:transparent; cursor:pointer; flex-shrink:0; margin-top:1px;
                             display:flex; align-items:center; justify-content:center; font-size:0.7rem;
@@ -3476,13 +3427,19 @@
                             </div>
                             ${task.description ? `<div style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;">${task.description}</div>` : ''}
                         </div>
-                        <button class="delete-btn" data-type="task" data-id="${task.id}" data-name="${task.title}"
+                        <button class="delete-btn" id="del-task-${task.id}" data-type="task" data-id="${task.id}" data-name="${task.title}"
                             style="width:28px; height:28px; border-radius:8px; border:none; background:rgba(255,82,82,0.1);
                             color:var(--danger-color); cursor:pointer; flex-shrink:0; font-size:0.9rem;
                             display:flex; align-items:center; justify-content:center;" title="Eliminar">🗑️</button>
                     </div>
                 </div>
             `).join('');
+
+            // Adjuntar listeners directamente
+            pendingTasks.forEach(task => {
+                const btn = document.getElementById(`complete-task-${task.id}`);
+                if (btn) btn.addEventListener('click', function() { toggleTaskComplete(task.id); });
+            });
         }
 
         function toggleTaskComplete(taskId) {
@@ -4337,7 +4294,11 @@
             document.getElementById('app-header').style.display = 'none';
             document.getElementById('app-main').style.display   = 'none';
             document.getElementById('app-nav').style.display    = 'none';
-            document.getElementById('auth-screen').style.display = 'flex';
+            const authEl = document.getElementById('auth-screen');
+            authEl.style.zIndex        = '9999';
+            authEl.style.visibility    = 'visible';
+            authEl.style.pointerEvents = 'auto';
+            authEl.style.display       = 'flex';
             // Limpiar campos
             document.getElementById('login-email').value    = '';
             document.getElementById('login-password').value = '';
@@ -4346,7 +4307,11 @@
 
         // ── Entrar a la app tras login/registro ──
         async function enterApp(displayName) {
-            document.getElementById('auth-screen').style.display  = 'none';
+            const authEl = document.getElementById('auth-screen');
+            authEl.style.display        = 'none';
+            authEl.style.pointerEvents  = 'none';
+            authEl.style.visibility     = 'hidden';
+            authEl.style.zIndex         = '-1';
             document.getElementById('sync-overlay').style.display = 'flex';
             document.getElementById('sync-message').textContent   = `Hola ${displayName}, cargando tus datos...`;
 
@@ -4476,7 +4441,7 @@
             loadTheme();
             const saved = localStorage.getItem('roseSession');
             if (!saved) {
-                document.getElementById('auth-screen').style.display = 'flex';
+                const _a = document.getElementById('auth-screen'); _a.style.zIndex='9999'; _a.style.visibility='visible'; _a.style.pointerEvents='auto'; _a.style.display='flex';
                 return;
             }
 
@@ -4511,7 +4476,7 @@
                 console.warn('Sesión inválida, volviendo al login:', e.message);
                 localStorage.removeItem('roseSession');
                 currentUser = null;
-                document.getElementById('auth-screen').style.display = 'flex';
+                const _a = document.getElementById('auth-screen'); _a.style.zIndex='9999'; _a.style.visibility='visible'; _a.style.pointerEvents='auto'; _a.style.display='flex';
             }
         }
 
@@ -6452,9 +6417,6 @@
                 const done      = isHabitCompletedToday(habit);
                 const streak    = habit.streak || 0;
                 const best      = habit.bestStreak || streak || 1;
-                const streakPct = Math.min(100, Math.round((streak / Math.max(best, 1)) * 100));
-
-                // Últimos 7 días para los puntos visuales
                 const last7 = Array.from({length: 7}, (_, i) => {
                     const d = new Date();
                     d.setDate(d.getDate() - (6 - i));
@@ -6462,8 +6424,6 @@
                 });
                 const completedSet = new Set(habit.completedDates || []);
                 const dots = last7.map(day => completedSet.has(day));
-
-                // Color según categoría
                 const categoryColors = {
                     salud: '#00c853', mente: '#7c4dff', relaciones: '#ff4081',
                     finanzas: '#ffab00', trabajo: '#2979ff', otro: '#78909c'
@@ -6473,61 +6433,60 @@
 
                 return `
                     <div class="habit-card ${done ? 'completed-today' : ''}" data-id="${habit.id}">
-                        <button class="habit-delete-btn" data-delete-habit="${habit.id}" title="Eliminar">✕</button>
-
-                        <!-- Fila superior: emoji + info + racha -->
+                        <button class="habit-delete-btn" id="del-habit-${habit.id}" title="Eliminar">✕</button>
                         <div style="display:flex; align-items:center; gap:12px; width:100%;">
                             <div class="habit-emoji">${habit.emoji || '⭐'}</div>
                             <div style="flex:1; min-width:0;">
                                 <div class="habit-name">${habit.name}</div>
                                 <span class="habit-category-badge" style="color:${catColor}; background:${catColor}22; margin-top:3px; display:inline-block;">${habit.category || 'otro'}</span>
                             </div>
-                            <!-- Racha número -->
                             <div style="text-align:center; flex-shrink:0;">
                                 <div style="font-size:1.5rem; line-height:1;">${fireEmoji}</div>
                                 <div style="font-size:1.1rem; font-weight:800; color:${done ? 'var(--success-color)' : streak > 0 ? catColor : 'var(--text-secondary)'}; line-height:1.2;">${streak}</div>
                                 <div style="font-size:0.62rem; color:var(--text-secondary); font-weight:600; text-transform:uppercase; letter-spacing:0.3px;">días</div>
                             </div>
                         </div>
-
-                        <!-- Barra de racha: últimos 7 días -->
                         <div style="display:flex; align-items:center; gap:4px; width:100%; margin-top:10px;">
                             <span style="font-size:0.68rem; color:var(--text-secondary); min-width:32px;">7d</span>
                             <div style="display:flex; gap:3px; flex:1;">
                                 ${dots.map((filled, i) => {
                                     const isToday = i === 6;
-                                    return `<div style="
-                                        flex:1; height:6px; border-radius:3px;
+                                    return `<div style="flex:1; height:6px; border-radius:3px;
                                         background:${filled ? catColor : 'var(--border-color)'};
                                         ${isToday && !filled ? `border:1.5px solid ${catColor}; background:transparent;` : ''}
                                         ${isToday && filled ? `box-shadow:0 0 6px ${catColor}80;` : ''}
-                                        opacity:${filled ? 1 : 0.4};
-                                    "></div>`;
+                                        opacity:${filled ? 1 : 0.4};"></div>`;
                                 }).join('')}
                             </div>
                             <span style="font-size:0.68rem; color:var(--text-secondary); min-width:46px; text-align:right;">mejor: ${best}d</span>
                         </div>
-
-                        <!-- Botón confirmar hoy -->
-                        <button data-toggle-habit="${habit.id}" style="
+                        <button id="toggle-habit-${habit.id}" style="
                             width:100%; margin-top:12px;
-                            padding: ${done ? '10px' : '13px'};
+                            padding:${done ? '10px' : '13px'};
                             border-radius:14px; border:none; cursor:pointer;
                             font-size:0.92rem; font-weight:700;
                             font-family:Poppins,sans-serif;
                             touch-action:manipulation;
                             transition:all 0.2s ease;
-                            background:${done
-                                ? 'rgba(0,230,118,0.12)'
-                                : `linear-gradient(135deg, ${catColor}, ${catColor}cc)`};
+                            background:${done ? 'rgba(0,230,118,0.12)' : `linear-gradient(135deg, ${catColor}, ${catColor}cc)`};
                             color:${done ? 'var(--success-color)' : 'white'};
                             box-shadow:${done ? 'none' : `0 4px 14px ${catColor}55`};
-                        ">
-                            ${done ? '✅ Completado hoy — toca para desmarcar' : '○  Marcar como completado hoy'}
-                        </button>
+                        ">${done ? '✅ Completado hoy — toca para desmarcar' : '○  Marcar como completado hoy'}</button>
                     </div>
                 `;
             }).join('');
+
+            // Adjuntar listeners directamente a cada botón — mismo patrón que los botones que funcionan
+            sorted.forEach(habit => {
+                const toggleBtn = document.getElementById(`toggle-habit-${habit.id}`);
+                if (toggleBtn) toggleBtn.addEventListener('click', function() {
+                    toggleHabitToday(habit.id);
+                });
+                const delBtn = document.getElementById(`del-habit-${habit.id}`);
+                if (delBtn) delBtn.addEventListener('click', function() {
+                    deleteHabit(habit.id);
+                });
+            });
         }
 
         function updateHabitStats() {
