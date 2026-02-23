@@ -3215,6 +3215,10 @@
             onTouch('see-all-people', function(e) { if(e.preventDefault) e.preventDefault(); showAllItems('people'); });
             onTouch('add-habit-btn-2', openHabitModal);
 
+            // Contenedores persistentes para hábitos y tareas
+            setupHabitsContainerListener();
+            setupTasksContainerListener();
+
             addTouchSupport();
         }
 
@@ -3441,29 +3445,37 @@
                     </div>
                 </div>
             `).join('');
+        }
 
-            // Adjuntar listeners directamente — touchend para Android + click para desktop
-            function addBtn(id, fn) {
-                const el = document.getElementById(id);
-                if (!el) return;
-                el.addEventListener('touchend', function(e) { e.preventDefault(); fn(); }, { passive: false });
-                el.addEventListener('click', fn);
-            }
-            pendingTasks.forEach(task => {
-                addBtn(`complete-task-${task.id}`, () => toggleTaskComplete(task.id));
+        // ── Listener persistente en el contenedor de tareas ──
+        function setupTasksContainerListener() {
+            const container = document.getElementById('tasks-scroll');
+            if (!container || container._listenerSet) return;
+            container._listenerSet = true;
+            container.addEventListener('touchend', function(e) {
+                const btn = e.target.closest('button[id^="complete-task-"]');
+                if (btn) { e.preventDefault(); toggleTaskComplete(parseInt(btn.id.replace('complete-task-', ''))); }
+            }, { passive: false });
+            container.addEventListener('click', function(e) {
+                const btn = e.target.closest('button[id^="complete-task-"]');
+                if (btn) toggleTaskComplete(parseInt(btn.id.replace('complete-task-', '')));
             });
         }
 
         function toggleTaskComplete(taskId) {
-            const task = appData.tasks.find(t => t.id === taskId);
-            if (!task) return;
-            task.completed = !task.completed;
-            saveData();
-            renderTasks();
-            updateStats();
-            updateHabitStats();
-            if (task.completed) showNotification(`✅ "${task.title}" completada`, 'success');
-            if (task.completed) setTimeout(evaluateBadges, 400);
+            try {
+                const task = appData.tasks.find(t => t.id === taskId);
+                if (!task) { showNotification('Tarea no encontrada', 'error'); return; }
+                task.completed = !task.completed;
+                saveData();
+                renderTasks();
+                updateStats();
+                updateHabitStats();
+                if (task.completed) showNotification(`✅ "${task.title}" completada`, 'success');
+                if (task.completed) setTimeout(evaluateBadges, 400);
+            } catch(err) {
+                showNotification('Error: ' + err.message, 'error');
+            }
         }
 
         function renderEvents() {
@@ -6333,40 +6345,42 @@
         }
 
         function toggleHabitToday(habitId) {
-            const habit = appData.habits.find(h => h.id === habitId);
-            if (!habit) return;
-            const today = getTodayString();
-            const idx = habit.completedDates.indexOf(today);
-            if (idx === -1) {
-                habit.completedDates.push(today);
-                recalcStreak(habit);
-                saveData();
-                renderHabits();
-                updateHabitStats();
-                // Animación y feedback
-                const card = document.querySelector(`.habit-card[data-id="${habitId}"]`);
-                if (card) {
-                    card.classList.add('just-completed');
-                    card.addEventListener('animationend', () => card.classList.remove('just-completed'), { once: true });
-                }
-                const streak = habit.streak;
-                if (streak >= 7) {
-                    showNotification(`🔥 ¡${streak} días seguidos con "${habit.name}"! Increíble racha`, 'success');
-                } else if (streak >= 3) {
-                    showNotification(`⚡ ¡${streak} días seguidos! Sigue así`, 'success');
+            try {
+                const habit = appData.habits.find(h => h.id === habitId);
+                if (!habit) return;
+                if (!habit.completedDates) habit.completedDates = [];
+                const today = getTodayString();
+                const idx = habit.completedDates.indexOf(today);
+                if (idx === -1) {
+                    habit.completedDates.push(today);
+                    recalcStreak(habit);
+                    saveData();
+                    renderHabits();
+                    updateHabitStats();
+                    const card = document.querySelector(`.habit-card[data-id="${habitId}"]`);
+                    if (card) {
+                        card.classList.add('just-completed');
+                        card.addEventListener('animationend', () => card.classList.remove('just-completed'), { once: true });
+                    }
+                    const streak = habit.streak;
+                    if (streak >= 7) {
+                        showNotification(`🔥 ¡${streak} días seguidos con "${habit.name}"! Increíble racha`, 'success');
+                    } else if (streak >= 3) {
+                        showNotification(`⚡ ¡${streak} días seguidos! Sigue así`, 'success');
+                    } else {
+                        showNotification(`✅ "${habit.name}" completado hoy`, 'success');
+                    }
+                    setTimeout(evaluateBadges, 400);
                 } else {
-                    showNotification(`✅ "${habit.name}" completado hoy`, 'success');
+                    habit.completedDates.splice(idx, 1);
+                    recalcStreak(habit);
+                    saveData();
+                    renderHabits();
+                    updateHabitStats();
+                    showNotification(`↩️ "${habit.name}" desmarcado`, 'info');
                 }
-                // Evaluar insignias al completar hábito
-                setTimeout(evaluateBadges, 400);
-            } else {
-                // Desmarcar
-                habit.completedDates.splice(idx, 1);
-                recalcStreak(habit);
-                saveData();
-                renderHabits();
-                updateHabitStats();
-                showNotification(`↩️ "${habit.name}" desmarcado`, 'info');
+            } catch(err) {
+                showNotification('Error: ' + err.message, 'error');
             }
         }
 
@@ -6487,18 +6501,33 @@
                     </div>
                 `;
             }).join('');
+        }
 
-            // Adjuntar listeners directamente a cada botón — touchend para Android + click para desktop
-            function addBtn(id, fn) {
-                const el = document.getElementById(id);
-                if (!el) return;
-                el.addEventListener('touchend', function(e) { e.preventDefault(); fn(); }, { passive: false });
-                el.addEventListener('click', fn);
-            }
-
-            sorted.forEach(habit => {
-                addBtn(`toggle-habit-${habit.id}`, () => toggleHabitToday(habit.id));
-                addBtn(`del-habit-${habit.id}`,    () => deleteHabit(habit.id));
+        // ── Listener persistente en el contenedor de hábitos — sobrevive re-renders ──
+        // Se registra una sola vez cuando la app inicia
+        function setupHabitsContainerListener() {
+            const container = document.getElementById('habits-container');
+            if (!container || container._listenerSet) return;
+            container._listenerSet = true;
+            container.addEventListener('touchend', function(e) {
+                const btn = e.target.closest('button[id^="toggle-habit-"]');
+                const del = e.target.closest('button[id^="del-habit-"]');
+                if (btn) {
+                    e.preventDefault();
+                    const id = parseInt(btn.id.replace('toggle-habit-', ''));
+                    toggleHabitToday(id);
+                }
+                if (del) {
+                    e.preventDefault();
+                    const id = parseInt(del.id.replace('del-habit-', ''));
+                    deleteHabit(id);
+                }
+            }, { passive: false });
+            container.addEventListener('click', function(e) {
+                const btn = e.target.closest('button[id^="toggle-habit-"]');
+                const del = e.target.closest('button[id^="del-habit-"]');
+                if (btn) toggleHabitToday(parseInt(btn.id.replace('toggle-habit-', '')));
+                if (del) deleteHabit(parseInt(del.id.replace('del-habit-', '')));
             });
         }
 
