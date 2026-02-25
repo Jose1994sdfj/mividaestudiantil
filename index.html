@@ -4549,7 +4549,9 @@
             if (pageName === 'progreso') {
                 renderSubjects();
                 updateProgressStats();
-                setTimeout(() => renderRadarChart(), 80);
+                // Renderizar solo el tab activo (el de resumen por defecto)
+                // sin lanzar setTimeouts en cascada que compiten con switchProgresoTab
+                renderRadarChart();
             }
         }
 
@@ -7639,6 +7641,7 @@
         // ═══════════════════════════════════════════════════
 
         // ── Switch de tabs en sección Progreso ──
+        let _progresoTabTimer = null;
         function switchProgresoTab(tabId) {
             const tabs    = ['tab-resumen','tab-habitos','tab-emociones','tab-areas'];
             const buttons = document.querySelectorAll('.progreso-tab');
@@ -7654,8 +7657,10 @@
                 btn.style.color      = isActive ? 'white' : 'var(--text-secondary)';
             });
 
-            // Dibujar la gráfica correspondiente con delay para que el DOM esté visible
-            setTimeout(() => {
+            // Cancelar cualquier render pendiente antes de lanzar uno nuevo
+            if (_progresoTabTimer) clearTimeout(_progresoTabTimer);
+            _progresoTabTimer = setTimeout(() => {
+                _progresoTabTimer = null;
                 if (tabId === 'tab-resumen')   { renderSubjects(); updateProgressStats(); renderRadarChart(); }
                 if (tabId === 'tab-habitos')   { renderHeatmap(); renderStreaksChart(); }
                 if (tabId === 'tab-emociones') { renderEmotionsLineChart(); renderEmotionsFrequency(); }
@@ -7675,7 +7680,7 @@
         }
 
         // ══════════════════════════════════════════
-        //  0. RADAR / SPIDER DE ÁREAS (SVG puro)
+        //  MAPA RADAR DE ÁREAS DE VIDA (SVG puro)
         // ══════════════════════════════════════════
         function renderRadarChart() {
             const container = document.getElementById('radar-chart-container');
@@ -7694,11 +7699,11 @@
             const n = subjects.length;
             const angleStep = (2 * Math.PI) / n;
             const pt = (i, r) => {
-                const a = i * angleStep - Math.PI/2;
+                const a = i * angleStep - Math.PI / 2;
                 return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) };
             };
 
-            // Rejilla
+            // Rejilla de fondo
             let grid = '';
             for (let lv = 1; lv <= levels; lv++) {
                 const r = (maxR / levels) * lv;
@@ -7706,8 +7711,9 @@
                 const d = pts.map((p,i) => `${i===0?'M':'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ') + ' Z';
                 grid += `<path d="${d}" fill="none" stroke="var(--border-color)" stroke-width="${lv===levels?1.5:0.8}"/>`;
             }
+
             // Ejes
-            let axes = subjects.map((_,i) => {
+            const axes = subjects.map((_,i) => {
                 const p = pt(i, maxR);
                 return `<line x1="${cx}" y1="${cy}" x2="${p.x.toFixed(1)}" y2="${p.y.toFixed(1)}" stroke="var(--border-color)" stroke-width="1"/>`;
             }).join('');
@@ -7723,7 +7729,7 @@
                 const anchor = p.x < cx-5 ? 'end' : p.x > cx+5 ? 'start' : 'middle';
                 const name = s.name.length > 10 ? s.name.slice(0,9)+'…' : s.name;
                 const pct = Math.round((s.grade||0)*10);
-                const col = pct>=70 ? '#00c853' : pct>=40 ? '#ffab00' : '#ff5252';
+                const col = pct>=70?'#00c853':pct>=40?'#ffab00':'#ff5252';
                 return `<text x="${p.x.toFixed(1)}" y="${p.y.toFixed(1)}" text-anchor="${anchor}" font-size="9" font-weight="700" fill="var(--text-primary)" font-family="Poppins,sans-serif">${name}</text>
                          <text x="${p.x.toFixed(1)}" y="${(p.y+11).toFixed(1)}" text-anchor="${anchor}" font-size="8" fill="${col}" font-family="Poppins,sans-serif">${pct}%</text>`;
             }).join('');
@@ -7870,25 +7876,14 @@
             if (!container) return;
             const days     = getLast14Days();
             const emotions = appData.emotions || [];
-            const positiveEm = ['Alegría','Amor','Confianza','Gratitud','Paz','Motivación','Esperanza'];
-
-            // Usa intensity si existe; si no calcula score de positividad del día
-            const points = days.map(day => {
-                const dayEm = emotions.filter(e => e.date && e.date.startsWith(day));
+            const points   = days.map(day => {
+                const dayEm = emotions.filter(e => e.date && e.date.startsWith(day) && e.intensity);
                 if (!dayEm.length) return null;
-                if (dayEm.some(e => e.intensity)) {
-                    const withInt = dayEm.filter(e => e.intensity);
-                    return Math.round(withInt.reduce((s,e) => s + (e.intensity||5), 0) / withInt.length * 10) / 10;
-                }
-                const allTags = dayEm.flatMap(e => e.emotions || []);
-                if (!allTags.length) return 5;
-                const posCount = allTags.filter(t => positiveEm.includes(t)).length;
-                return Math.min(10, Math.round((posCount / allTags.length) * 7) + 3);
+                return Math.round(dayEm.reduce((s,e) => s + (e.intensity||5), 0) / dayEm.length * 10) / 10;
             });
-
             const hasData = points.some(v => v !== null);
             if (!hasData) {
-                container.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--text-secondary);"><div style="font-size:2rem;">😶</div><p style="font-size:0.9rem;margin-top:0.5rem;">Registra emociones para ver tu evolución</p></div>`;
+                container.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--text-secondary);"><div style="font-size:2rem;">📭</div><p style="font-size:0.9rem;margin-top:0.5rem;">Registra emociones con intensidad para ver la gráfica</p></div>`;
                 return;
             }
             const max = 10;
@@ -7908,7 +7903,7 @@
                 </div>
                 <div style="display:flex;justify-content:space-between;margin-top:8px;padding:0 4px;">
                     <span style="font-size:0.72rem;color:var(--text-secondary);">${shortDay(days[0])}</span>
-                    <span style="font-size:0.72rem;color:var(--text-secondary);">Bienestar emocional (0–10)</span>
+                    <span style="font-size:0.72rem;color:var(--text-secondary);">Intensidad (0–10)</span>
                     <span style="font-size:0.72rem;color:var(--text-secondary);">${shortDay(days[13])}</span>
                 </div>`;
         }
