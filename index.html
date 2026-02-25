@@ -1177,11 +1177,14 @@
             bottom: 0;
             background: rgba(0, 0, 0, 0.6);
             z-index: 1000;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
             padding: 1rem;
+            padding-top: max(1rem, env(safe-area-inset-top));
+            overflow-y: auto;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
+            -webkit-overflow-scrolling: touch;
         }
 
         .modal-content {
@@ -1190,11 +1193,14 @@
             -webkit-backdrop-filter: blur(20px);
             width: 100%;
             max-width: 420px;
+            max-height: 90vh;
+            overflow-y: auto;
             border-radius: 24px;
             padding: 2rem;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             border: 1px solid var(--glass-border);
             animation: modalAppear 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            -webkit-overflow-scrolling: touch;
         }
 
         @keyframes modalAppear {
