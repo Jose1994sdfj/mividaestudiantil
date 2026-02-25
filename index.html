@@ -9,12 +9,12 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Rose">
     <title>Rose</title>
-    
+
     <link rel="manifest" href="/manifest.json">
     <link rel="apple-touch-icon" href="/icons/icon-192.png">
     <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512.png">
-    
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -1035,7 +1035,7 @@
             color: var(--text-primary);
             transition: background 0.3s ease, color 0.3s ease;
         }
-        
+
         select.form-control {
             cursor: pointer;
             -webkit-appearance: none;
@@ -1049,7 +1049,7 @@
             position: relative;
             z-index: 10;
         }
-        
+
         select.form-control:focus {
             outline: 2px solid var(--primary-color);
             border-color: var(--primary-color);
@@ -2224,7 +2224,7 @@
             <p class="tutorial-description" id="tutorial-description">
                 Tu compañero de vida diaria
             </p>
-            
+
             <div class="tutorial-features" id="tutorial-features">
                 <!-- Las características se cargarán dinámicamente -->
             </div>
@@ -2255,7 +2255,7 @@
                     <h2 class="greeting-title" id="greeting-title">Buenos días</h2>
                     <p class="greeting-subtitle" id="welcome-message">Cargando...</p>
                 </div>
-                
+
                 <div class="quick-stats">
                     <div class="quick-stat-item">
                         <div class="stat-number" id="quick-tasks-stat">0</div>
@@ -2367,7 +2367,7 @@
         </div>
         <div class="cards-scroll" id="people-scroll"></div>
 
-        
+
         </div>
         <!-- Fin Sección de Inicio -->
 
@@ -2380,7 +2380,7 @@
                     <button class="see-all" id="add-class-btn" onclick="openClassModal()" style="padding: 10px 18px;">+ Agregar</button>
                 </div>
             </div>
-            
+
             <div class="stats-grid">
                 <div class="stat-item">
                     <div class="stat-icon">🕐</div>
@@ -2423,21 +2423,14 @@
 
             <!-- Tabs -->
             <div style="display:flex; background:var(--bg-secondary); border-radius:16px; padding:4px; margin-bottom:20px; gap:4px; box-shadow:var(--card-shadow); border:1px solid var(--border-color);">
-                <button class="progreso-tab active-tab" data-tab="tab-resumen"   onclick="switchProgresoTab('tab-resumen')"   style="flex:1; padding:9px 4px; border:none; border-radius:12px; font-size:0.78rem; font-weight:600; cursor:pointer; background:var(--gradient); color:white; transition:var(--transition); font-family:Poppins,sans-serif;">📊 Resumen</button>
-                <button class="progreso-tab"            data-tab="tab-habitos"   onclick="switchProgresoTab('tab-habitos')"   style="flex:1; padding:9px 4px; border:none; border-radius:12px; font-size:0.78rem; font-weight:600; cursor:pointer; background:transparent; color:var(--text-secondary); transition:var(--transition); font-family:Poppins,sans-serif;">🔥 Hábitos</button>
-                <button class="progreso-tab"            data-tab="tab-emociones" onclick="switchProgresoTab('tab-emociones')" style="flex:1; padding:9px 4px; border:none; border-radius:12px; font-size:0.78rem; font-weight:600; cursor:pointer; background:transparent; color:var(--text-secondary); transition:var(--transition); font-family:Poppins,sans-serif;">❤️ Emociones</button>
-                <button class="progreso-tab"            data-tab="tab-areas"     onclick="switchProgresoTab('tab-areas')"     style="flex:1; padding:9px 4px; border:none; border-radius:12px; font-size:0.78rem; font-weight:600; cursor:pointer; background:transparent; color:var(--text-secondary); transition:var(--transition); font-family:Poppins,sans-serif;">🌱 Áreas</button>
+                <button class="progreso-tab active-tab" data-tab="tab-resumen"   onclick="window.switchProgresoTab('tab-resumen')"   style="flex:1; padding:12px 4px; border:none; border-radius:12px; font-size:0.78rem; font-weight:600; cursor:pointer; background:var(--gradient); color:white; transition:var(--transition); font-family:Poppins,sans-serif; touch-action:manipulation; -webkit-tap-highlight-color:transparent; z-index:10;">📊 Resumen</button>
+                <button class="progreso-tab"            data-tab="tab-habitos"   onclick="window.switchProgresoTab('tab-habitos')"   style="flex:1; padding:12px 4px; border:none; border-radius:12px; font-size:0.78rem; font-weight:600; cursor:pointer; background:transparent; color:var(--text-secondary); transition:var(--transition); font-family:Poppins,sans-serif; touch-action:manipulation; -webkit-tap-highlight-color:transparent; z-index:10;">🔥 Hábitos</button>
+                <button class="progreso-tab"            data-tab="tab-emociones" onclick="window.switchProgresoTab('tab-emociones')" style="flex:1; padding:12px 4px; border:none; border-radius:12px; font-size:0.78rem; font-weight:600; cursor:pointer; background:transparent; color:var(--text-secondary); transition:var(--transition); font-family:Poppins,sans-serif; touch-action:manipulation; -webkit-tap-highlight-color:transparent; z-index:10;">❤️ Emociones</button>
+                <button class="progreso-tab"            data-tab="tab-areas"     onclick="window.switchProgresoTab('tab-areas')"     style="flex:1; padding:12px 4px; border:none; border-radius:12px; font-size:0.78rem; font-weight:600; cursor:pointer; background:transparent; color:var(--text-secondary); transition:var(--transition); font-family:Poppins,sans-serif; touch-action:manipulation; -webkit-tap-highlight-color:transparent; z-index:10;">🌱 Áreas</button>
             </div>
 
             <!-- TAB RESUMEN -->
             <div id="tab-resumen">
-                <div class="section-title" style="margin-top:0;">
-                    <h3>Mis Metas 🎯</h3>
-                    <div style="display:flex; gap:8px;">
-                        <button class="see-all" id="manage-subjects-btn" onclick="showManageSubjectsModal()" style="padding:10px 18px; background:rgba(255,107,107,0.15); color:var(--danger-color);">🗑️ Gestionar</button>
-                        <button class="see-all" id="add-subject-btn" onclick="openSubjectModal()" style="padding:10px 18px;">+ Agregar</button>
-                    </div>
-                </div>
                 <div class="card" style="background:var(--gradient); color:white; text-align:center; padding:2rem;">
                     <h3 style="margin-bottom:0.5rem; opacity:0.95;">Índice de Bienestar</h3>
                     <p style="opacity:0.75; font-size:0.82rem; margin-bottom:1rem;">Promedio ponderado de tus áreas de vida</p>
@@ -2446,10 +2439,6 @@
                     <div class="progress-bar" style="margin-top:1rem; background:rgba(255,255,255,0.3);">
                         <div class="progress-fill" id="overall-progress" style="width:0%; background:white;"></div>
                     </div>
-                </div>
-                <div class="section-title"><h3>Mapa de Áreas 🕸️</h3></div>
-                <div class="card" style="padding:16px;">
-                    <div id="radar-chart-container" style="display:flex; flex-direction:column; align-items:center;"></div>
                 </div>
                 <div class="section-title"><h3>Áreas de Vida 🌱</h3></div>
                 <div id="subjects-container"></div>
@@ -2488,13 +2477,6 @@
 
             <!-- TAB ÁREAS -->
             <div id="tab-areas" style="display:none;">
-                <div class="section-title" style="margin-top:0;">
-                    <h3>Áreas de Vida 🌱</h3>
-                    <div style="display:flex; gap:8px;">
-                        <button class="see-all" id="manage-subjects-btn-2" onclick="showManageSubjectsModal()" style="padding:10px 18px; background:rgba(255,107,107,0.15); color:var(--danger-color);">🗑️ Gestionar</button>
-                        <button class="see-all" id="add-subject-btn-2" onclick="openSubjectModal()" style="padding:10px 18px;">+ Agregar</button>
-                    </div>
-                </div>
                 <div id="areas-bar-chart-html"></div>
                 <div id="subjects-container-areas"></div>
             </div>
@@ -3035,6 +3017,21 @@
         // ========== INICIALIZACIÓN ==========
         document.addEventListener('DOMContentLoaded', function() {
             checkExistingSession();
+            
+            // Forzar registro de eventos táctiles
+            const progTabs = document.querySelectorAll('.progreso-tab');
+            progTabs.forEach(btn => {
+                const tid = btn.getAttribute('data-tab');
+                btn.addEventListener('touchstart', (e) => {
+                    // Prevenir scroll accidental al tocar rápido
+                    if (window.switchProgresoTab) window.switchProgresoTab(tid);
+                }, {passive: true});
+            });
+
+            // Asegurar que las pestañas de progreso funcionen
+            setTimeout(() => {
+                if (window.switchProgresoTab) window.switchProgresoTab('tab-resumen');
+            }, 300);
         });
 
         // Event delegation global para todos los botones de eliminar
@@ -3255,7 +3252,7 @@
                     };
                     return getMinutes(a.time) - getMinutes(b.time);
                 });
-                
+
                 if (sortedClasses.length > 0 || day === 'Lunes') {
                     html += `
                         <div class="card" style="margin-bottom: 1rem;">
@@ -3807,7 +3804,7 @@
             slider.oninput = function() {
                 label.textContent = this.value + ' / 10';
             };
-            
+
             // Setup tags
             const tags = document.querySelectorAll('#emotion-tags-modal .emotion-tag');
             tags.forEach(tag => {
@@ -3821,12 +3818,12 @@
         // Handle Emotion Modal Submit
         document.getElementById('emotion-form-modal').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
+
             // Determinar si es "sobre mí" o "sobre alguien"
             const isSelf = document.getElementById('emotion-mode-self').classList.contains('active-mode');
             const personSelect = document.getElementById('emotion-person-modal').value;
             const person = isSelf ? '🙋 Yo mismo' : personSelect;
-            
+
             if (!isSelf && !personSelect) {
                 showNotification('Selecciona una persona o elige "Sobre mí"', 'error');
                 return;
@@ -3857,7 +3854,7 @@
             saveData();
             renderEmotionsHistoryBienestar();
             updateStats();
-            
+
             document.getElementById('emotion-modal').style.display = 'none';
             this.reset();
             // Resetear modo a "Sobre mí"
@@ -4114,13 +4111,13 @@
         function updateQuickStats() {
             const today = new Date();
             const todayStr = today.toISOString().split('T')[0];
-            
+
             // Calcular tareas pendientes (no completadas)
             const pendingTasks = appData.tasks.filter(t => !t.completed).length;
-            
+
             // Calcular próximos eventos (hoy y futuros)
             const upcomingEvents = appData.events.filter(e => e.date >= todayStr).length;
-            
+
             // Calcular progreso de tareas
             const completedTasks = appData.tasks.filter(t => t.completed).length;
             const totalTasks = appData.tasks.length;
@@ -4485,9 +4482,9 @@
         function showNotification(message, type = 'success') {
             const notification = document.getElementById('notification');
             if (!notification) return;
-            
+
             notification.textContent = message;
-            
+
             if (type === 'error') {
                 notification.style.background = 'var(--danger-color)';
             } else if (type === 'info') {
@@ -4495,7 +4492,7 @@
             } else {
                 notification.style.background = 'var(--success-color)';
             }
-            
+
             notification.style.display = 'block';
             notification.style.opacity = '1';
 
@@ -4549,9 +4546,8 @@
             if (pageName === 'progreso') {
                 renderSubjects();
                 updateProgressStats();
-                // Renderizar solo el tab activo (el de resumen por defecto)
-                // sin lanzar setTimeouts en cascada que compiten con switchProgresoTab
-                renderRadarChart();
+                // Pequeño delay para que el DOM esté visible antes de dibujar Canvas
+                setTimeout(() => renderAllCharts(), 80);
             }
         }
 
@@ -4572,7 +4568,7 @@
             if (totalClassesEl) {
                 totalClassesEl.textContent = totalClasses;
             }
-            
+
             const daysMap = {
                 0: 'Domingo',
                 1: 'Lunes',
@@ -4582,11 +4578,11 @@
                 5: 'Viernes',
                 6: 'Sábado'
             };
-            
+
             const today = new Date().getDay();
             const todayName = daysMap[today];
             const classesToday = appData.schedule.filter(c => c.day === todayName).length;
-            
+
             const classesTodayEl = document.getElementById('classes-today');
             if (classesTodayEl) {
                 classesTodayEl.textContent = classesToday;
@@ -4596,7 +4592,7 @@
             const now = new Date();
             const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
             const todayClasses = appData.schedule.filter(c => c.day === todayName && c.time > currentTime);
-            
+
             const nextClassEl = document.getElementById('next-class-time');
             if (nextClassEl) {
                 if (todayClasses.length > 0) {
@@ -4613,7 +4609,7 @@
                 const dayIndex = Object.keys(daysMap).find(key => daysMap[key] === c.day);
                 return dayIndex < today || (dayIndex == today && c.time < currentTime);
             }).length;
-            
+
             const weekProgressEl = document.getElementById('week-progress');
             if (weekProgressEl) {
                 const percentage = totalWeekClasses > 0 ? Math.round((completedClasses / totalWeekClasses) * 100) : 0;
@@ -5003,13 +4999,13 @@
             // ── Notificaciones: cargar estado guardado ──
             initNotifSettingsUI(modal);
         }
-        
+
         // ========== MODAL DE GESTIÓN DE CLASES ==========
         function showManageClassesModal() {
             const modal = document.createElement('div');
             modal.className = 'modal';
             modal.style.display = 'flex';
-            
+
             const classesHTML = `
                 <div class="modal-content" style="max-width: 600px;">
                     <div class="modal-header">
@@ -5045,26 +5041,26 @@
                     ` : ''}
                 </div>
             `;
-            
+
             modal.innerHTML = classesHTML;
             document.body.appendChild(modal);
-            
+
             modal.querySelector('.close-modal').addEventListener('click', () => {
                 document.body.removeChild(modal);
             });
-            
+
             modal.addEventListener('click', (e) => {
                 if (e.target === modal) {
                     document.body.removeChild(modal);
                 }
             });
-            
+
             // Event listeners para botones de borrar individual
             modal.querySelectorAll('.manage-delete-class-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const id = parseInt(this.getAttribute('data-id'));
                     const name = this.getAttribute('data-name');
-                    
+
                     if (confirm(`¿Estás seguro de que quieres borrar la clase "${name}"?`)) {
                         appData.schedule = appData.schedule.filter(cls => cls.id !== id);
                         saveData();
@@ -5075,7 +5071,7 @@
                     }
                 });
             });
-            
+
             // Event listener para borrar todas
             const deleteAllBtn = modal.querySelector('#delete-all-classes-btn');
             if (deleteAllBtn) {
@@ -5097,7 +5093,7 @@
             const modal = document.createElement('div');
             modal.className = 'modal';
             modal.style.display = 'flex';
-            
+
             const subjectsHTML = `
                 <div class="modal-content" style="max-width: 600px;">
                     <div class="modal-header">
@@ -5134,26 +5130,26 @@
                     ` : ''}
                 </div>
             `;
-            
+
             modal.innerHTML = subjectsHTML;
             document.body.appendChild(modal);
-            
+
             modal.querySelector('.close-modal').addEventListener('click', () => {
                 document.body.removeChild(modal);
             });
-            
+
             modal.addEventListener('click', (e) => {
                 if (e.target === modal) {
                     document.body.removeChild(modal);
                 }
             });
-            
+
             // Event listeners para botones de borrar individual
             modal.querySelectorAll('.manage-delete-subject-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const id = parseInt(this.getAttribute('data-id'));
                     const name = this.getAttribute('data-name');
-                    
+
                     if (confirm(`¿Estás seguro de que quieres borrar el área "${name}"?`)) {
                         appData.subjects = appData.subjects.filter(subject => subject.id !== id);
                         saveData();
@@ -5164,7 +5160,7 @@
                     }
                 });
             });
-            
+
             // Event listener para borrar todas
             const deleteAllBtn = modal.querySelector('#delete-all-subjects-btn');
             if (deleteAllBtn) {
@@ -5189,7 +5185,7 @@
                 headerSubtitle.textContent = `Hola, ${name} 👋`;
             }
         }
-        
+
         // Cargar nombre de usuario al iniciar
         function loadInstitutionName() {
             const savedName = localStorage.getItem('institutionName');
@@ -5209,7 +5205,7 @@
                 if (select) {
                     const currentValue = select.value;
                     select.innerHTML = id === 'person-select-analysis' ? '<option value="">Todas las personas</option>' : '<option value="">Selecciona una persona</option>';
-                    
+
                     if (appData && Array.isArray(appData.people)) {
                         appData.people.forEach(person => {
                             const option = document.createElement('option');
@@ -5226,11 +5222,11 @@
         function renderEmotionsTimelineView() {
             const container = document.getElementById('emotions-timeline-view');
             if (!container) return;
-            
+
             if (!Array.isArray(appData.emotions)) appData.emotions = [];
-            
+
             const sortedEmotions = [...appData.emotions].sort((a, b) => new Date(b.date) - new Date(a.date));
-            
+
             if (sortedEmotions.length === 0) {
                 container.innerHTML = `
                     <div class="card">
@@ -5249,7 +5245,7 @@
                 'Confianza':'🤝','Miedo':'😨','Sorpresa':'😲','Gratitud':'🙏','Paz':'☮️',
                 'Motivación':'💪','Esperanza':'🌟','Ansiedad':'😰','Soledad':'🌧️','Cansancio':'😴'
             };
-            
+
             container.innerHTML = sortedEmotions.map(emotion => {
                 // Determinar avatar e identificador
                 const isSelf = emotion.isSelf || emotion.person === '🙋 Yo mismo';
@@ -5310,7 +5306,7 @@
         function renderEmotionsGroupedView() {
             const container = document.getElementById('emotions-grouped-view');
             if (!container) return;
-            
+
             if (appData.emotions.length === 0) {
                 container.innerHTML = `
                     <div class="card">
@@ -5322,7 +5318,7 @@
                 `;
                 return;
             }
-            
+
             // Agrupar por persona
             const groupedByPerson = {};
             appData.emotions.forEach(emotion => {
@@ -5330,14 +5326,14 @@
                 if (!groupedByPerson[key]) groupedByPerson[key] = [];
                 groupedByPerson[key].push(emotion);
             });
-            
+
             container.innerHTML = Object.keys(groupedByPerson).sort().map(personName => {
                 const emotions = groupedByPerson[personName];
                 const isSelf = personName === '🙋 Yo mismo';
                 const person = isSelf ? null : appData.people.find(p => p.name === personName);
                 const emoji = isSelf ? '🙋' : (person ? person.emoji : '👤');
                 const relation = isSelf ? 'Registro personal' : (person ? person.relation : 'Desconocido');
-                
+
                 // Contar emociones totales
                 const emotionCounts = {};
                 emotions.forEach(emotion => {
@@ -5345,11 +5341,11 @@
                         emotionCounts[e] = (emotionCounts[e] || 0) + 1;
                     });
                 });
-                
+
                 const topEmotions = Object.entries(emotionCounts)
                     .sort((a, b) => b[1] - a[1])
                     .slice(0, 3);
-                
+
                 return `
                     <div class="card" style="margin-bottom: 1.5rem;">
                         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 2px solid var(--border-color);">
@@ -5362,7 +5358,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         ${topEmotions.length > 0 ? `
                             <div style="margin-bottom: 1rem;">
                                 <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.5rem;">
@@ -5385,7 +5381,7 @@
                                 </div>
                             </div>
                         ` : ''}
-                        
+
                         <div style="margin-top: 1rem;">
                             <button class="btn toggle-person-emotions-btn" data-person="${personName}" style="width: 100%; background: var(--bg-primary); color: var(--text-primary); border: 1px solid var(--border-color); padding: 0.8rem;">
                                 <i class="fas fa-chevron-down"></i> Ver todos los registros
@@ -5432,7 +5428,7 @@
             const containerId = 'person-emotions-' + personName.replace(/\s+/g, '-');
             const container = document.getElementById(containerId);
             const button = container.previousElementSibling;
-            
+
             if (container.style.display === 'none') {
                 container.style.display = 'block';
                 button.innerHTML = '<i class="fas fa-chevron-up"></i> Ocultar registros';
@@ -5472,7 +5468,7 @@
         function setupEmotionsFilters() {
             const btn = document.getElementById('toggle-view-btn');
             if (!btn) return;
-            
+
             // Usar onclick directo para evitar duplicidad de listeners
             btn.onclick = function(e) {
                 e.preventDefault();
@@ -5489,7 +5485,7 @@
                 // Remove existing listeners by replacing the element
                 const newTag = tag.cloneNode(true);
                 tag.parentNode.replaceChild(newTag, tag);
-                
+
                 newTag.addEventListener('click', function(e) {
                     e.preventDefault();
                     e.stopPropagation();
@@ -5605,7 +5601,7 @@
                 }
 
                 const selectedPerson = personSelect ? personSelect.value : '';
-                
+
                 let analysis;
                 if (selectedPerson) {
                     // Analizar solo la persona seleccionada
@@ -5620,7 +5616,7 @@
                     analysis = analyzeRelationshipsProfessionally();
                     showNotification('Análisis completado ✨');
                 }
-                
+
                 resultContainer.innerHTML = analysis;
             });
         }
@@ -5629,11 +5625,11 @@
         function analyzeSinglePerson(personName) {
             // Filtrar emociones de la persona seleccionada
             const personEmotions = appData.emotions.filter(e => e.person === personName);
-            
+
             if (personEmotions.length === 0) {
                 return null;
             }
-            
+
             // Preparar datos de la persona
             const personData = {
                 emotions: [],
@@ -5641,20 +5637,20 @@
                 descriptions: [],
                 relation: appData.people.find(p => p.name === personName)?.relation || 'Desconocido'
             };
-            
+
             personEmotions.forEach(emotion => {
                 personData.emotions.push(...emotion.emotions);
                 personData.dates.push(new Date(emotion.date));
                 personData.descriptions.push(emotion.description);
             });
-            
+
             // Realizar análisis individual
             const analysis = analyzeIndividualRelationship(personName, personData);
-            
+
             // Generar HTML específico para esta persona
             const healthColor = analysis.relationshipHealthIndex >= 70 ? 'var(--success-color)' : 
                                analysis.relationshipHealthIndex >= 40 ? 'var(--warning-color)' : 'var(--danger-color)';
-            
+
             const emotionEmojis = {
                 'Alegría': '😊',
                 'Tristeza': '😢',
@@ -5663,7 +5659,7 @@
                 'Frustración': '😤',
                 'Confianza': '🤝'
             };
-            
+
             let html = `
                 <div style="margin-top: 1.5rem;">
                     <!-- Encabezado Principal -->
@@ -5687,7 +5683,7 @@
 
                     <!-- Detalle del Análisis -->
                     <div style="background: var(--glass-bg); backdrop-filter: blur(10px); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; border: 1px solid var(--glass-border); box-shadow: var(--card-shadow);">
-                        
+
                         <!-- Distribución Emocional -->
                         <div style="margin-bottom: 1.5rem;">
                             <div style="font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-secondary);">Emociones Registradas:</div>
@@ -5738,10 +5734,10 @@
                     </div>
                 </div>
             `;
-            
+
             return html;
         }
-        
+
         function analyzeRelationshipsProfessionally() {
             // Agrupar emociones por persona
             const personEmotions = {};
@@ -5761,7 +5757,7 @@
 
             // Análisis global
             const globalAnalysis = analyzeGlobalEmotionalHealth(personEmotions);
-            
+
             // Análisis individual por persona
             const individualAnalyses = Object.keys(personEmotions).map(person => {
                 return analyzeIndividualRelationship(person, personEmotions[person]);
@@ -5780,7 +5776,7 @@
             // Clasificar emociones
             const positiveEmotions = ['Alegría', 'Amor', 'Confianza'];
             const negativeEmotions = ['Tristeza', 'Enojo', 'Frustración'];
-            
+
             const positiveCount = allEmotions.filter(e => positiveEmotions.includes(e)).length;
             const negativeCount = allEmotions.filter(e => negativeEmotions.includes(e)).length;
             const totalEmotions = allEmotions.length;
@@ -5797,7 +5793,7 @@
             let wellbeingLevel = '';
             let wellbeingColor = '';
             let wellbeingIcon = '';
-            
+
             if (emotionalHealthScore >= 80) {
                 wellbeingLevel = 'Excelente';
                 wellbeingColor = 'var(--success-color)';
@@ -5842,7 +5838,7 @@
 
         function analyzeIndividualRelationship(personName, data) {
             const { emotions, dates, descriptions, relation } = data;
-            
+
             // Análisis de frecuencia emocional
             const emotionCounts = {};
             emotions.forEach(e => {
@@ -5856,7 +5852,7 @@
             // Clasificar emociones
             const positiveEmotions = ['Alegría', 'Amor', 'Confianza'];
             const negativeEmotions = ['Tristeza', 'Enojo', 'Frustración'];
-            
+
             const positiveCount = emotions.filter(e => positiveEmotions.includes(e)).length;
             const negativeCount = emotions.filter(e => negativeEmotions.includes(e)).length;
 
@@ -5939,7 +5935,7 @@
 
             const level = healthIndex >= 70 ? 'high' : healthIndex >= 40 ? 'medium' : 'low';
             const baseDiagnosis = diagnoses[dominantEmotion]?.[level] || 'Se requiere más información para un diagnóstico preciso.';
-            
+
             let trendNote = '';
             if (trend === 'Mejorando') {
                 trendNote = ' <strong style="color: var(--success-color);">📈 Tendencia Positiva:</strong> La relación muestra señales de mejora reciente.';
@@ -7074,7 +7070,7 @@
 
         function initializeTutorial() {
             const hasSeenTutorial = localStorage.getItem('hasSeenTutorial');
-            
+
             if (!hasSeenTutorial) {
                 setTimeout(() => {
                     showTutorial();
@@ -7091,11 +7087,11 @@
 
         function updateTutorialContent() {
             const step = tutorialSteps[currentTutorialStep];
-            
+
             document.getElementById('tutorial-icon').textContent = step.icon;
             document.getElementById('tutorial-title').textContent = step.title;
             document.getElementById('tutorial-description').textContent = step.description;
-            
+
             const featuresContainer = document.getElementById('tutorial-features');
             featuresContainer.innerHTML = step.features.map(feature => `
                 <div class="tutorial-feature">
@@ -7103,7 +7099,7 @@
                     <div class="tutorial-feature-text">${feature.text}</div>
                 </div>
             `).join('');
-            
+
             // Actualizar puntos de progreso
             const dots = document.querySelectorAll('.tutorial-dot');
             dots.forEach((dot, index) => {
@@ -7113,7 +7109,7 @@
                     dot.classList.remove('active');
                 }
             });
-            
+
             // Actualizar botón siguiente
             const nextBtn = document.getElementById('tutorial-next');
             if (currentTutorialStep === tutorialSteps.length - 1) {
@@ -7132,7 +7128,7 @@
 
         // Event listeners para el tutorial
         document.getElementById('tutorial-skip')?.addEventListener('click', closeTutorial);
-        
+
         document.getElementById('tutorial-next')?.addEventListener('click', function() {
             if (currentTutorialStep < tutorialSteps.length - 1) {
                 currentTutorialStep++;
@@ -7641,115 +7637,64 @@
         // ═══════════════════════════════════════════════════
 
         // ── Switch de tabs en sección Progreso ──
-        let _progresoTabTimer = null;
-        function switchProgresoTab(tabId) {
+        window.switchProgresoTab = function(tabId) {
+            console.log('Switching to tab:', tabId);
+            
+            // Forzar cierre de cualquier modal abierto por si acaso interfiere
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(m => {
+                if(m.style.display === 'block') {
+                    m.style.display = 'none';
+                    console.log('Closing modal for safety');
+                }
+            });
+
             const tabs    = ['tab-resumen','tab-habitos','tab-emociones','tab-areas'];
             const buttons = document.querySelectorAll('.progreso-tab');
 
             tabs.forEach(id => {
                 const el = document.getElementById(id);
-                if (el) el.style.display = id === tabId ? 'block' : 'none';
+                if (el) {
+                    el.style.display = (id === tabId) ? 'block' : 'none';
+                }
             });
 
             buttons.forEach(btn => {
-                const isActive = btn.dataset.tab === tabId;
+                const isActive = (btn.getAttribute('data-tab') === tabId);
                 btn.style.background = isActive ? 'var(--gradient)' : 'transparent';
                 btn.style.color      = isActive ? 'white' : 'var(--text-secondary)';
+                if (isActive) {
+                    btn.classList.add('active-tab');
+                    btn.style.opacity = '1';
+                } else {
+                    btn.classList.remove('active-tab');
+                    btn.style.opacity = '0.7';
+                }
             });
 
-            // Cancelar cualquier render pendiente antes de lanzar uno nuevo
-            if (_progresoTabTimer) clearTimeout(_progresoTabTimer);
-            _progresoTabTimer = setTimeout(() => {
-                _progresoTabTimer = null;
-                if (tabId === 'tab-resumen')   { renderSubjects(); updateProgressStats(); renderRadarChart(); }
-                if (tabId === 'tab-habitos')   { renderHeatmap(); renderStreaksChart(); }
-                if (tabId === 'tab-emociones') { renderEmotionsLineChart(); renderEmotionsFrequency(); }
-                if (tabId === 'tab-areas')     { renderAreasBarChart(); renderSubjectsAreas(); }
-            }, 60);
+            // Dibujar la gráfica correspondiente
+            setTimeout(() => {
+                try {
+                    if (tabId === 'tab-habitos')   { renderHeatmap(); renderStreaksChart(); }
+                    if (tabId === 'tab-emociones') { renderEmotionsLineChart(); renderEmotionsFrequency(); }
+                    if (tabId === 'tab-areas')     { renderAreasBarChart(); renderSubjectsAreas(); }
+                } catch (e) {
+                    console.error('Error rendering charts:', e);
+                }
+            }, 50);
         }
+
+        // Expose to window immediately
+        window.switchProgresoTab = window.switchProgresoTab;
 
         // ── Punto de entrada: renderiza todas las gráficas visibles ──
         function renderAllCharts() {
-            renderRadarChart();
             renderHeatmap();
             renderStreaksChart();
             renderEmotionsLineChart();
             renderEmotionsFrequency();
             renderAreasBarChart();
             renderSubjectsAreas();
-        }
-
-        // ══════════════════════════════════════════
-        //  MAPA RADAR DE ÁREAS DE VIDA (SVG puro)
-        // ══════════════════════════════════════════
-        function renderRadarChart() {
-            const container = document.getElementById('radar-chart-container');
-            if (!container) return;
-            const subjects = appData.subjects || [];
-
-            if (subjects.length < 2) {
-                container.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--text-secondary);">
-                    <div style="font-size:2.5rem;">🕸️</div>
-                    <p style="font-size:0.88rem;margin-top:0.5rem;">Agrega al menos 2 áreas para ver el mapa</p>
-                </div>`;
-                return;
-            }
-
-            const size = 240, cx = size/2, cy = size/2, maxR = 88, levels = 5;
-            const n = subjects.length;
-            const angleStep = (2 * Math.PI) / n;
-            const pt = (i, r) => {
-                const a = i * angleStep - Math.PI / 2;
-                return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) };
-            };
-
-            // Rejilla de fondo
-            let grid = '';
-            for (let lv = 1; lv <= levels; lv++) {
-                const r = (maxR / levels) * lv;
-                const pts = subjects.map((_, i) => pt(i, r));
-                const d = pts.map((p,i) => `${i===0?'M':'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ') + ' Z';
-                grid += `<path d="${d}" fill="none" stroke="var(--border-color)" stroke-width="${lv===levels?1.5:0.8}"/>`;
-            }
-
-            // Ejes
-            const axes = subjects.map((_,i) => {
-                const p = pt(i, maxR);
-                return `<line x1="${cx}" y1="${cy}" x2="${p.x.toFixed(1)}" y2="${p.y.toFixed(1)}" stroke="var(--border-color)" stroke-width="1"/>`;
-            }).join('');
-
-            // Polígono de datos
-            const dPts = subjects.map((s,i) => pt(i, ((s.grade||0)/10)*maxR));
-            const dataPath = dPts.map((p,i) => `${i===0?'M':'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ') + ' Z';
-            const dots = dPts.map(p => `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4" fill="var(--primary-color)" stroke="white" stroke-width="1.5"/>`).join('');
-
-            // Etiquetas
-            const labels = subjects.map((s,i) => {
-                const p = pt(i, maxR + 20);
-                const anchor = p.x < cx-5 ? 'end' : p.x > cx+5 ? 'start' : 'middle';
-                const name = s.name.length > 10 ? s.name.slice(0,9)+'…' : s.name;
-                const pct = Math.round((s.grade||0)*10);
-                const col = pct>=70?'#00c853':pct>=40?'#ffab00':'#ff5252';
-                return `<text x="${p.x.toFixed(1)}" y="${p.y.toFixed(1)}" text-anchor="${anchor}" font-size="9" font-weight="700" fill="var(--text-primary)" font-family="Poppins,sans-serif">${name}</text>
-                         <text x="${p.x.toFixed(1)}" y="${(p.y+11).toFixed(1)}" text-anchor="${anchor}" font-size="8" fill="${col}" font-family="Poppins,sans-serif">${pct}%</text>`;
-            }).join('');
-
-            container.innerHTML = `
-                <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="overflow:visible;margin:12px 0 4px;">
-                    ${grid}${axes}
-                    <path d="${dataPath}" fill="var(--primary-color)" fill-opacity="0.18" stroke="var(--primary-color)" stroke-width="2.5"/>
-                    ${dots}${labels}
-                </svg>
-                <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:8px;">
-                    ${subjects.slice(0,6).map(s => {
-                        const pct = Math.round((s.grade||0)*10);
-                        const col = pct>=70?'#00c853':pct>=40?'#ffab00':'#ff5252';
-                        return `<div style="display:flex;align-items:center;gap:4px;">
-                            <div style="width:8px;height:8px;border-radius:50%;background:${col};"></div>
-                            <span style="font-size:0.72rem;color:var(--text-secondary);">${s.name.length>12?s.name.slice(0,11)+'…':s.name}</span>
-                        </div>`;
-                    }).join('')}
-                </div>`;
         }
 
         // ── Helpers de fecha ──
