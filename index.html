@@ -58,13 +58,14 @@
         }
 
         /* ── Tema: Marino (Navy #223377) ── */
-        [data-theme="navy"] {
-            --primary-color:   #223377;
-            --secondary-color: #116699;
-            --accent-color:    #0066FF;
-            --gradient:        linear-gradient(135deg, #223377 0%, #116699 100%);
-            --gradient-hover:  linear-gradient(135deg, #1a2860 0%, #0d5280 100%);
-            --text-primary:    #223377;
+        /* ── Tema: Noche Púrpura (#4A235A → #5B2C6F) · AAA 12.51:1 ── */
+        [data-theme="noche"] {
+            --primary-color:   #4A235A;
+            --secondary-color: #5B2C6F;
+            --accent-color:    #0099FF;
+            --gradient:        linear-gradient(135deg, #4A235A 0%, #5B2C6F 100%);
+            --gradient-hover:  linear-gradient(135deg, #3a1a47 0%, #4a2059 100%);
+            --text-primary:    #4A235A;
         }
 
         /* ── Tema: Profundo (Deep Violet #222255) — default ── */
@@ -97,14 +98,14 @@
             --text-primary:    #116699;
         }
 
-        /* ── Tema: Eléctrico (Electric #0066FF) ── */
-        [data-theme="electric"] {
-            --primary-color:   #0066FF;
-            --secondary-color: #116699;
-            --accent-color:    #221188;
-            --gradient:        linear-gradient(135deg, #0066FF 0%, #116699 100%);
-            --gradient-hover:  linear-gradient(135deg, #0052cc 0%, #0d5280 100%);
-            --text-primary:    #0066FF;
+        /* ── Tema: Océano (#1E2833 → #214A80) · AAA 14.93:1 / 8.91:1 ── */
+        [data-theme="oceano"] {
+            --primary-color:   #214A80;
+            --secondary-color: #0099FF;
+            --accent-color:    #1E2833;
+            --gradient:        linear-gradient(135deg, #1E2833 0%, #214A80 100%);
+            --gradient-hover:  linear-gradient(135deg, #151e28 0%, #193a66 100%);
+            --text-primary:    #214A80;
         }
 
         /* ── Tema: Oscuro (dark mode universal) ── */
@@ -2992,12 +2993,12 @@
 
         // ========== SISTEMA DE TEMAS ==========
         const THEMES = {
-            violet:   { label: 'Violeta',   emoji: '🟣', gradient: 'linear-gradient(135deg,#222255 0%,#221188 100%)' },
-            navy:     { label: 'Marino',    emoji: '🔵', gradient: 'linear-gradient(135deg,#223377 0%,#116699 100%)' },
-            forest:   { label: 'Bosque',    emoji: '🟢', gradient: 'linear-gradient(135deg,#224433 0%,#225500 100%)' },
-            steel:    { label: 'Acero',     emoji: '🩵', gradient: 'linear-gradient(135deg,#116699 0%,#0066FF 100%)' },
-            electric: { label: 'Eléctrico', emoji: '⚡', gradient: 'linear-gradient(135deg,#0066FF 0%,#116699 100%)' },
-            dark:     { label: 'Oscuro',    emoji: '🌑', gradient: 'linear-gradient(135deg,#222255 0%,#221188 100%)' },
+            violet:  { label: 'Violeta',  emoji: '🟣', gradient: 'linear-gradient(135deg,#222255 0%,#221188 100%)' },
+            noche:   { label: 'Noche',    emoji: '🪻', gradient: 'linear-gradient(135deg,#4A235A 0%,#5B2C6F 100%)' },
+            forest:  { label: 'Bosque',   emoji: '🟢', gradient: 'linear-gradient(135deg,#224433 0%,#225500 100%)' },
+            oceano:  { label: 'Océano',   emoji: '🌊', gradient: 'linear-gradient(135deg,#1E2833 0%,#214A80 100%)' },
+            steel:   { label: 'Acero',    emoji: '🩵', gradient: 'linear-gradient(135deg,#116699 0%,#0066FF 100%)' },
+            dark:    { label: 'Oscuro',   emoji: '🌑', gradient: 'linear-gradient(135deg,#222255 0%,#221188 100%)' },
         };
 
         function setTheme(themeName) {
