@@ -2447,6 +2447,10 @@
                         <div class="progress-fill" id="overall-progress" style="width:0%; background:white;"></div>
                     </div>
                 </div>
+                <div class="section-title"><h3>Mapa de Áreas 🕸️</h3></div>
+                <div class="card" style="padding:16px;">
+                    <div id="radar-chart-container" style="display:flex; flex-direction:column; align-items:center;"></div>
+                </div>
                 <div class="section-title"><h3>Áreas de Vida 🌱</h3></div>
                 <div id="subjects-container"></div>
                 <div class="section-title"><h3>Mis Estadísticas 📈</h3></div>
@@ -3351,6 +3355,9 @@
             // Espejo en el tab de áreas
             const areasContainer = document.getElementById('subjects-container-areas');
             if (areasContainer) areasContainer.innerHTML = container.innerHTML;
+            // Actualizar radar si está visible
+            const radarContainer = document.getElementById('radar-chart-container');
+            if (radarContainer) renderRadarChart();
         }
 
         function renderTasks() {
@@ -4545,8 +4552,11 @@
             if (pageName === 'progreso') {
                 renderSubjects();
                 updateProgressStats();
-                // Pequeño delay para que el DOM esté visible antes de dibujar Canvas
-                setTimeout(() => renderAllCharts(), 80);
+                // Renderizar primero el tab activo (resumen), luego el resto lazy
+                setTimeout(() => {
+                    renderRadarChart();
+                    // Los otros tabs se renderizan cuando el usuario los activa via switchProgresoTab
+                }, 80);
             }
         }
 
@@ -7651,8 +7661,9 @@
                 btn.style.color      = isActive ? 'white' : 'var(--text-secondary)';
             });
 
-            // Dibujar la gráfica correspondiente con delay para que el DOM esté visible
+            // Renderizar la gráfica correspondiente con delay para que el DOM esté visible
             setTimeout(() => {
+                if (tabId === 'tab-resumen')   { renderSubjects(); updateProgressStats(); renderRadarChart(); }
                 if (tabId === 'tab-habitos')   { renderHeatmap(); renderStreaksChart(); }
                 if (tabId === 'tab-emociones') { renderEmotionsLineChart(); renderEmotionsFrequency(); }
                 if (tabId === 'tab-areas')     { renderAreasBarChart(); renderSubjectsAreas(); }
@@ -7661,12 +7672,110 @@
 
         // ── Punto de entrada: renderiza todas las gráficas visibles ──
         function renderAllCharts() {
+            renderRadarChart();
             renderHeatmap();
             renderStreaksChart();
             renderEmotionsLineChart();
             renderEmotionsFrequency();
             renderAreasBarChart();
             renderSubjectsAreas();
+        }
+
+        // ══════════════════════════════════════════
+        //  0. RADAR / SPIDER DE ÁREAS (SVG puro — tab resumen)
+        // ══════════════════════════════════════════
+        function renderRadarChart() {
+            const container = document.getElementById('radar-chart-container');
+            if (!container) return;
+            const subjects = appData.subjects || [];
+
+            if (subjects.length < 2) {
+                container.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--text-secondary);">
+                    <div style="font-size:2.5rem;">🕸️</div>
+                    <p style="font-size:0.88rem;margin-top:0.5rem;">Agrega al menos 2 áreas para ver el mapa</p>
+                </div>`;
+                return;
+            }
+
+            const size    = 240;
+            const cx      = size / 2;
+            const cy      = size / 2;
+            const maxR    = 90;
+            const levels  = 5;
+            const n       = subjects.length;
+            const angleStep = (2 * Math.PI) / n;
+
+            // Helper: coordenadas de un punto
+            const pt = (i, r) => {
+                const angle = i * angleStep - Math.PI / 2;
+                return { x: cx + r * Math.cos(angle), y: cy + r * Math.sin(angle) };
+            };
+
+            // Rejilla de fondo
+            let gridLines = '';
+            for (let lv = 1; lv <= levels; lv++) {
+                const r = (maxR / levels) * lv;
+                const pts = subjects.map((_, i) => pt(i, r));
+                const path = pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ') + ' Z';
+                gridLines += `<path d="${path}" fill="none" stroke="var(--border-color)" stroke-width="1"/>`;
+            }
+
+            // Ejes (líneas desde centro)
+            let axes = '';
+            subjects.forEach((_, i) => {
+                const p = pt(i, maxR);
+                axes += `<line x1="${cx}" y1="${cy}" x2="${p.x.toFixed(1)}" y2="${p.y.toFixed(1)}" stroke="var(--border-color)" stroke-width="1"/>`;
+            });
+
+            // Polígono de datos
+            const dataPoints = subjects.map((s, i) => {
+                const val = Math.min(10, Math.max(0, s.grade || 0));
+                const r   = (val / 10) * maxR;
+                return pt(i, r);
+            });
+            const dataPath = dataPoints.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ') + ' Z';
+
+            // Puntos de datos
+            const dots = dataPoints.map((p, i) => {
+                const val = subjects[i].grade || 0;
+                return `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4" fill="var(--primary-color)" stroke="white" stroke-width="1.5"/>`;
+            }).join('');
+
+            // Etiquetas
+            const labels = subjects.map((s, i) => {
+                const p = pt(i, maxR + 18);
+                const anchor = p.x < cx - 5 ? 'end' : p.x > cx + 5 ? 'start' : 'middle';
+                const shortName = s.name.length > 10 ? s.name.slice(0, 9) + '…' : s.name;
+                const pct = Math.round((s.grade || 0) * 10);
+                return `<text x="${p.x.toFixed(1)}" y="${p.y.toFixed(1)}" text-anchor="${anchor}"
+                    font-size="9" font-weight="700" fill="var(--text-primary)" font-family="Poppins,sans-serif">${shortName}</text>
+                    <text x="${p.x.toFixed(1)}" y="${(p.y + 11).toFixed(1)}" text-anchor="${anchor}"
+                    font-size="8" fill="var(--primary-color)" font-family="Poppins,sans-serif">${pct}%</text>`;
+            }).join('');
+
+            // Calcular promedio para la leyenda
+            const avg = subjects.length
+                ? Math.round(subjects.reduce((s, x) => s + (x.grade || 0), 0) / subjects.length * 10)
+                : 0;
+
+            container.innerHTML = `
+                <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="overflow:visible; margin:16px 0 8px;">
+                    ${gridLines}
+                    ${axes}
+                    <path d="${dataPath}" fill="var(--primary-color)" fill-opacity="0.18" stroke="var(--primary-color)" stroke-width="2"/>
+                    ${dots}
+                    ${labels}
+                </svg>
+                <div style="display:flex;gap:16px;margin-top:4px;flex-wrap:wrap;justify-content:center;">
+                    ${subjects.slice(0,6).map(s => {
+                        const pct = Math.round((s.grade||0)*10);
+                        const col = pct>=70?'var(--success-color)':pct>=40?'#ffab00':'var(--danger-color)';
+                        return `<div style="display:flex;align-items:center;gap:4px;">
+                            <div style="width:8px;height:8px;border-radius:50%;background:${col};flex-shrink:0;"></div>
+                            <span style="font-size:0.72rem;color:var(--text-secondary);">${s.name.length>12?s.name.slice(0,11)+'…':s.name}</span>
+                        </div>`;
+                    }).join('')}
+                </div>`;
         }
 
         // ── Helpers de fecha ──
@@ -7793,14 +7902,28 @@
             if (!container) return;
             const days     = getLast14Days();
             const emotions = appData.emotions || [];
-            const points   = days.map(day => {
-                const dayEm = emotions.filter(e => e.date && e.date.startsWith(day) && e.intensity);
+
+            // Usar intensity si existe, si no usar cantidad de emociones del día (escala 1-10)
+            const positiveEm = ['Alegría','Amor','Confianza','Gratitud','Paz','Motivación','Esperanza'];
+            const points = days.map(day => {
+                const dayEm = emotions.filter(e => e.date && e.date.startsWith(day));
                 if (!dayEm.length) return null;
-                return Math.round(dayEm.reduce((s,e) => s + (e.intensity||5), 0) / dayEm.length * 10) / 10;
+                if (dayEm.some(e => e.intensity)) {
+                    // Tiene intensity: promedio
+                    const withInt = dayEm.filter(e => e.intensity);
+                    return Math.round(withInt.reduce((s,e) => s + (e.intensity||5), 0) / withInt.length * 10) / 10;
+                }
+                // Sin intensity: calcular positividad (positivas=10, negativas=3, mix=6)
+                const allTags = dayEm.flatMap(e => e.emotions || []);
+                if (!allTags.length) return 5;
+                const posCount = allTags.filter(t => positiveEm.includes(t)).length;
+                const score = Math.round((posCount / allTags.length) * 7) + 3; // 3-10
+                return Math.min(10, score);
             });
+
             const hasData = points.some(v => v !== null);
             if (!hasData) {
-                container.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--text-secondary);"><div style="font-size:2rem;">📭</div><p style="font-size:0.9rem;margin-top:0.5rem;">Registra emociones con intensidad para ver la gráfica</p></div>`;
+                container.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--text-secondary);"><div style="font-size:2rem;">😶</div><p style="font-size:0.9rem;margin-top:0.5rem;">Registra emociones para ver tu evolución</p></div>`;
                 return;
             }
             const max = 10;
@@ -7820,7 +7943,7 @@
                 </div>
                 <div style="display:flex;justify-content:space-between;margin-top:8px;padding:0 4px;">
                     <span style="font-size:0.72rem;color:var(--text-secondary);">${shortDay(days[0])}</span>
-                    <span style="font-size:0.72rem;color:var(--text-secondary);">Intensidad (0–10)</span>
+                    <span style="font-size:0.72rem;color:var(--text-secondary);">Bienestar emocional (0–10)</span>
                     <span style="font-size:0.72rem;color:var(--text-secondary);">${shortDay(days[13])}</span>
                 </div>`;
         }
