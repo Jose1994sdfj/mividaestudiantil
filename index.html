@@ -3059,78 +3059,6 @@
         });
 
         // Event delegation global para todos los botones de eliminar
-        function setupGlobalDeleteListeners() {
-            document.body.addEventListener('click', function(e) {
-                let target = e.target;
-                let deleteBtn = null;
-                
-                // Buscar el botón de eliminar subiendo en el DOM
-                while (target && target !== document.body) {
-                    if (target.classList && target.classList.contains('delete-btn')) {
-                        deleteBtn = target;
-                        break;
-                    }
-                    target = target.parentElement;
-                }
-                
-                if (!deleteBtn) return;
-                
-                e.preventDefault();
-                e.stopPropagation();
-                
-                const idAttr = deleteBtn.getAttribute('data-id');
-                const type = deleteBtn.getAttribute('data-type');
-                
-                console.log('Botón eliminar clickeado - Tipo:', type, 'ID attr:', idAttr);
-                
-                if (!idAttr || !type) {
-                    console.log('ID o tipo inválido - ID:', idAttr, 'Tipo:', type);
-                    return;
-                }
-                
-                const id = parseInt(idAttr);
-                
-                if (isNaN(id)) {
-                    console.log('ID no es un número válido:', idAttr);
-                    return;
-                }
-                
-                let item = null;
-                let name = '';
-                
-                if (type === 'class') {
-                    console.log('Buscando clase con ID:', id, 'en', appData.schedule.length, 'clases');
-                    item = appData.schedule.find(c => c.id === id);
-                    name = item ? item.name : '';
-                } else if (type === 'subject') {
-                    console.log('Buscando área con ID:', id, 'en', appData.subjects.length, 'áreas');
-                    item = appData.subjects.find(s => s.id === id);
-                    name = item ? item.name : '';
-                } else if (type === 'task') {
-                    item = appData.tasks.find(t => t.id === id);
-                    name = item ? item.title : '';
-                } else if (type === 'event') {
-                    item = appData.events.find(ev => ev.id === id);
-                    name = item ? item.title : '';
-                } else if (type === 'person') {
-                    item = appData.people.find(p => p.id === id);
-                    name = item ? item.name : '';
-                } else if (type === 'emotion') {
-                    item = appData.emotions.find(em => em.id === id);
-                    name = item ? `Emoción sobre ${item.person}` : '';
-                }
-                
-                console.log('Item encontrado:', item);
-                
-                if (item) {
-                    openDeleteModal(type, id, name);
-                } else {
-                    console.log('No se encontró el elemento con ID:', id, 'tipo:', type);
-                    showNotification('Error: No se encontró el elemento a eliminar', 'error');
-                }
-            });
-        }
-
         let _appInitialized = false;
         function initializeApp() {
             // Cargar datos guardados solo si aún no se cargaron via Firebase
@@ -3253,10 +3181,12 @@
 
                 // Eliminar items (delete-btn con data attributes)
                 if (btn.classList.contains('delete-btn')) {
-                    const type = btn.dataset.type;
-                    const did  = btn.dataset.id;
-                    const name = btn.dataset.name;
-                    if (type && did) openDeleteModal(type, isNaN(did) ? did : parseInt(did), name);
+                    const type  = btn.dataset.type;
+                    const rawId = btn.dataset.id;
+                    const name  = btn.dataset.name || '';
+                    if (!type || !rawId) return;
+                    const id = isNaN(rawId) ? rawId : parseInt(rawId);
+                    openDeleteModal(type, id, name);
                     return;
                 }
             });
@@ -4428,7 +4358,6 @@
                 initializeApp();
                 setupEventListeners();
                 renderAllData();
-                setupGlobalDeleteListeners();
                 initializeTutorial();
                 scheduleAllNotifications();
                 checkTasksDueToday();
