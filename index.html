@@ -2287,6 +2287,7 @@
                 <div class="stat-info">
                     <div class="stat-value" id="task-count">0/0</div>
                     <div class="stat-label">Tareas</div>
+                    <div style="font-size:0.68rem; color:var(--text-secondary); margin-top:2px;" id="task-sublabel">completadas</div>
                 </div>
             </div>
             <div class="stat-item">
@@ -2294,6 +2295,7 @@
                 <div class="stat-info">
                     <div class="stat-value" id="emotion-count">0</div>
                     <div class="stat-label">Emociones</div>
+                    <div style="font-size:0.68rem; color:var(--text-secondary); margin-top:2px;" id="emotion-sublabel">registradas</div>
                 </div>
             </div>
             <div class="stat-item">
@@ -2301,6 +2303,7 @@
                 <div class="stat-info">
                     <div class="stat-value" id="habits-today-stat">0/0</div>
                     <div class="stat-label">Hábitos Hoy</div>
+                    <div style="font-size:0.68rem; color:var(--text-secondary); margin-top:2px;" id="habits-sublabel">en progreso</div>
                 </div>
             </div>
             <div class="stat-item">
@@ -2308,6 +2311,7 @@
                 <div class="stat-info">
                     <div class="stat-value" id="best-streak-stat">0</div>
                     <div class="stat-label">Mejor Racha</div>
+                    <div style="font-size:0.68rem; color:var(--text-secondary); margin-top:2px;" id="streak-sublabel">días consecutivos</div>
                 </div>
             </div>
         </div>
@@ -2338,31 +2342,29 @@
 
         <!-- Hábitos de Hoy -->
         <div class="section-title">
-            <h3>Hábitos de Hoy 🔥</h3>
+            <h3>Hábitos de Hoy 🔥 <span id="habits-section-count" style="font-size:0.75rem; font-weight:500; color:var(--text-secondary); margin-left:4px;"></span></h3>
             <button class="see-all" id="add-habit-btn-2" style="padding: 10px 18px;">+ Nuevo</button>
         </div>
         <div id="habits-day-progress-bar"></div>
-        <div class="habits-container" id="habits-container">
-            <!-- Los hábitos se cargarán dinámicamente -->
-        </div>
+        <div class="habits-container" id="habits-container"></div>
 
         <!-- Tareas Pendientes -->
         <div class="section-title">
-            <h3>Tareas Pendientes 📋</h3>
+            <h3>Tareas Pendientes 📋 <span id="tasks-section-count" style="font-size:0.75rem; font-weight:500; color:var(--text-secondary); margin-left:4px;"></span></h3>
             <button class="see-all" id="see-all-tasks" onclick="showAllItems('tasks')">Ver todas</button>
         </div>
         <div class="cards-scroll" id="tasks-scroll"></div>
 
         <!-- Próximos Eventos -->
         <div class="section-title">
-            <h3>Próximos Eventos 🗓️</h3>
+            <h3>Próximos Eventos 🗓️ <span id="events-section-count" style="font-size:0.75rem; font-weight:500; color:var(--text-secondary); margin-left:4px;"></span></h3>
             <button class="see-all" id="see-all-events" onclick="showAllItems('events')">Ver todos</button>
         </div>
         <div class="cards-scroll" id="events-scroll"></div>
 
         <!-- Personas Especiales -->
         <div class="section-title">
-            <h3>Personas Especiales 👨‍👩‍👧‍👦</h3>
+            <h3>Personas Especiales 👨‍👩‍👧‍👦 <span id="people-section-count" style="font-size:0.75rem; font-weight:500; color:var(--text-secondary); margin-left:4px;"></span></h3>
             <button class="see-all" id="see-all-people" onclick="showAllItems('people')">Ver todas</button>
         </div>
         <div class="cards-scroll" id="people-scroll"></div>
@@ -3231,45 +3233,52 @@
             if (!container) return;
 
             const days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-            const dayEmojis = {
-                'Lunes': '📘',
-                'Martes': '📗',
-                'Miércoles': '📙',
-                'Jueves': '📕',
-                'Viernes': '📔',
-                'Sábado': '📓'
-            };
+            const dayEmojis = { 'Lunes':'📘','Martes':'📗','Miércoles':'📙','Jueves':'📕','Viernes':'📔','Sábado':'📓' };
+            const dayMap    = { 0:'Domingo',1:'Lunes',2:'Martes',3:'Miércoles',4:'Jueves',5:'Viernes',6:'Sábado' };
+            const todayName = dayMap[new Date().getDay()];
+            const nowMins   = new Date().getHours() * 60 + new Date().getMinutes();
 
             let html = '';
             days.forEach(day => {
                 const dayClasses = appData.schedule.filter(c => c.day === day);
-                // Ordenar clases por hora (de la más temprana a la más tarde)
                 const sortedClasses = [...dayClasses].sort((a, b) => {
-                    // Convertir tiempo a minutos desde medianoche para comparar
-                    const getMinutes = (time) => {
-                        const [hours, mins] = time.split(':').map(Number);
-                        return hours * 60 + mins;
-                    };
-                    return getMinutes(a.time) - getMinutes(b.time);
+                    const toMin = t => { const [h,m] = t.split(':').map(Number); return h*60+m; };
+                    return toMin(a.time) - toMin(b.time);
                 });
 
                 if (sortedClasses.length > 0 || day === 'Lunes') {
+                    const isToday = day === todayName;
+                    const nextClass = isToday ? sortedClasses.find(c => {
+                        const [h,m] = c.time.split(':').map(Number);
+                        return h*60+m > nowMins;
+                    }) : null;
+
                     html += `
-                        <div class="card" style="margin-bottom: 1rem;">
-                            <div class="card-header">
+                        <div class="card" style="margin-bottom:1rem; ${isToday ? 'border:1.5px solid var(--primary-color); box-shadow:0 0 0 3px var(--primary-color)18;' : ''}">
+                            <div class="card-header" style="align-items:center;">
                                 <div class="card-icon">${dayEmojis[day]}</div>
-                                <h3>${day}</h3>
+                                <h3 style="flex:1;">${day}</h3>
+                                ${isToday ? `<span style="font-size:0.7rem; font-weight:700; color:white; background:var(--primary-color); padding:3px 10px; border-radius:20px;">HOY</span>` : ''}
+                                ${sortedClasses.length > 0 ? `<span style="font-size:0.72rem; color:var(--text-secondary); margin-left:8px;">${sortedClasses.length} rutina${sortedClasses.length!==1?'s':''}</span>` : ''}
                             </div>
+                            ${nextClass ? `<div style="font-size:0.78rem; color:var(--primary-color); font-weight:600; margin:4px 0 10px; padding:6px 10px; background:var(--primary-color)10; border-radius:10px; border-left:3px solid var(--primary-color);">⏰ Próxima: ${nextClass.name} a las ${nextClass.time}</div>` : ''}
                             ${sortedClasses.length === 0 ? `
-                                <div class="empty-state" style="padding: 1rem;">
-                                    <p style="color: var(--text-secondary); margin: 0;">Sin clases programadas</p>
+                                <div class="empty-state" style="padding:1rem;">
+                                    <p style="color:var(--text-secondary); margin:0; font-size:0.88rem;">Sin rutinas programadas</p>
                                 </div>
-                            ` : sortedClasses.map(cls => `
-                                <div class="event-item">
-                                    <div class="event-time">${cls.time}</div>
-                                    <div class="event-text" style="flex: 1;">${cls.name} - ${cls.location}</div>
-                                </div>
-                            `).join('')}
+                            ` : sortedClasses.map(cls => {
+                                const [h,m] = cls.time.split(':').map(Number);
+                                const clsMins = h*60+m;
+                                const isPast  = isToday && clsMins < nowMins;
+                                const isCurrent = isToday && clsMins <= nowMins && clsMins + 90 > nowMins;
+                                return `
+                                <div class="event-item" style="${isCurrent ? 'background:var(--primary-color)10; border-radius:10px; padding:6px 8px; margin-bottom:4px;' : isPast ? 'opacity:0.45;' : ''}">
+                                    <div class="event-time" style="${isCurrent ? 'color:var(--primary-color);' : ''}">${cls.time}</div>
+                                    <div class="event-text" style="flex:1; ${isCurrent ? 'font-weight:700; color:var(--primary-color);' : ''}">${cls.name}</div>
+                                    <div style="font-size:0.72rem; color:var(--text-secondary);">${cls.location}</div>
+                                    ${isCurrent ? `<span style="font-size:0.68rem; color:white; background:var(--primary-color); padding:2px 6px; border-radius:8px; margin-left:4px; font-weight:700;">EN CURSO</span>` : ''}
+                                </div>`;
+                            }).join('')}
                         </div>
                     `;
                 }
@@ -3300,48 +3309,60 @@
             // Ordenar: más prioritarias primero
             const sorted = [...appData.subjects].sort((a, b) => (b.credits || 1) - (a.credits || 1));
 
+            // Tareas relacionadas por área (si el nombre de la tarea contiene el nombre del área)
+            const getRelatedTasks = (name) => {
+                const n = name.toLowerCase();
+                return (appData.tasks || []).filter(t => !t.completed && t.title.toLowerCase().includes(n)).length;
+            };
+
             container.innerHTML = `
                 <div class="card">
                     ${sorted.map(subject => {
-                        const pct = Math.round(((subject.grade || 0) / 10) * 100);
+                        const pct      = Math.round(((subject.grade || 0) / 10) * 100);
                         const priority = subject.credits || 1;
+                        const related  = getRelatedTasks(subject.name);
 
-                        // Estado según progreso
-                        let statusLabel, statusColor, barColor;
+                        let statusLabel, statusColor, barColor, tip;
                         if (pct >= 70) {
                             statusLabel = '✅ Bien';
                             statusColor = 'var(--success-color)';
                             barColor    = 'linear-gradient(90deg, var(--success-color), #69f0ae)';
+                            tip         = 'Mantén el ritmo y sigue consolidando.';
                         } else if (pct >= 50) {
                             statusLabel = '⚡ En proceso';
                             statusColor = 'var(--warning-color)';
                             barColor    = 'linear-gradient(90deg, var(--warning-color), #ffd740)';
+                            tip         = 'Vas bien — un empujón más y llegas a verde.';
                         } else {
                             statusLabel = '🔍 Necesita atención';
                             statusColor = 'var(--danger-color)';
                             barColor    = 'linear-gradient(90deg, var(--danger-color), #ff867f)';
+                            tip         = 'Prioriza esta área esta semana.';
                         }
 
-                        // Indicador de prioridad
-                        const priorityDots = '●'.repeat(Math.min(Math.round(priority / 2.5), 4));
+                        const priorityLabel = priority >= 8 ? 'Muy alta' : priority >= 5 ? 'Alta' : priority >= 3 ? 'Media' : 'Baja';
+                        const priorityColor = priority >= 8 ? 'var(--danger-color)' : priority >= 5 ? '#ffab00' : 'var(--success-color)';
 
                         return `
-                            <div style="margin-bottom:1.2rem; padding-bottom:1rem; border-bottom:1px solid var(--border-color);">
+                            <div style="margin-bottom:1.4rem; padding-bottom:1.2rem; border-bottom:1px solid var(--border-color);">
                                 <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px; gap:8px;">
                                     <div style="flex:1; min-width:0;">
                                         <div style="font-weight:600; font-size:0.95rem; color:var(--text-primary);">${subject.name}</div>
-                                        <div style="display:flex; align-items:center; gap:8px; margin-top:3px; flex-wrap:wrap;">
+                                        <div style="display:flex; align-items:center; gap:6px; margin-top:3px; flex-wrap:wrap;">
                                             <span style="font-size:0.72rem; color:${statusColor}; font-weight:700;">${statusLabel}</span>
-                                            <span style="font-size:0.7rem; color:var(--text-secondary);">Prioridad: <span style="color:var(--primary-color); letter-spacing:-1px;">${priorityDots}</span></span>
+                                            <span style="font-size:0.7rem; color:${priorityColor}; font-weight:600; background:${priorityColor}15; padding:1px 7px; border-radius:10px;">⚡ ${priorityLabel}</span>
+                                            ${related > 0 ? `<span style="font-size:0.7rem; color:var(--primary-color);">📝 ${related} tarea${related!==1?'s':''} pendiente${related!==1?'s':''}</span>` : ''}
                                         </div>
                                     </div>
                                     <div style="text-align:right; flex-shrink:0;">
-                                        <span style="font-weight:800; font-size:1.2rem; color:${statusColor};">${pct}%</span>
+                                        <span style="font-weight:800; font-size:1.3rem; color:${statusColor};">${pct}%</span>
+                                        <div style="font-size:0.65rem; color:var(--text-secondary);">${subject.grade||0}/10</div>
                                     </div>
                                 </div>
                                 <div class="progress-bar">
                                     <div class="progress-fill" style="width:${pct}%; background:${barColor}; transition:width 0.5s ease;"></div>
                                 </div>
+                                <div style="font-size:0.72rem; color:var(--text-secondary); margin-top:5px; font-style:italic;">${tip}</div>
                             </div>
                         `;
                     }).join('')}
@@ -3358,6 +3379,11 @@
             const container = document.getElementById('tasks-scroll');
             if (!container) return;
             const pending = (appData.tasks || []).filter(t => !t.completed);
+
+            // Update section counter
+            const countEl = document.getElementById('tasks-section-count');
+            if (countEl) countEl.textContent = pending.length > 0 ? `· ${pending.length}` : '';
+
             if (pending.length === 0) {
                 container.innerHTML = `
                     <div class="habit-card" style="flex-direction:row; align-items:center; gap:14px; opacity:0.7;">
@@ -3369,10 +3395,40 @@
                     </div>`;
                 return;
             }
-            container.innerHTML = pending.map(task => {
+
+            const today    = new Date().toISOString().split('T')[0];
+            const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+
+            // Sort: high priority first, then by deadline
+            const sorted = [...pending].sort((a, b) => {
+                const pOrder = { high: 0, medium: 1, low: 2 };
+                const pa = pOrder[a.priority] ?? 1;
+                const pb = pOrder[b.priority] ?? 1;
+                if (pa !== pb) return pa - pb;
+                if (a.deadline && b.deadline) return a.deadline.localeCompare(b.deadline);
+                if (a.deadline) return -1;
+                if (b.deadline) return 1;
+                return 0;
+            });
+
+            container.innerHTML = sorted.map(task => {
                 const colors = { high: '#ff5252', medium: '#ffab00', low: '#00c853' };
                 const labels = { high: '🔴 Alta', medium: '🟡 Media', low: '🟢 Baja' };
-                const color  = colors[task.priority] || '#7c4dff';
+                const color  = colors[task.priority] || 'var(--primary-color)';
+
+                let deadlineBadge = '';
+                if (task.deadline) {
+                    if (task.deadline < today) {
+                        deadlineBadge = `<span style="font-size:0.7rem; font-weight:700; color:white; background:#ff5252; padding:2px 7px; border-radius:20px;">⚠️ Vencida</span>`;
+                    } else if (task.deadline === today) {
+                        deadlineBadge = `<span style="font-size:0.7rem; font-weight:700; color:white; background:#ff5252; padding:2px 7px; border-radius:20px;">🔴 Vence hoy</span>`;
+                    } else if (task.deadline === tomorrow) {
+                        deadlineBadge = `<span style="font-size:0.7rem; font-weight:700; color:#7a3f00; background:#ffab00; padding:2px 7px; border-radius:20px;">🟡 Mañana</span>`;
+                    } else {
+                        deadlineBadge = `<span style="font-size:0.72rem; color:var(--text-secondary);">📅 ${formatDate(task.deadline)}</span>`;
+                    }
+                }
+
                 return `
                 <div class="habit-card" style="flex-direction:row; align-items:center; gap:14px;" data-task-id="${task.id}">
                     <button id="complete-task-${task.id}" style="
@@ -3385,7 +3441,7 @@
                         <div style="font-weight:600; font-size:0.95rem; color:var(--text-primary); line-height:1.3;">${task.title}</div>
                         <div style="display:flex; gap:6px; align-items:center; margin-top:4px; flex-wrap:wrap;">
                             <span style="font-size:0.72rem; font-weight:700; color:${color}; background:${color}18; padding:2px 8px; border-radius:20px;">${labels[task.priority] || task.priority}</span>
-                            ${task.deadline ? `<span style="font-size:0.72rem; color:var(--text-secondary);">📅 ${formatDate(task.deadline)}</span>` : ''}
+                            ${deadlineBadge}
                         </div>
                         ${task.description ? `<div style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px; line-height:1.4;">${task.description}</div>` : ''}
                     </div>
@@ -3436,6 +3492,11 @@
                 .filter(e => e.date >= today)
                 .sort((a, b) => new Date(a.date) - new Date(b.date))
                 .slice(0, 5);
+
+            // Update section counter
+            const countEl = document.getElementById('events-section-count');
+            if (countEl) countEl.textContent = events.length > 0 ? `· ${events.length}` : '';
+
             if (events.length === 0) {
                 container.innerHTML = `
                     <div class="habit-card" style="flex-direction:row; align-items:center; gap:14px; opacity:0.7;">
@@ -3451,17 +3512,19 @@
                 const d    = new Date(ev.date + 'T00:00:00');
                 const days = Math.round((d - new Date().setHours(0,0,0,0)) / 86400000);
                 const badge = days === 0 ? '🔴 Hoy' : days === 1 ? '🟡 Mañana' : `📆 En ${days}d`;
+                const badgeColor = days === 0 ? '#ff5252' : days === 1 ? '#ffab00' : 'var(--primary-color)';
+                const badgeBg   = days === 0 ? 'rgba(255,82,82,0.12)' : days === 1 ? 'rgba(255,171,0,0.12)' : 'rgba(124,77,255,0.1)';
                 return `
                 <div class="habit-card" style="flex-direction:row; align-items:center; gap:14px;" data-event-id="${ev.id}">
-                    <div style="width:44px; height:44px; border-radius:14px; background:rgba(124,77,255,0.12);
+                    <div style="width:44px; height:44px; border-radius:14px; background:${badgeBg};
                         display:flex; flex-direction:column; align-items:center; justify-content:center; flex-shrink:0;">
-                        <div style="font-size:0.65rem; font-weight:700; color:var(--primary-color); text-transform:uppercase;">${d.toLocaleDateString('es',{month:'short'})}</div>
-                        <div style="font-size:1.1rem; font-weight:800; color:var(--primary-color); line-height:1;">${d.getDate()}</div>
+                        <div style="font-size:0.65rem; font-weight:700; color:${badgeColor}; text-transform:uppercase;">${d.toLocaleDateString('es',{month:'short'})}</div>
+                        <div style="font-size:1.1rem; font-weight:800; color:${badgeColor}; line-height:1;">${d.getDate()}</div>
                     </div>
                     <div style="flex:1; min-width:0;">
                         <div style="font-weight:600; font-size:0.95rem; color:var(--text-primary); line-height:1.3;">${ev.title}</div>
                         <div style="display:flex; gap:6px; align-items:center; margin-top:4px; flex-wrap:wrap;">
-                            <span style="font-size:0.72rem; font-weight:700; color:var(--primary-color); background:rgba(124,77,255,0.1); padding:2px 8px; border-radius:20px;">${badge}</span>
+                            <span style="font-size:0.72rem; font-weight:700; color:${badgeColor}; background:${badgeBg}; padding:2px 8px; border-radius:20px;">${badge}</span>
                             ${ev.time ? `<span style="font-size:0.72rem; color:var(--text-secondary);">🕐 ${ev.time}</span>` : ''}
                         </div>
                         ${ev.description ? `<div style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;">${ev.description}</div>` : ''}
@@ -3478,6 +3541,11 @@
             const container = document.getElementById('people-scroll');
             if (!container) return;
             const people = appData.people || [];
+
+            // Update section counter
+            const countEl = document.getElementById('people-section-count');
+            if (countEl) countEl.textContent = people.length > 0 ? `· ${people.length}` : '';
+
             if (people.length === 0) {
                 container.innerHTML = `
                     <div class="habit-card" style="flex-direction:row; align-items:center; gap:14px; opacity:0.7;">
@@ -3493,12 +3561,31 @@
                 'Pareja':'#ff4081','Amigo/a':'#7c4dff','Familiar':'#00c853',
                 'Compañero/a':'#2979ff','Profesor/a':'#ffab00','Mentor/a':'#ff6b35'
             };
+            const todayMs = new Date().setHours(0,0,0,0);
             container.innerHTML = people.map(person => {
                 const color = relationColors[person.relation] || '#7c4dff';
-                const lastEmotion = (appData.emotions || [])
-                    .filter(e => e.person === person.name)
-                    .sort((a,b) => b.date?.localeCompare(a.date||''))
-                    .slice(0,1)[0];
+                const emotions = (appData.emotions || []).filter(e => e.person === person.name);
+                const lastEmotion = emotions.sort((a,b) => (b.date||'').localeCompare(a.date||''))[0];
+
+                let contactBadge = '';
+                if (lastEmotion && lastEmotion.date) {
+                    const lastMs  = new Date(lastEmotion.date + 'T00:00:00').getTime();
+                    const diffDays = Math.floor((todayMs - lastMs) / 86400000);
+                    if (diffDays === 0) {
+                        contactBadge = `<span style="font-size:0.7rem; color:var(--success-color); font-weight:600;">● Hoy</span>`;
+                    } else if (diffDays <= 3) {
+                        contactBadge = `<span style="font-size:0.7rem; color:#ffab00; font-weight:600;">● Hace ${diffDays}d</span>`;
+                    } else if (diffDays <= 7) {
+                        contactBadge = `<span style="font-size:0.7rem; color:var(--text-secondary);">● Hace ${diffDays}d</span>`;
+                    } else {
+                        contactBadge = `<span style="font-size:0.7rem; color:var(--danger-color); font-weight:600;">● Hace ${diffDays}d</span>`;
+                    }
+                } else {
+                    contactBadge = `<span style="font-size:0.7rem; color:var(--text-secondary); opacity:0.6;">Sin registro aún</span>`;
+                }
+
+                const totalEmotions = emotions.length;
+
                 return `
                 <div class="habit-card" style="flex-direction:row; align-items:center; gap:14px;" data-person-id="${person.id}">
                     <div style="width:48px; height:48px; border-radius:16px; background:${color}18;
@@ -3507,8 +3594,9 @@
                         <div style="font-weight:600; font-size:0.95rem; color:var(--text-primary);">${person.name}</div>
                         <div style="display:flex; gap:6px; align-items:center; margin-top:4px; flex-wrap:wrap;">
                             <span style="font-size:0.72rem; font-weight:700; color:${color}; background:${color}18; padding:2px 8px; border-radius:20px;">${person.relation}</span>
-                            ${lastEmotion ? `<span style="font-size:0.72rem; color:var(--text-secondary);">Último estado: ${lastEmotion.emotion}</span>` : ''}
+                            ${contactBadge}
                         </div>
+                        ${totalEmotions > 0 ? `<div style="font-size:0.72rem; color:var(--text-secondary); margin-top:3px;">${totalEmotions} registro${totalEmotions !== 1 ? 's' : ''} emocional${totalEmotions !== 1 ? 'es' : ''}</div>` : ''}
                     </div>
                     <button class="delete-btn" data-type="person" data-id="${person.id}" data-name="${person.name}"
                         style="width:36px; height:36px; border-radius:10px; border:none; background:rgba(255,82,82,0.1);
@@ -3558,12 +3646,10 @@
 
         function confirmDelete() {
             if (!itemToDelete || !deleteType) {
-                console.log('No hay elemento para eliminar');
                 closeDeleteModal();
                 return;
             }
 
-            console.log('Confirmando eliminación:', deleteType, itemToDelete);
 
             let deleted = false;
 
@@ -3594,12 +3680,10 @@
                 const before = appData.schedule.length;
                 appData.schedule = appData.schedule.filter(cls => cls.id !== itemToDelete);
                 deleted = appData.schedule.length < before;
-                console.log('Clases: antes=' + before + ', después=' + appData.schedule.length);
             } else if (deleteType === 'subject') {
                 const before = appData.subjects.length;
                 appData.subjects = appData.subjects.filter(subj => subj.id !== itemToDelete);
                 deleted = appData.subjects.length < before;
-                console.log('Áreas: antes=' + before + ', después=' + appData.subjects.length);
             }
 
             if (deleted) {
@@ -3608,7 +3692,6 @@
                 closeDeleteModal();
                 showNotification('Elemento eliminado correctamente 🗑️');
             } else {
-                console.log('No se pudo eliminar el elemento');
                 closeDeleteModal();
                 showNotification('Error al eliminar el elemento', 'error');
             }
@@ -3871,7 +3954,6 @@
 
             // Intentar subir a Firebase en segundo plano
             saveEmotionToFirebase(newEmotion).then(ok => {
-                if (ok) console.log('✅ Emoción sincronizada con Firebase');
             });
 
             // Evaluar insignias
@@ -4137,13 +4219,57 @@
 
         function updateStats() {
             const completedTasks = appData.tasks.filter(task => task.completed).length;
-            const totalTasks = appData.tasks.length;
+            const totalTasks     = appData.tasks.length;
+            const pendingTasks   = appData.tasks.filter(t => !t.completed);
+            const highPriority   = pendingTasks.filter(t => t.priority === 'high').length;
+            const today          = new Date().toISOString().split('T')[0];
+            const tomorrow       = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+            const urgentTasks    = pendingTasks.filter(t => t.deadline === today || t.deadline === tomorrow).length;
 
-            const taskCountEl = document.getElementById('task-count');
+            const taskCountEl   = document.getElementById('task-count');
+            const taskSubLabel  = document.getElementById('task-sublabel');
             const emotionCountEl = document.getElementById('emotion-count');
+            const emotionSub    = document.getElementById('emotion-sublabel');
 
             if (taskCountEl) taskCountEl.textContent = `${completedTasks}/${totalTasks}`;
-            if (emotionCountEl) emotionCountEl.textContent = appData.emotions.length;
+            if (taskSubLabel) {
+                if (highPriority > 0) {
+                    taskSubLabel.textContent = `${highPriority} de alta prioridad`;
+                    taskSubLabel.style.color = 'var(--danger-color)';
+                    taskSubLabel.style.fontWeight = '600';
+                } else if (urgentTasks > 0) {
+                    taskSubLabel.textContent = `${urgentTasks} vencen pronto`;
+                    taskSubLabel.style.color = '#ffab00';
+                    taskSubLabel.style.fontWeight = '600';
+                } else if (completedTasks === totalTasks && totalTasks > 0) {
+                    taskSubLabel.textContent = '¡Todo completado! 🎉';
+                    taskSubLabel.style.color = 'var(--success-color)';
+                    taskSubLabel.style.fontWeight = '600';
+                } else {
+                    taskSubLabel.textContent = `${pendingTasks.length} pendientes`;
+                    taskSubLabel.style.color = '';
+                    taskSubLabel.style.fontWeight = '';
+                }
+            }
+
+            const totalEmotions = appData.emotions.length;
+            const todayEmotions = appData.emotions.filter(e => e.date && e.date.startsWith(today)).length;
+            if (emotionCountEl) emotionCountEl.textContent = totalEmotions;
+            if (emotionSub) {
+                emotionSub.textContent = todayEmotions > 0 ? `${todayEmotions} registradas hoy` : 'Sin registro hoy';
+                emotionSub.style.color = todayEmotions > 0 ? 'var(--success-color)' : '';
+                emotionSub.style.fontWeight = todayEmotions > 0 ? '600' : '';
+            }
+
+            // Actualizar contadores de sección
+            const pending = appData.tasks.filter(t => !t.completed).length;
+            const upEvents = (appData.events || []).filter(e => e.date >= today).length;
+            const el1 = document.getElementById('tasks-section-count');
+            const el2 = document.getElementById('events-section-count');
+            const el3 = document.getElementById('people-section-count');
+            if (el1) el1.textContent = pending > 0 ? `· ${pending}` : '';
+            if (el2) el2.textContent = upEvents > 0 ? `· ${upEvents}` : '';
+            if (el3) el3.textContent = appData.people.length > 0 ? `· ${appData.people.length}` : '';
         }
 
         function formatDate(dateString) {
@@ -5490,7 +5616,6 @@
                     e.preventDefault();
                     e.stopPropagation();
                     this.classList.toggle('active');
-                    console.log('Tag clicked:', this.getAttribute('data-emotion'), 'Active:', this.classList.contains('active'));
                 });
             });
         }
@@ -6507,18 +6632,57 @@
         }
 
         function updateHabitStats() {
-            const habits = appData.habits || [];
-            const total = habits.length;
-            const doneToday = habits.filter(h => isHabitCompletedToday(h)).length;
+            const habits     = appData.habits || [];
+            const total      = habits.length;
+            const doneToday  = habits.filter(h => isHabitCompletedToday(h)).length;
             const bestStreak = habits.reduce((max, h) => Math.max(max, h.bestStreak || 0), 0);
+            const currentBest = habits.reduce((max, h) => Math.max(max, h.streak || 0), 0);
 
-            const habitsStat = document.getElementById('habits-today-stat');
+            const habitsStat    = document.getElementById('habits-today-stat');
             const bestStreakStat = document.getElementById('best-streak-stat');
             const quickHabitStat = document.getElementById('quick-habits-stat');
+            const habitsSub     = document.getElementById('habits-sublabel');
+            const streakSub     = document.getElementById('streak-sublabel');
+            const sectionCount  = document.getElementById('habits-section-count');
 
             if (habitsStat) habitsStat.textContent = `${doneToday}/${total}`;
             if (bestStreakStat) bestStreakStat.textContent = bestStreak > 0 ? `${bestStreak}🔥` : '0';
             if (quickHabitStat) quickHabitStat.textContent = doneToday;
+
+            if (habitsSub) {
+                const pct = total > 0 ? Math.round((doneToday/total)*100) : 0;
+                if (doneToday === total && total > 0) {
+                    habitsSub.textContent = '¡Día perfecto! 🏆';
+                    habitsSub.style.color = 'var(--success-color)';
+                    habitsSub.style.fontWeight = '600';
+                } else if (pct >= 50) {
+                    habitsSub.textContent = `${pct}% completado`;
+                    habitsSub.style.color = '#ffab00';
+                    habitsSub.style.fontWeight = '600';
+                } else {
+                    habitsSub.textContent = total > 0 ? `${total - doneToday} pendientes` : 'sin hábitos aún';
+                    habitsSub.style.color = '';
+                    habitsSub.style.fontWeight = '';
+                }
+            }
+
+            if (streakSub) {
+                if (currentBest >= 7) {
+                    streakSub.textContent = `racha activa: ${currentBest}d 🔥`;
+                    streakSub.style.color = 'var(--success-color)';
+                    streakSub.style.fontWeight = '600';
+                } else if (currentBest > 0) {
+                    streakSub.textContent = `racha actual: ${currentBest}d`;
+                    streakSub.style.color = '';
+                    streakSub.style.fontWeight = '';
+                } else {
+                    streakSub.textContent = 'días consecutivos';
+                    streakSub.style.color = '';
+                    streakSub.style.fontWeight = '';
+                }
+            }
+
+            if (sectionCount) sectionCount.textContent = total > 0 ? `· ${doneToday}/${total} hoy` : '';
         }
 
         function openHabitModal() {
@@ -7638,14 +7802,12 @@
 
         // ── Switch de tabs en sección Progreso ──
         window.switchProgresoTab = function(tabId) {
-            console.log('Switching to tab:', tabId);
             
             // Forzar cierre de cualquier modal abierto por si acaso interfiere
             const modals = document.querySelectorAll('.modal');
             modals.forEach(m => {
                 if(m.style.display === 'block') {
                     m.style.display = 'none';
-                    console.log('Closing modal for safety');
                 }
             });
 
