@@ -2376,8 +2376,8 @@
             <div class="section-title">
                 <h3>Mis Rutinas 🔁</h3>
                 <div style="display: flex; gap: 8px;">
-                    <button class="see-all" id="manage-classes-btn" style="padding: 10px 18px; background: rgba(255, 107, 107, 0.15); color: var(--danger-color);">🗑️ Gestionar</button>
-                    <button class="see-all" id="add-class-btn" style="padding: 10px 18px;">+ Agregar</button>
+                    <button class="see-all" id="manage-classes-btn" onclick="showManageClassesModal()" style="padding: 10px 18px; background: rgba(255, 107, 107, 0.15); color: var(--danger-color);">🗑️ Gestionar</button>
+                    <button class="see-all" id="add-class-btn" onclick="openClassModal()" style="padding: 10px 18px;">+ Agregar</button>
                 </div>
             </div>
             
@@ -2434,8 +2434,8 @@
                 <div class="section-title" style="margin-top:0;">
                     <h3>Mis Metas 🎯</h3>
                     <div style="display:flex; gap:8px;">
-                        <button class="see-all" id="manage-subjects-btn" style="padding:10px 18px; background:rgba(255,107,107,0.15); color:var(--danger-color);">🗑️ Gestionar</button>
-                        <button class="see-all" id="add-subject-btn" style="padding:10px 18px;">+ Agregar</button>
+                        <button class="see-all" id="manage-subjects-btn" onclick="showManageSubjectsModal()" style="padding:10px 18px; background:rgba(255,107,107,0.15); color:var(--danger-color);">🗑️ Gestionar</button>
+                        <button class="see-all" id="add-subject-btn" onclick="openSubjectModal()" style="padding:10px 18px;">+ Agregar</button>
                     </div>
                 </div>
 
@@ -2505,8 +2505,8 @@
                 <div class="section-title" style="margin-top:0;">
                     <h3>Áreas de Vida 🌱</h3>
                     <div style="display:flex; gap:8px;">
-                        <button class="see-all" id="manage-subjects-btn-2" style="padding:10px 18px; background:rgba(255,107,107,0.15); color:var(--danger-color);">🗑️ Gestionar</button>
-                        <button class="see-all" id="add-subject-btn-2" style="padding:10px 18px;">+ Agregar</button>
+                        <button class="see-all" id="manage-subjects-btn-2" onclick="showManageSubjectsModal()" style="padding:10px 18px; background:rgba(255,107,107,0.15); color:var(--danger-color);">🗑️ Gestionar</button>
+                        <button class="see-all" id="add-subject-btn-2" onclick="openSubjectModal()" style="padding:10px 18px;">+ Agregar</button>
                     </div>
                 </div>
                 <div class="card" style="padding:16px; margin-bottom:16px;">
@@ -3162,74 +3162,107 @@
 
         let _listenersAttached = false;
         function setupEventListeners() {
-            // Evitar registrar listeners múltiples veces
             if (_listenersAttached) return;
             _listenersAttached = true;
 
-            // Helper seguro: no explota si el elemento no existe
+            // Formularios (submit no puede ir en document click)
             function on(id, event, handler) {
                 const el = document.getElementById(id);
                 if (el) el.addEventListener(event, handler);
             }
-
-            // Modales de agregar
-            on('add-task-btn',   'click', openTaskModal);
-            on('add-person-btn', 'click', openPersonModal);
-            on('add-event-btn',  'click', openEventModal);
-
-            // Formularios
             on('task-form',    'submit', handleTaskSubmit);
             on('person-form',  'submit', handlePersonSubmit);
             on('event-form',   'submit', handleEventSubmit);
             on('class-form',   'submit', handleClassSubmit);
             on('subject-form', 'submit', handleSubjectSubmit);
 
-            // Eliminación
-            on('cancel-delete',  'click', closeDeleteModal);
-            on('confirm-delete', 'click', confirmDelete);
-
-            // Cerrar modales
-            document.querySelectorAll('.close-modal').forEach(btn => {
-                btn.addEventListener('click', closeAllModals);
-            });
-
-            // Navegación
+            // Navegación inferior
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.addEventListener('click', function(e) {
                     e.preventDefault();
-                    const page = this.getAttribute('data-page');
-                    navigateToPage(page);
+                    navigateToPage(this.getAttribute('data-page'));
                 });
             });
 
-            // Botones del header
-            on('notifications-btn', 'click', showNotificationsModal);
-            on('settings-btn',      'click', showSettingsModal);
-            on('badges-btn',        'click', showBadgesModal);
+            // ── UN SOLO listener en document para TODOS los botones ──
+            document.addEventListener('click', function(e) {
+                const btn = e.target.closest('button, a');
+                if (!btn) return;
+                const id = btn.id;
 
-            // Ver todos — touchend con flag para evitar doble ejecución con click
-            function onTouch(id, fn) {
-                const el = document.getElementById(id);
-                if (!el) return;
-                let touched = false;
-                el.addEventListener('touchend', function(e) {
-                    e.preventDefault();
-                    touched = true;
-                    fn();
-                    setTimeout(() => { touched = false; }, 500);
-                }, { passive: false });
-                el.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    if (touched) return;
-                    fn();
-                });
-            }
-            onTouch('add-habit-btn-2', openHabitModal);
+                // Header
+                if (id === 'notifications-btn')    { showNotificationsModal(); return; }
+                if (id === 'settings-btn')         { showSettingsModal();      return; }
+                if (id === 'badges-btn')           { showBadgesModal();        return; }
 
-            // Contenedores persistentes para hábitos y tareas
+                // Acciones rápidas
+                if (id === 'add-task-btn')         { openTaskModal();          return; }
+                if (id === 'add-person-btn')       { openPersonModal();        return; }
+                if (id === 'add-event-btn')        { openEventModal();         return; }
+                if (id === 'add-emotion-quick-btn'){ openEmotionModal();       return; }
+
+                // Hábitos
+                if (id === 'add-habit-btn-2')      { openHabitModal();         return; }
+
+                // Ver todas
+                if (id === 'see-all-tasks')        { showAllItems('tasks');    return; }
+                if (id === 'see-all-events')       { showAllItems('events');   return; }
+                if (id === 'see-all-people')       { showAllItems('people');   return; }
+
+                // Rutinas
+                if (id === 'add-class-btn')        { openClassModal();         return; }
+                if (id === 'manage-classes-btn')   { showManageClassesModal(); return; }
+
+                // Áreas / Metas
+                if (id === 'add-subject-btn' || id === 'add-subject-btn-2')       { openSubjectModal();         return; }
+                if (id === 'manage-subjects-btn' || id === 'manage-subjects-btn-2'){ showManageSubjectsModal(); return; }
+
+                // Sentir
+                if (id === 'manage-emotions-btn')  { showManageEmotionsModal(); return; }
+                if (id === 'toggle-view-btn') {
+                    const nextView = (typeof currentView !== 'undefined' && currentView === 'timeline') ? 'grouped' : 'timeline';
+                    if (typeof switchEmotionView === 'function') switchEmotionView(nextView);
+                    return;
+                }
+
+                // Revisión semanal
+                if (id === 'start-review-btn')     { startReview();            return; }
+
+                // Eliminar / confirmar
+                if (id === 'cancel-delete')        { closeDeleteModal();       return; }
+                if (id === 'confirm-delete')       { confirmDelete();          return; }
+
+                // Cerrar modales
+                if (btn.classList.contains('close-modal')) { closeAllModals(); return; }
+
+                // Tareas completar
+                if (id.startsWith('complete-task-')) {
+                    toggleTaskComplete(parseInt(id.replace('complete-task-', '')));
+                    return;
+                }
+
+                // Hábitos completar / eliminar
+                if (id.startsWith('toggle-habit-')) {
+                    toggleHabitToday(parseInt(id.replace('toggle-habit-', '')));
+                    return;
+                }
+                if (id.startsWith('del-habit-')) {
+                    deleteHabit(parseInt(id.replace('del-habit-', '')));
+                    return;
+                }
+
+                // Eliminar items (delete-btn con data attributes)
+                if (btn.classList.contains('delete-btn')) {
+                    const type = btn.dataset.type;
+                    const did  = btn.dataset.id;
+                    const name = btn.dataset.name;
+                    if (type && did) openDeleteModal(type, isNaN(did) ? did : parseInt(did), name);
+                    return;
+                }
+            });
+
             setupHabitsContainerListener();
             setupTasksContainerListener();
-
             addTouchSupport();
         }
 
