@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="theme-color" content="#6a11cb">
+    <meta name="theme-color" content="#284A8A">
     <meta name="description" content="Rose — tu compañero de vida. Productividad, bienestar y relaciones en un solo lugar.">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -18,107 +18,176 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* ═══════════════════════════════════════════
-           SISTEMA DE COLORES — ChromaAudit certified
-           ═══════════════════════════════════════════ */
+        /* ═══════════════════════════════════════════════════════
+           SISTEMA DE COLORES — ChromaAudit v2 · 8 combos AA/AAA
+           ═══════════════════════════════════════════════════════ */
         :root {
-            /* ChromaAudit palette */
-            --chroma-deep-violet:  #222255;
-            --chroma-royal-blue:   #221188;
-            --chroma-navy:         #223377;
-            --chroma-forest:       #224433;
-            --chroma-green:        #225500;
-            --chroma-steel:        #116699;
-            --chroma-electric:     #0066FF;
-            --chroma-white:        #FFFFFF;
+            /* Paleta base ChromaAudit */
+            --ca-dark:    #181C35;
+            --ca-pale:    #E8D3F4;
+            --ca-blue:    #284A8A;
+            --ca-sky:     #2D94E0;
+            --ca-violet:  #977DE8;
 
-            /* Tokens semánticos — tema por defecto (Violeta · combo-1) */
-            --primary-color:    #222255;
-            --secondary-color:  #221188;
-            --accent-color:     #0066FF;
-            --gradient:         linear-gradient(135deg, #222255 0%, #221188 100%);
-            --gradient-hover:   linear-gradient(135deg, #1a1a44 0%, #1a0d6e 100%);
+            /* Tema por defecto — combo-1: Dark bg · Pale text (AAA 11.98:1) */
+            --primary-color:    #181C35;
+            --secondary-color:  #284A8A;
+            --accent-color:     #2D94E0;
+            --gradient:         linear-gradient(135deg, #181C35 0%, #284A8A 100%);
+            --gradient-hover:   linear-gradient(135deg, #0f1128 0%, #1e3870 100%);
 
             /* Sistema base */
-            --success-color:  #00e676;
-            --warning-color:  #ffea00;
-            --danger-color:   #ff5252;
-            --card-shadow:    0 10px 40px rgba(0, 0, 0, 0.08);
-            --radius:         24px;
-            --transition:     all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --success-color:   #00e676;
+            --warning-color:   #ffea00;
+            --danger-color:    #ff5252;
+            --card-shadow:     0 10px 40px rgba(0, 0, 0, 0.12);
+            --radius:          24px;
+            --transition:      all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
-            /* Superficie clara */
-            --bg-primary:    #f0f2f5;
-            --bg-secondary:  #ffffff;
-            --text-primary:  #222255;
-            --text-secondary: #64748b;
-            --border-color:  rgba(0, 0, 0, 0.06);
-            --glass-bg:      rgba(255, 255, 255, 0.82);
-            --glass-border:  rgba(255, 255, 255, 0.45);
+            /* Superficies — tema oscuro por defecto (combo-1) */
+            --bg-primary:     #0f1128;
+            --bg-secondary:   #181C35;
+            --text-primary:   #E8D3F4;
+            --text-secondary: #977DE8;
+            --border-color:   rgba(232, 211, 244, 0.12);
+            --glass-bg:       rgba(24, 28, 53, 0.85);
+            --glass-border:   rgba(232, 211, 244, 0.18);
         }
 
-        /* ── Tema: Marino (Navy #223377) ── */
-        /* ── Tema: Noche Púrpura (#4A235A → #5B2C6F) · AAA 12.51:1 ── */
-        [data-theme="noche"] {
-            --primary-color:   #4A235A;
-            --secondary-color: #5B2C6F;
-            --accent-color:    #0099FF;
-            --gradient:        linear-gradient(135deg, #4A235A 0%, #5B2C6F 100%);
-            --gradient-hover:  linear-gradient(135deg, #3a1a47 0%, #4a2059 100%);
-            --text-primary:    #4A235A;
+        /* ══ Combo-1: Dark Night · bg #181C35 · text #E8D3F4 · AAA 11.98:1 ══ */
+        [data-theme="combo1"] {
+            --primary-color:    #181C35;
+            --secondary-color:  #284A8A;
+            --accent-color:     #2D94E0;
+            --gradient:         linear-gradient(135deg, #181C35 0%, #284A8A 100%);
+            --gradient-hover:   linear-gradient(135deg, #0f1128 0%, #1e3870 100%);
+            --bg-primary:       #0f1128;
+            --bg-secondary:     #181C35;
+            --text-primary:     #E8D3F4;
+            --text-secondary:   #977DE8;
+            --border-color:     rgba(232, 211, 244, 0.12);
+            --glass-bg:         rgba(24, 28, 53, 0.85);
+            --glass-border:     rgba(232, 211, 244, 0.18);
+            --card-shadow:      0 10px 40px rgba(0, 0, 0, 0.35);
         }
 
-        /* ── Tema: Profundo (Deep Violet #222255) — default ── */
-        [data-theme="violet"] {
-            --primary-color:   #222255;
-            --secondary-color: #221188;
-            --accent-color:    #0066FF;
-            --gradient:        linear-gradient(135deg, #222255 0%, #221188 100%);
-            --gradient-hover:  linear-gradient(135deg, #1a1a44 0%, #1a0d6e 100%);
-            --text-primary:    #222255;
+        /* ══ Combo-2: Pale Dream · bg #E8D3F4 · text #181C35 · AAA 11.98:1 ══ */
+        [data-theme="combo2"] {
+            --primary-color:    #284A8A;
+            --secondary-color:  #181C35;
+            --accent-color:     #2D94E0;
+            --gradient:         linear-gradient(135deg, #284A8A 0%, #181C35 100%);
+            --gradient-hover:   linear-gradient(135deg, #1e3870 0%, #0f1128 100%);
+            --bg-primary:       #d8c3e8;
+            --bg-secondary:     #E8D3F4;
+            --text-primary:     #181C35;
+            --text-secondary:   #284A8A;
+            --border-color:     rgba(24, 28, 53, 0.12);
+            --glass-bg:         rgba(232, 211, 244, 0.88);
+            --glass-border:     rgba(24, 28, 53, 0.15);
+            --card-shadow:      0 10px 40px rgba(24, 28, 53, 0.10);
         }
 
-        /* ── Tema: Bosque (Forest #224433) ── */
-        [data-theme="forest"] {
-            --primary-color:   #224433;
-            --secondary-color: #225500;
-            --accent-color:    #116699;
-            --gradient:        linear-gradient(135deg, #224433 0%, #225500 100%);
-            --gradient-hover:  linear-gradient(135deg, #1a3328 0%, #1a4400 100%);
-            --text-primary:    #224433;
+        /* ══ Combo-3: Royal · bg #284A8A · text #E8D3F4 · AA 6.18:1 ══ */
+        [data-theme="combo3"] {
+            --primary-color:    #284A8A;
+            --secondary-color:  #181C35;
+            --accent-color:     #2D94E0;
+            --gradient:         linear-gradient(135deg, #284A8A 0%, #181C35 100%);
+            --gradient-hover:   linear-gradient(135deg, #1e3870 0%, #0f1128 100%);
+            --bg-primary:       #1e3870;
+            --bg-secondary:     #284A8A;
+            --text-primary:     #E8D3F4;
+            --text-secondary:   #977DE8;
+            --border-color:     rgba(232, 211, 244, 0.14);
+            --glass-bg:         rgba(40, 74, 138, 0.85);
+            --glass-border:     rgba(232, 211, 244, 0.2);
+            --card-shadow:      0 10px 40px rgba(0, 0, 0, 0.3);
         }
 
-        /* ── Tema: Acero (Steel #116699) ── */
-        [data-theme="steel"] {
-            --primary-color:   #116699;
-            --secondary-color: #0066FF;
-            --accent-color:    #223377;
-            --gradient:        linear-gradient(135deg, #116699 0%, #0066FF 100%);
-            --gradient-hover:  linear-gradient(135deg, #0d5280 0%, #0052cc 100%);
-            --text-primary:    #116699;
+        /* ══ Combo-4: Lavender Light · bg #E8D3F4 · text #284A8A · AA 6.18:1 ══ */
+        [data-theme="combo4"] {
+            --primary-color:    #284A8A;
+            --secondary-color:  #181C35;
+            --accent-color:     #977DE8;
+            --gradient:         linear-gradient(135deg, #977DE8 0%, #284A8A 100%);
+            --gradient-hover:   linear-gradient(135deg, #8060d0 0%, #1e3870 100%);
+            --bg-primary:       #d8c3e8;
+            --bg-secondary:     #E8D3F4;
+            --text-primary:     #284A8A;
+            --text-secondary:   #181C35;
+            --border-color:     rgba(40, 74, 138, 0.14);
+            --glass-bg:         rgba(232, 211, 244, 0.88);
+            --glass-border:     rgba(40, 74, 138, 0.18);
+            --card-shadow:      0 10px 40px rgba(40, 74, 138, 0.12);
         }
 
-        /* ── Tema: Océano (#1E2833 → #214A80) · AAA 14.93:1 / 8.91:1 ── */
-        [data-theme="oceano"] {
-            --primary-color:   #214A80;
-            --secondary-color: #0099FF;
-            --accent-color:    #1E2833;
-            --gradient:        linear-gradient(135deg, #1E2833 0%, #214A80 100%);
-            --gradient-hover:  linear-gradient(135deg, #151e28 0%, #193a66 100%);
-            --text-primary:    #214A80;
+        /* ══ Combo-5: Electric Night · bg #181C35 · text #2D94E0 · AA 5.11:1 ══ */
+        [data-theme="combo5"] {
+            --primary-color:    #2D94E0;
+            --secondary-color:  #284A8A;
+            --accent-color:     #977DE8;
+            --gradient:         linear-gradient(135deg, #181C35 0%, #1e3870 100%);
+            --gradient-hover:   linear-gradient(135deg, #0f1128 0%, #162d58 100%);
+            --bg-primary:       #0f1128;
+            --bg-secondary:     #181C35;
+            --text-primary:     #2D94E0;
+            --text-secondary:   #E8D3F4;
+            --border-color:     rgba(45, 148, 224, 0.15);
+            --glass-bg:         rgba(24, 28, 53, 0.88);
+            --glass-border:     rgba(45, 148, 224, 0.2);
+            --card-shadow:      0 10px 40px rgba(45, 148, 224, 0.15);
         }
 
-        /* ── Tema: Oscuro (dark mode universal) ── */
-        [data-theme="dark"] {
-            --bg-primary:    #0f172a;
-            --bg-secondary:  #1e293b;
-            --text-primary:  #f8fafc;
-            --text-secondary: #94a3b8;
-            --border-color:  rgba(255, 255, 255, 0.1);
-            --card-shadow:   0 10px 40px rgba(0, 0, 0, 0.35);
-            --glass-bg:      rgba(30, 41, 59, 0.75);
-            --glass-border:  rgba(255, 255, 255, 0.1);
-            /* mantiene el gradiente del tema seleccionado */
+        /* ══ Combo-6: Sky Bold · bg #2D94E0 · text #181C35 · AA 5.11:1 ══ */
+        [data-theme="combo6"] {
+            --primary-color:    #181C35;
+            --secondary-color:  #284A8A;
+            --accent-color:     #E8D3F4;
+            --gradient:         linear-gradient(135deg, #2D94E0 0%, #284A8A 100%);
+            --gradient-hover:   linear-gradient(135deg, #2280c8 0%, #1e3870 100%);
+            --bg-primary:       #1e7ec8;
+            --bg-secondary:     #2D94E0;
+            --text-primary:     #181C35;
+            --text-secondary:   #0f1128;
+            --border-color:     rgba(24, 28, 53, 0.15);
+            --glass-bg:         rgba(45, 148, 224, 0.88);
+            --glass-border:     rgba(24, 28, 53, 0.18);
+            --card-shadow:      0 10px 40px rgba(24, 28, 53, 0.2);
+        }
+
+        /* ══ Combo-7: Violet Night · bg #181C35 · text #977DE8 · AA 5.11:1 ══ */
+        [data-theme="combo7"] {
+            --primary-color:    #977DE8;
+            --secondary-color:  #2D94E0;
+            --accent-color:     #E8D3F4;
+            --gradient:         linear-gradient(135deg, #181C35 0%, #977DE8 40%, #284A8A 100%);
+            --gradient-hover:   linear-gradient(135deg, #0f1128 0%, #7a60d0 40%, #1e3870 100%);
+            --bg-primary:       #0f1128;
+            --bg-secondary:     #181C35;
+            --text-primary:     #977DE8;
+            --text-secondary:   #E8D3F4;
+            --border-color:     rgba(151, 125, 232, 0.18);
+            --glass-bg:         rgba(24, 28, 53, 0.88);
+            --glass-border:     rgba(151, 125, 232, 0.22);
+            --card-shadow:      0 10px 40px rgba(151, 125, 232, 0.2);
+        }
+
+        /* ══ Combo-8: Amethyst · bg #977DE8 · text #181C35 · AA 5.11:1 ══ */
+        [data-theme="combo8"] {
+            --primary-color:    #181C35;
+            --secondary-color:  #284A8A;
+            --accent-color:     #2D94E0;
+            --gradient:         linear-gradient(135deg, #977DE8 0%, #284A8A 100%);
+            --gradient-hover:   linear-gradient(135deg, #8060d0 0%, #1e3870 100%);
+            --bg-primary:       #8060d0;
+            --bg-secondary:     #977DE8;
+            --text-primary:     #181C35;
+            --text-secondary:   #0f1128;
+            --border-color:     rgba(24, 28, 53, 0.15);
+            --glass-bg:         rgba(151, 125, 232, 0.88);
+            --glass-border:     rgba(24, 28, 53, 0.18);
+            --card-shadow:      0 10px 40px rgba(24, 28, 53, 0.2);
         }
 
         * {
@@ -149,7 +218,7 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 4px 24px rgba(124, 77, 255, 0.25);
+            box-shadow: 0 4px 24px rgba(151, 125, 232, 0.25);
         }
 
         .header-content {
@@ -275,10 +344,6 @@
             font-weight: 500;
         }
 
-        [data-theme="dark"] .mobile-header {
-            box-shadow: 0 4px 24px rgba(124, 77, 255, 0.35);
-        }
-
         /* Modern Cards */
         .card {
             background: var(--bg-secondary);
@@ -373,7 +438,7 @@
         }
 
         .nav-item.active .nav-icon {
-            background: rgba(124, 77, 255, 0.12);
+            background: color-mix(in srgb, var(--primary-color) 15%, transparent);
             transform: scale(1.05);
         }
 
@@ -570,7 +635,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            box-shadow: 0 4px 20px rgba(106, 17, 203, 0.08);
+            box-shadow: 0 4px 20px rgba(40, 74, 138, 0.08);
             border: 1px solid var(--glass-border);
             transition: var(--transition);
             cursor: pointer;
@@ -578,12 +643,8 @@
 
         .stat-item:hover {
             transform: translateY(-4px);
-            box-shadow: 0 8px 30px rgba(106, 17, 203, 0.15);
-            background: rgba(255, 255, 255, 0.95);
-        }
-
-        [data-theme="dark"] .stat-item:hover {
-            background: rgba(22, 33, 62, 0.9);
+            box-shadow: 0 8px 30px rgba(40, 74, 138, 0.15);
+            background: var(--glass-bg);
         }
 
         .stat-icon {
@@ -596,7 +657,7 @@
             justify-content: center;
             background: var(--gradient);
             color: white;
-            box-shadow: 0 4px 12px rgba(106, 17, 203, 0.3);
+            box-shadow: 0 4px 12px rgba(40, 74, 138, 0.3);
             transition: var(--transition);
             flex-shrink: 0;
         }
@@ -641,7 +702,7 @@
             align-items: center;
             text-decoration: none;
             color: var(--text-primary);
-            box-shadow: 0 4px 20px rgba(106, 17, 203, 0.08);
+            box-shadow: 0 4px 20px rgba(40, 74, 138, 0.08);
             border: 1px solid var(--glass-border);
             transition: var(--transition);
             cursor: pointer;
@@ -730,7 +791,7 @@
         .btn-primary {
             background: var(--gradient);
             color: white;
-            box-shadow: 0 4px 15px rgba(106, 17, 203, 0.3);
+            box-shadow: 0 4px 15px rgba(40, 74, 138, 0.3);
         }
 
         .btn-primary:active {
@@ -828,7 +889,7 @@
             border-radius: var(--radius);
             padding: 1.5rem;
             width: 100%;
-            box-shadow: 0 4px 24px rgba(106, 17, 203, 0.08);
+            box-shadow: 0 4px 24px rgba(40, 74, 138, 0.08);
             border: 1px solid var(--glass-border);
             transition: var(--transition);
             position: relative;
@@ -845,6 +906,7 @@
             background: radial-gradient(circle, rgba(106, 17, 203, 0.03) 0%, transparent 70%);
             opacity: 0;
             transition: var(--transition);
+            pointer-events: none;
         }
 
         .card:hover::before {
@@ -853,7 +915,7 @@
 
         .card:hover {
             transform: translateY(-6px);
-            box-shadow: 0 12px 40px rgba(106, 17, 203, 0.15);
+            box-shadow: 0 12px 40px rgba(40, 74, 138, 0.15);
             border-color: rgba(106, 17, 203, 0.2);
         }
 
@@ -1128,7 +1190,7 @@
         .btn-primary {
             background: var(--gradient);
             color: white;
-            box-shadow: 0 4px 15px rgba(106, 17, 203, 0.3);
+            box-shadow: 0 4px 15px rgba(40, 74, 138, 0.3);
         }
 
         .btn-primary:hover {
@@ -1139,7 +1201,7 @@
 
         .btn-primary:active {
             transform: translateY(0) scale(0.98);
-            box-shadow: 0 2px 10px rgba(106, 17, 203, 0.3);
+            box-shadow: 0 2px 10px rgba(40, 74, 138, 0.3);
         }
 
         .btn-danger {
@@ -1458,7 +1520,7 @@
         .tutorial-btn-next {
             background: var(--gradient);
             color: white;
-            box-shadow: 0 4px 15px rgba(106, 17, 203, 0.3);
+            box-shadow: 0 4px 15px rgba(40, 74, 138, 0.3);
         }
 
         .tutorial-btn-next:hover {
@@ -1547,7 +1609,7 @@
             font-size: 0.7rem;
             padding: 2px 8px;
             border-radius: 20px;
-            background: rgba(124, 77, 255, 0.1);
+            background: rgba(151, 125, 232, 0.1);
             color: var(--primary-color);
             font-weight: 600;
             text-transform: capitalize;
@@ -1580,26 +1642,28 @@
         }
 
         .habit-delete-btn {
-            position: absolute;
-            top: 6px;
-            right: 6px;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: rgba(255, 82, 82, 0.12);
-            border: none;
+            flex-shrink: 0;
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            background: rgba(255, 82, 82, 0.10);
+            border: 1.5px solid rgba(255, 82, 82, 0.2);
             color: var(--danger-color);
-            font-size: 0.65rem;
+            font-size: 0.8rem;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: var(--transition);
-            opacity: 0.5;
+            opacity: 1;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .habit-card:hover .habit-delete-btn,
-        .habit-card:active .habit-delete-btn { opacity: 1; }
+        .habit-delete-btn:active {
+            background: rgba(255, 82, 82, 0.22);
+            transform: scale(0.93);
+        }
 
         .habits-day-progress {
             background: var(--bg-secondary);
@@ -1681,7 +1745,7 @@
 
         .emoji-option.selected {
             border-color: var(--primary-color);
-            background: rgba(124, 77, 255, 0.1);
+            background: rgba(151, 125, 232, 0.1);
             transform: scale(1.1);
         }
 
@@ -2260,17 +2324,17 @@
                 <div class="quick-stats">
                     <div class="quick-stat-item">
                         <div class="stat-number" id="quick-tasks-stat">0</div>
-                        <div class="stat-label-small">Tareas Hoy</div>
+                        <div class="stat-label-small" id="quick-tasks-label">Tareas</div>
                     </div>
                     <div class="stat-divider"></div>
                     <div class="quick-stat-item">
                         <div class="stat-number" id="quick-habits-stat">0</div>
-                        <div class="stat-label-small">Hábitos ✓</div>
+                        <div class="stat-label-small" id="quick-habits-label">Hábitos</div>
                     </div>
                     <div class="stat-divider"></div>
                     <div class="quick-stat-item">
                         <div class="stat-number" id="quick-progress-stat">0%</div>
-                        <div class="stat-label-small">Completado</div>
+                        <div class="stat-label-small">Rendimiento</div>
                     </div>
                 </div>
 
@@ -2492,61 +2556,70 @@
 
         <!-- Sección de Bienestar -->
         <div id="page-bienestar" class="page-section" style="display: none;">
-            <div class="section-title">
-                <h3>Cómo me Siento ❤️</h3>
+
+            <!-- ══════════════════════════════════════════
+                 PANEL PERSONAL — Diagnóstico emocional
+                 ══════════════════════════════════════════ -->
+            <div class="section-title" style="margin-top:0;">
+                <h3>Mi Bienestar 🧘</h3>
             </div>
 
-            <!-- Tarjeta principal: Registro de hoy -->
-            <div class="welcome-card-new" style="margin-top:0; cursor:pointer;" onclick="openEmotionModal()">
+            <!-- Botón registrar hoy -->
+            <div class="welcome-card-new" style="margin-top:0; cursor:pointer;" onclick="openEmotionModalSelf()">
                 <div class="welcome-bg-pattern"></div>
-                <div class="welcome-content" style="padding:1.5rem;">
-                    <div class="welcome-greeting" style="margin-bottom:1rem;">
-                        <div class="greeting-emoji" style="font-size:2.8rem; animation:wave 2s ease-in-out infinite; display:inline-block;">💝</div>
-                        <h2 class="greeting-title" style="font-size:1.5rem;">¿Cómo te sientes hoy?</h2>
-                        <p class="greeting-subtitle">Registra tu estado emocional — sin necesidad de vincular a nadie.</p>
+                <div class="welcome-content" style="padding:1.4rem 1.5rem;">
+                    <div style="display:flex; align-items:center; gap:14px;">
+                        <div id="bienestar-hero-emoji" style="font-size:3rem; flex-shrink:0; animation:wave 2.5s ease-in-out infinite; display:inline-block;">🌿</div>
+                        <div style="flex:1; min-width:0;">
+                            <h2 class="greeting-title" style="font-size:1.25rem; margin-bottom:4px;" id="bienestar-hero-title">¿Cómo estás hoy?</h2>
+                            <p class="greeting-subtitle" style="font-size:0.82rem;" id="bienestar-hero-sub">Registra tu estado — es solo para ti</p>
+                        </div>
+                        <div style="background:rgba(255,255,255,0.2); border-radius:12px; padding:10px 14px; text-align:center; flex-shrink:0; border:1px solid rgba(255,255,255,0.25);">
+                            <div style="font-size:1.4rem;" id="bienestar-today-score">—</div>
+                            <div style="font-size:0.6rem; color:rgba(255,255,255,0.8); font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">hoy</div>
+                        </div>
                     </div>
-                    <div style="background:rgba(255,255,255,0.2); border-radius:14px; padding:12px 16px; display:flex; align-items:center; gap:10px; border:1px solid rgba(255,255,255,0.3);">
-                        <span style="font-size:1.4rem;">✍️</span>
-                        <span style="color:white; font-size:0.9rem; font-weight:500;">Toca aquí para registrar cómo te sientes ahora mismo</span>
-                        <span style="color:rgba(255,255,255,0.7); margin-left:auto; font-size:1.1rem;">→</span>
+                    <div style="background:rgba(255,255,255,0.15); border-radius:12px; padding:10px 14px; display:flex; align-items:center; gap:10px; border:1px solid rgba(255,255,255,0.2); margin-top:14px;">
+                        <span style="font-size:1.1rem;">✍️</span>
+                        <span style="color:white; font-size:0.85rem; font-weight:500;">Toca para registrar cómo te sientes ahora</span>
+                        <span style="color:rgba(255,255,255,0.7); margin-left:auto;">→</span>
                     </div>
                 </div>
             </div>
 
-            <div class="section-title" style="margin-top: 2rem;">
-                <h3>Análisis de Relaciones 🔍</h3>
-            </div>
+            <!-- ── Diagnóstico inteligente ── -->
+            <div id="self-diagnosis-panel" style="margin-top:1.2rem;"></div>
 
-            <div class="card">
-                <p style="margin-bottom: 1rem; color: var(--text-secondary);">Analiza tus relaciones y obtén recomendaciones personalizadas</p>
-                <div class="form-group" style="margin-bottom: 1rem;">
-                    <label for="person-select-analysis">Seleccionar persona (opcional):</label>
+            <!-- ── Historial personal (solo "Sobre mí") ── -->
+            <div class="section-title" style="margin-top:1.5rem;">
+                <h3>Mi Historial Personal 📖</h3>
+                <button class="see-all" id="manage-emotions-btn" style="padding:8px 14px; background:rgba(255,82,82,0.12); color:var(--danger-color); font-size:0.78rem;">🗑️ Gestionar</button>
+            </div>
+            <div id="self-emotions-list"></div>
+
+            <!-- ── Separador: Emociones de relaciones ── -->
+            <div class="section-title" style="margin-top:2rem;">
+                <h3>Análisis de Relaciones 🔍</h3>
+                <div style="display:flex; gap:8px;">
+                    <button class="see-all" id="toggle-view-btn" style="padding:8px 14px; font-size:0.78rem;">👥 Por Persona</button>
+                </div>
+            </div>
+            <div class="card" style="margin-bottom:1rem;">
+                <p style="margin-bottom:1rem; color:var(--text-secondary); font-size:0.88rem;">Analiza cómo te sientes con las personas de tu vida</p>
+                <div class="form-group" style="margin-bottom:1rem;">
                     <select id="person-select-analysis" class="form-control">
                         <option value="">Todas las personas</option>
                     </select>
-                    <small style="display: block; margin-top: 0.5rem; color: var(--text-secondary); font-size: 0.85rem;">
-                        Deja "Todas las personas" para un análisis completo, o selecciona una persona específica
-                    </small>
                 </div>
-                <button class="btn btn-primary" id="analyze-btn-bienestar">Analizar Relaciones 🧠</button>
+                <button class="btn btn-primary" id="analyze-btn-bienestar" style="font-size:0.9rem; padding:12px;">Analizar Relaciones 🧠</button>
                 <div id="analysis-result-bienestar"></div>
             </div>
 
-            <div class="section-title" style="margin-top: 2rem;">
-                <h3>Mis Emociones Registradas 📝</h3>
-                <div style="display: flex; gap: 8px;">
-                    <button class="see-all" id="manage-emotions-btn" style="padding: 10px 18px; background: rgba(255, 107, 107, 0.15); color: var(--danger-color);">🗑️ Gestionar</button>
-                    <button class="see-all" id="toggle-view-btn" style="padding: 10px 18px; position: relative; z-index: 100;">
-                        👥 Por Persona
-                    </button>
-                </div>
-            </div>
-
-            <!-- Vista Cronológica -->
+            <!-- Vista Cronológica (todas las emociones) -->
             <div id="emotions-timeline-view" class="emotion-view active"></div>
-
             <!-- Vista Agrupada por Persona -->
             <div id="emotions-grouped-view" class="emotion-view" style="display: none;"></div>
+
         </div>
         <!-- Fin Sección de Bienestar -->
 
@@ -2993,32 +3066,35 @@
 
         // ========== SISTEMA DE TEMAS ==========
         const THEMES = {
-            violet:  { label: 'Violeta',  emoji: '🟣', gradient: 'linear-gradient(135deg,#222255 0%,#221188 100%)' },
-            noche:   { label: 'Noche',    emoji: '🪻', gradient: 'linear-gradient(135deg,#4A235A 0%,#5B2C6F 100%)' },
-            forest:  { label: 'Bosque',   emoji: '🟢', gradient: 'linear-gradient(135deg,#224433 0%,#225500 100%)' },
-            oceano:  { label: 'Océano',   emoji: '🌊', gradient: 'linear-gradient(135deg,#1E2833 0%,#214A80 100%)' },
-            steel:   { label: 'Acero',    emoji: '🩵', gradient: 'linear-gradient(135deg,#116699 0%,#0066FF 100%)' },
-            dark:    { label: 'Oscuro',   emoji: '🌑', gradient: 'linear-gradient(135deg,#222255 0%,#221188 100%)' },
+            combo1: { label: 'Dark Night',  emoji: '🌑', gradient: 'linear-gradient(135deg,#181C35 0%,#284A8A 100%)',  desc: 'Fondo muy oscuro · texto lila claro · AAA' },
+            combo2: { label: 'Pale Dream',  emoji: '🪷', gradient: 'linear-gradient(135deg,#284A8A 0%,#181C35 100%)',  desc: 'Fondo lavanda suave · texto oscuro · AAA' },
+            combo3: { label: 'Royal Blue',  emoji: '🔷', gradient: 'linear-gradient(135deg,#284A8A 0%,#181C35 100%)',  desc: 'Fondo azul royal · texto lila · AA' },
+            combo4: { label: 'Lavender',    emoji: '💜', gradient: 'linear-gradient(135deg,#977DE8 0%,#284A8A 100%)',  desc: 'Fondo lavanda · texto azul royal · AA' },
+            combo5: { label: 'Electric',    emoji: '⚡', gradient: 'linear-gradient(135deg,#181C35 0%,#1e3870 100%)',  desc: 'Fondo oscuro · texto azul eléctrico · AA' },
+            combo6: { label: 'Sky',         emoji: '🩵', gradient: 'linear-gradient(135deg,#2D94E0 0%,#284A8A 100%)',  desc: 'Fondo azul cielo · texto muy oscuro · AA' },
+            combo7: { label: 'Violet Dark', emoji: '🟣', gradient: 'linear-gradient(135deg,#181C35 0%,#977DE8 60%,#284A8A 100%)', desc: 'Fondo oscuro · texto violeta · AA' },
+            combo8: { label: 'Amethyst',    emoji: '✨', gradient: 'linear-gradient(135deg,#977DE8 0%,#284A8A 100%)',  desc: 'Fondo amatista · texto muy oscuro · AA' },
         };
 
         function setTheme(themeName) {
-            // Quitar todos los atributos de tema existentes
             document.documentElement.removeAttribute('data-theme');
-
             const validThemes = Object.keys(THEMES);
-            const theme = validThemes.includes(themeName) ? themeName : 'violet';
+            const theme = validThemes.includes(themeName) ? themeName : 'combo1';
             document.documentElement.setAttribute('data-theme', theme);
             localStorage.setItem('appTheme', theme);
         }
 
         function loadTheme() {
-            const saved = localStorage.getItem('appTheme') || 'violet';
-            setTheme(saved);
+            const saved = localStorage.getItem('appTheme') || 'combo1';
+            // Migrar temas viejos al equivalente más cercano
+            const migration = { violet:'combo1', noche:'combo7', forest:'combo3', oceano:'combo5', steel:'combo6', dark:'combo1' };
+            const theme = migration[saved] || (Object.keys(THEMES).includes(saved) ? saved : 'combo1');
+            setTheme(theme);
         }
 
         // Compatibilidad legacy
         function toggleDarkMode(enabled) {
-            setTheme(enabled ? 'dark' : 'violet');
+            setTheme(enabled ? 'combo1' : 'combo2');
         }
 
         // ========== INICIALIZACIÓN ==========
@@ -3131,6 +3207,24 @@
 
                 // Sentir
                 if (id === 'manage-emotions-btn')  { showManageEmotionsModal(); return; }
+                if (id === 'analyze-btn-bienestar') {
+                    const rc = document.getElementById('analysis-result-bienestar');
+                    const ps = document.getElementById('person-select-analysis');
+                    if (!rc) return;
+                    if (!appData.emotions.length) { showNotification('Primero registra algunas emociones', 'error'); return; }
+                    const sel = ps ? ps.value : '';
+                    let analysis;
+                    if (sel) {
+                        analysis = analyzeSinglePerson(sel);
+                        if (!analysis) { showNotification('No hay emociones para ' + sel, 'error'); return; }
+                        showNotification('Análisis de ' + sel + ' completado ✨');
+                    } else {
+                        analysis = analyzeRelationshipsProfessionally();
+                        showNotification('Análisis completado ✨');
+                    }
+                    rc.innerHTML = analysis;
+                    return;
+                }
                 if (id === 'toggle-view-btn') {
                     const nextView = (typeof currentView !== 'undefined' && currentView === 'timeline') ? 'grouped' : 'timeline';
                     if (typeof switchEmotionView === 'function') switchEmotionView(nextView);
@@ -3232,6 +3326,7 @@
             renderSubjects();
             renderHabits();
             updateHabitStats();
+            updateQuickStats();
         }
 
         function renderSchedule() {
@@ -3483,6 +3578,7 @@
                 renderTasks();
                 updateStats();
                 updateHabitStats();
+                updateQuickStats();
                 if (task.completed) showNotification(`✅ "${task.title}" completada`, 'success');
                 if (task.completed) setTimeout(evaluateBadges, 400);
             } catch(err) {
@@ -3564,12 +3660,12 @@
                 return;
             }
             const relationColors = {
-                'Pareja':'#ff4081','Amigo/a':'#7c4dff','Familiar':'#00c853',
+                'Pareja':'#ff4081','Amigo/a':'#977DE8','Familiar':'#00c853',
                 'Compañero/a':'#2979ff','Profesor/a':'#ffab00','Mentor/a':'#ff6b35'
             };
             const todayMs = new Date().setHours(0,0,0,0);
             container.innerHTML = people.map(person => {
-                const color = relationColors[person.relation] || '#7c4dff';
+                const color = relationColors[person.relation] || '#977DE8';
                 const emotions = (appData.emotions || []).filter(e => e.person === person.name);
                 const lastEmotion = emotions.sort((a,b) => (b.date||'').localeCompare(a.date||''))[0];
 
@@ -4197,30 +4293,50 @@
         }
 
         function updateQuickStats() {
-            const today = new Date();
-            const todayStr = today.toISOString().split('T')[0];
-
-            // Calcular tareas pendientes (no completadas)
-            const pendingTasks = appData.tasks.filter(t => !t.completed).length;
-
-            // Calcular próximos eventos (hoy y futuros)
-            const upcomingEvents = appData.events.filter(e => e.date >= todayStr).length;
-
-            // Calcular progreso de tareas
             const completedTasks = appData.tasks.filter(t => t.completed).length;
-            const totalTasks = appData.tasks.length;
-            const progressPercent = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+            const totalTasks     = appData.tasks.length;
+            const habits         = appData.habits || [];
+            const doneToday      = habits.filter(h => isHabitCompletedToday(h)).length;
+            const totalHabits    = habits.length;
 
-            const quickTasksEl = document.getElementById('quick-tasks-stat');
-            const quickHabitsEl = document.getElementById('quick-habits-stat');
+            // Score integrado del dia: 60% habitos + 40% tareas
+            const habitScore   = totalHabits > 0 ? (doneToday / totalHabits) * 60 : 0;
+            const taskScore    = totalTasks  > 0 ? (completedTasks / totalTasks) * 40 : 0;
+            const hasData      = totalHabits > 0 || totalTasks > 0;
+            const overallScore = hasData ? Math.round(habitScore + taskScore) : 0;
+
+            const quickTasksEl    = document.getElementById('quick-tasks-stat');
+            const quickHabitsEl   = document.getElementById('quick-habits-stat');
             const quickProgressEl = document.getElementById('quick-progress-stat');
 
-            if (quickTasksEl) quickTasksEl.textContent = pendingTasks;
-            if (quickHabitsEl) {
-                const doneToday = (appData.habits||[]).filter(h => isHabitCompletedToday(h)).length;
-                quickHabitsEl.textContent = doneToday;
+            if (quickTasksEl) quickTasksEl.textContent = totalTasks > 0 ? completedTasks + '/' + totalTasks : '0';
+            if (quickHabitsEl) quickHabitsEl.textContent = doneToday + (totalHabits > 0 ? '/' + totalHabits : '');
+            if (quickProgressEl) {
+                quickProgressEl.textContent = overallScore + '%';
+                if (overallScore >= 80)      quickProgressEl.style.color = '#00e676';
+                else if (overallScore >= 50) quickProgressEl.style.color = '#ffab00';
+                else if (overallScore > 0)   quickProgressEl.style.color = '#ff6b6b';
+                else                         quickProgressEl.style.color = '';
             }
-            if (quickProgressEl) quickProgressEl.textContent = progressPercent + '%';
+
+            // Actualizar mensaje de motivacion en tiempo real segun rendimiento
+            const motivationEl = document.getElementById('motivation-message');
+            if (motivationEl) {
+                const bestStreak = (appData.habits||[]).reduce((max, h) => Math.max(max, h.streak || 0), 0);
+                if (overallScore === 100) {
+                    motivationEl.textContent = '🏆 Dia perfecto. Tareas y habitos al 100%. Eso es rendimiento real.';
+                } else if (overallScore >= 80) {
+                    motivationEl.textContent = '🔥 Vas muy bien hoy. Sigue y cierra el dia fuerte.';
+                } else if (overallScore >= 50) {
+                    motivationEl.textContent = '⚡ Buen avance. Tienes el impulso — no lo desperdicies.';
+                } else if (overallScore > 0) {
+                    motivationEl.textContent = '🌱 Ya empezaste. Lo que importa es no parar.';
+                } else if (bestStreak >= 7) {
+                    motivationEl.textContent = `🔥 ${bestStreak} dias de racha. Eso no es suerte — es caracter.`;
+                } else {
+                    motivationEl.textContent = 'Completa un habito o tarea para ver tu rendimiento subir.';
+                }
+            }
         }
 
         function updateStats() {
@@ -4913,14 +5029,17 @@
                 return `
                 <button class="theme-swatch" data-theme="${key}" style="
                     position:relative; padding:0; border:none; cursor:pointer;
-                    border-radius:14px; overflow:hidden; aspect-ratio:1;
-                    box-shadow: ${isActive ? '0 0 0 3px var(--primary-color), 0 4px 12px rgba(0,0,0,0.2)' : '0 2px 8px rgba(0,0,0,0.1)'};
-                    transition:var(--transition);">
-                    <div style="width:100%; height:100%; background:${t.gradient}; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; padding:10px;">
-                        <span style="font-size:1.2rem;">${t.emoji}</span>
-                        <span style="font-size:0.68rem; font-weight:700; color:white; text-shadow:0 1px 3px rgba(0,0,0,0.4);">${t.label}</span>
+                    border-radius:16px; overflow:hidden;
+                    box-shadow: ${isActive ? '0 0 0 3px #977DE8, 0 4px 16px rgba(0,0,0,0.35)' : '0 2px 10px rgba(0,0,0,0.2)'};
+                    transition:var(--transition); width:100%;">
+                    <div style="background:${t.gradient}; display:flex; align-items:center; gap:10px; padding:12px 14px;">
+                        <span style="font-size:1.4rem; flex-shrink:0;">${t.emoji}</span>
+                        <div style="text-align:left; min-width:0;">
+                            <div style="font-size:0.8rem; font-weight:700; color:white; text-shadow:0 1px 3px rgba(0,0,0,0.5); white-space:nowrap;">${t.label}</div>
+                            <div style="font-size:0.65rem; color:rgba(255,255,255,0.75); margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${t.desc}</div>
+                        </div>
+                        ${isActive ? `<div style="margin-left:auto; width:20px; height:20px; border-radius:50%; background:rgba(255,255,255,0.9); display:flex; align-items:center; justify-content:center; font-size:0.65rem; color:#181C35; font-weight:900; flex-shrink:0;">✓</div>` : ''}
                     </div>
-                    ${isActive ? `<div style="position:absolute; top:4px; right:4px; width:14px; height:14px; border-radius:50%; background:white; display:flex; align-items:center; justify-content:center; font-size:0.5rem; color:var(--primary-color); font-weight:900;">✓</div>` : ''}
                 </button>`;
             }).join('');
 
@@ -4951,7 +5070,7 @@
                         <!-- Selector de tema -->
                         <div>
                             <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-secondary); margin-bottom:10px;">🎨 Tema de color</div>
-                            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px;" id="theme-swatches-grid">
+                            <div style="display:flex; flex-direction:column; gap:8px;" id="theme-swatches-grid">
                                 ${themeSwatches}
                             </div>
                             <p style="font-size:0.75rem; color:var(--text-secondary); margin-top:8px; text-align:center;">Paleta certificada WCAG AA/AAA · ChromaAudit</p>
@@ -5576,6 +5695,296 @@
             } else {
                 renderEmotionsGroupedView();
             }
+            renderSelfDiagnosisPanel();
+        }
+
+        // ════════════════════════════════════════════════════════
+        //  PANEL DE DIAGNÓSTICO EMOCIONAL PERSONAL
+        //  Analiza solo emociones "Sobre mí" (isSelf === true)
+        // ════════════════════════════════════════════════════════
+        function openEmotionModalSelf() {
+            openEmotionModal();
+            // Forzar modo "Sobre mí" al abrir desde el panel personal
+            setTimeout(() => {
+                const btnSelf  = document.getElementById('emotion-mode-self');
+                const btnOther = document.getElementById('emotion-mode-other');
+                const personGrp = document.getElementById('emotion-person-group');
+                if (btnSelf) {
+                    btnSelf.classList.add('active-mode');
+                    btnSelf.style.cssText = 'flex:1; padding:12px 8px; border-radius:14px; border:2px solid var(--primary-color); background:var(--gradient); color:white; font-weight:600; font-size:0.9rem; cursor:pointer; transition:var(--transition);';
+                }
+                if (btnOther) {
+                    btnOther.classList.remove('active-mode');
+                    btnOther.style.cssText = 'flex:1; padding:12px 8px; border-radius:14px; border:2px solid var(--border-color); background:var(--bg-primary); color:var(--text-secondary); font-weight:600; font-size:0.9rem; cursor:pointer; transition:var(--transition);';
+                }
+                if (personGrp) personGrp.style.display = 'none';
+            }, 60);
+        }
+
+        function renderSelfDiagnosisPanel() {
+            const panel = document.getElementById('self-diagnosis-panel');
+            const selfList = document.getElementById('self-emotions-list');
+            if (!panel) return;
+
+            const selfEmotions = (appData.emotions || [])
+                .filter(e => e.isSelf || e.person === '🙋 Yo mismo')
+                .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            // ── actualizar hero ──
+            const heroEmoji  = document.getElementById('bienestar-hero-emoji');
+            const heroTitle  = document.getElementById('bienestar-hero-title');
+            const heroSub    = document.getElementById('bienestar-hero-sub');
+            const todayScore = document.getElementById('bienestar-today-score');
+            const todayStr   = new Date().toISOString().split('T')[0];
+            const todayEms   = selfEmotions.filter(e => e.date && e.date.startsWith(todayStr));
+
+            if (todayEms.length > 0) {
+                const lastEm = todayEms[0];
+                const avgInt = Math.round(lastEm.intensity || 5);
+                const domEmotion = lastEm.emotions[0] || '';
+                const emojiMap = { 'Alegría':'😊','Tristeza':'😢','Enojo':'😠','Amor':'❤️','Frustración':'😤','Confianza':'🤝','Miedo':'😨','Sorpresa':'😲','Gratitud':'🙏','Paz':'☮️','Motivación':'💪','Esperanza':'🌟','Ansiedad':'😰','Soledad':'🌧️','Cansancio':'😴' };
+                if (heroEmoji) heroEmoji.textContent = emojiMap[domEmotion] || '💝';
+                if (heroTitle) heroTitle.textContent = 'Ya registraste cómo estás hoy';
+                if (heroSub)   heroSub.textContent   = `Emoción principal: ${domEmotion} · ${lastEm.emotions.length} sentimiento${lastEm.emotions.length !== 1 ? 's' : ''} registrado${lastEm.emotions.length !== 1 ? 's' : ''}`;
+                if (todayScore) {
+                    const bars = '▓'.repeat(Math.round(avgInt/2)) + '░'.repeat(5 - Math.round(avgInt/2));
+                    todayScore.textContent = avgInt + '/10';
+                }
+            } else {
+                if (heroEmoji) heroEmoji.textContent = '🌿';
+                if (heroTitle) heroTitle.textContent = '¿Cómo estás hoy?';
+                if (heroSub)   heroSub.textContent   = 'Aún no has registrado cómo te sientes hoy';
+                if (todayScore) todayScore.textContent = '—';
+            }
+
+            if (selfEmotions.length === 0) {
+                panel.innerHTML = `
+                    <div class="card" style="text-align:center; padding:2rem;">
+                        <div style="font-size:3rem; margin-bottom:1rem;">🌱</div>
+                        <p style="font-weight:600; color:var(--text-primary); margin-bottom:6px;">Tu diagnóstico emocional aparecerá aquí</p>
+                        <p style="color:var(--text-secondary); font-size:0.85rem;">Empieza registrando cómo te sientes. Con 3 o más entradas el sistema generará tu perfil emocional completo.</p>
+                    </div>`;
+                if (selfList) selfList.innerHTML = '';
+                return;
+            }
+
+            // ════ ANÁLISIS ════
+            const positive = ['Alegría','Amor','Gratitud','Paz','Motivación','Confianza','Esperanza'];
+            const negative  = ['Tristeza','Enojo','Frustración','Miedo','Ansiedad','Soledad','Cansancio'];
+            const emojiMap  = { 'Alegría':'😊','Tristeza':'😢','Enojo':'😠','Amor':'❤️','Frustración':'😤','Confianza':'🤝','Miedo':'😨','Sorpresa':'😲','Gratitud':'🙏','Paz':'☮️','Motivación':'💪','Esperanza':'🌟','Ansiedad':'😰','Soledad':'🌧️','Cansancio':'😴' };
+
+            // 1. Frecuencia de cada emoción
+            const freq = {};
+            selfEmotions.forEach(e => (e.emotions||[]).forEach(em => { freq[em] = (freq[em]||0)+1; }));
+            const topEmotions = Object.entries(freq).sort((a,b)=>b[1]-a[1]);
+            const top3 = topEmotions.slice(0,3);
+
+            // 2. Score emocional promedio (intensidad ajustada por tipo)
+            const allIntensities = selfEmotions.filter(e => e.intensity).map(e => {
+                const hasPos = (e.emotions||[]).some(x => positive.includes(x));
+                const hasNeg = (e.emotions||[]).some(x => negative.includes(x));
+                const base = parseFloat(e.intensity) || 5;
+                return hasNeg && !hasPos ? -(base) : base;
+            });
+            const avgScore = allIntensities.length
+                ? Math.round(allIntensities.reduce((a,b)=>a+b,0) / allIntensities.length * 10) / 10
+                : 0;
+            const scoreNorm = Math.min(100, Math.max(0, Math.round(((avgScore + 10) / 20) * 100)));
+
+            // 3. Tendencia últimos 7 días vs 7 anteriores
+            const now = Date.now();
+            const msDay = 86400000;
+            const last7  = selfEmotions.filter(e => new Date(e.date) >= new Date(now - 7*msDay));
+            const prev7  = selfEmotions.filter(e => new Date(e.date) >= new Date(now - 14*msDay) && new Date(e.date) < new Date(now - 7*msDay));
+            const scoreWeek = (arr) => {
+                const ints = arr.filter(e=>e.intensity).map(e=>{
+                    const hasNeg=(e.emotions||[]).some(x=>negative.includes(x));
+                    return hasNeg ? -parseFloat(e.intensity) : parseFloat(e.intensity);
+                });
+                return ints.length ? ints.reduce((a,b)=>a+b,0)/ints.length : null;
+            };
+            const s7   = scoreWeek(last7);
+            const sPrev = scoreWeek(prev7);
+            let trend = 'neutral', trendLabel='Estable', trendEmoji='➡️', trendColor='var(--text-secondary)';
+            if (s7 !== null && sPrev !== null) {
+                const diff = s7 - sPrev;
+                if (diff > 1.5)       { trend='up';   trendLabel='Mejorando';   trendEmoji='📈'; trendColor='var(--success-color)'; }
+                else if (diff < -1.5) { trend='down'; trendLabel='En descenso'; trendEmoji='📉'; trendColor='var(--danger-color)'; }
+            } else if (s7 !== null && sPrev === null) {
+                trend='new'; trendLabel='Empezando'; trendEmoji='🌱'; trendColor='var(--accent-color)';
+            }
+
+            // 4. Racha de registro (días consecutivos)
+            const registeredDays = [...new Set(selfEmotions.map(e => e.date ? e.date.split('T')[0] : ''))].filter(Boolean).sort().reverse();
+            let streak = 0;
+            for (let i = 0; i < registeredDays.length; i++) {
+                const expected = new Date(now - i*msDay).toISOString().split('T')[0];
+                if (registeredDays[i] === expected) streak++; else break;
+            }
+
+            // 5. Perfil emocional dominante
+            const posCount = topEmotions.filter(([e])=>positive.includes(e)).reduce((s,[,n])=>s+n,0);
+            const negCount = topEmotions.filter(([e])=>negative.includes(e)).reduce((s,[,n])=>s+n,0);
+            const total = posCount + negCount;
+            const posPct = total ? Math.round((posCount/total)*100) : 50;
+            let profile, profileEmoji, profileDesc;
+            if (posPct >= 75)       { profile='Floreciendo';   profileEmoji='🌸'; profileDesc='Predominan emociones positivas y alta energía.'; }
+            else if (posPct >= 55)  { profile='Equilibrado';   profileEmoji='⚖️'; profileDesc='Buen balance emocional con momentos de tensión.'; }
+            else if (posPct >= 40)  { profile='En proceso';    profileEmoji='🌊'; profileDesc='Atraviesas un período de altibajos emocionales.'; }
+            else if (posPct >= 20)  { profile='Necesita apoyo';profileEmoji='🤍'; profileDesc='Las emociones difíciles predominan. Mereces apoyo.'; }
+            else                    { profile='Alerta';         profileEmoji='⚠️'; profileDesc='Alta frecuencia de emociones complejas. Considera hablar con alguien.'; }
+
+            // 6. Alerta si hay emoción negativa recurrente (≥3 veces en 7 días)
+            const alerts = [];
+            const urgentNeg = ['Ansiedad','Tristeza','Soledad','Miedo'];
+            urgentNeg.forEach(em => {
+                const cnt = last7.filter(e=>(e.emotions||[]).includes(em)).length;
+                if (cnt >= 3) alerts.push({ em, cnt });
+            });
+
+            // 7. Recomendaciones personalizadas
+            const recs = [];
+            if (trend === 'down')          recs.push({ icon:'💬', text:'Habla con alguien de confianza sobre lo que estás viviendo.' });
+            if (alerts.length > 0)         recs.push({ icon:'🧘', text:`La ${alerts[0].em} aparece frecuente esta semana. Prueba 5 min de respiración consciente.` });
+            if (streak === 0)              recs.push({ icon:'📝', text:'Registrar cómo te sientes cada día te ayuda a ver patrones que no notas en el momento.' });
+            if (streak >= 7)               recs.push({ icon:'🔥', text:`${streak} días seguidos registrando. Esa constancia es autoconocimiento real.` });
+            if (freq['Cansancio'] >= 3)    recs.push({ icon:'😴', text:'El cansancio aparece seguido. Revisa tu rutina de sueño.' });
+            if (freq['Motivación'] >= 3)   recs.push({ icon:'💪', text:'Tu motivación es alta — buen momento para retomar algo que tenías pendiente.' });
+            if (freq['Gratitud'] >= 2)     recs.push({ icon:'🙏', text:'Sientes gratitud con frecuencia. Eso protege tu bienestar a largo plazo.' });
+            if (posCount === 0 && selfEmotions.length >= 5) recs.push({ icon:'🌈', text:'No has registrado emociones positivas aún. ¿Hay algo pequeño que te dé alegría hoy?' });
+            if (recs.length === 0)         recs.push({ icon:'✨', text:'Sigue registrando. Tu historial construye un mapa emocional único de ti.' });
+
+            // ══ RENDER ══
+            const scoreColor = scoreNorm >= 65 ? 'var(--success-color)' : scoreNorm >= 40 ? '#ffab00' : 'var(--danger-color)';
+            const streakFire = streak >= 7 ? '🔥' : streak >= 3 ? '⚡' : '🌱';
+
+            panel.innerHTML = `
+                <!-- Score general + tendencia + racha -->
+                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:14px;">
+                    <div class="card" style="padding:14px; text-align:center; cursor:default;">
+                        <div style="font-size:1.6rem; font-weight:800; color:${scoreColor};">${scoreNorm}%</div>
+                        <div style="font-size:0.68rem; color:var(--text-secondary); font-weight:600; text-transform:uppercase; letter-spacing:0.3px; margin-top:2px;">Bienestar</div>
+                        <div style="height:4px; background:var(--border-color); border-radius:2px; margin-top:8px; overflow:hidden;"><div style="height:100%; width:${scoreNorm}%; background:${scoreColor}; border-radius:2px; transition:width 0.6s ease;"></div></div>
+                    </div>
+                    <div class="card" style="padding:14px; text-align:center; cursor:default;">
+                        <div style="font-size:1.4rem;">${trendEmoji}</div>
+                        <div style="font-size:0.78rem; font-weight:700; color:${trendColor}; margin-top:2px;">${trendLabel}</div>
+                        <div style="font-size:0.65rem; color:var(--text-secondary); margin-top:2px;">vs. sem. anterior</div>
+                    </div>
+                    <div class="card" style="padding:14px; text-align:center; cursor:default;">
+                        <div style="font-size:1.4rem;">${streakFire}</div>
+                        <div style="font-size:1.1rem; font-weight:800; color:var(--primary-color);">${streak}d</div>
+                        <div style="font-size:0.65rem; color:var(--text-secondary);">racha</div>
+                    </div>
+                </div>
+
+                <!-- Perfil emocional -->
+                <div class="card" style="padding:16px 18px; margin-bottom:12px;">
+                    <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+                        <div style="font-size:2rem;">${profileEmoji}</div>
+                        <div>
+                            <div style="font-weight:700; color:var(--text-primary); font-size:0.95rem;">${profile}</div>
+                            <div style="font-size:0.78rem; color:var(--text-secondary); margin-top:2px;">${profileDesc}</div>
+                        </div>
+                    </div>
+                    <!-- Barra positivo/negativo -->
+                    <div style="margin-bottom:8px;">
+                        <div style="display:flex; justify-content:space-between; font-size:0.72rem; color:var(--text-secondary); margin-bottom:4px;">
+                            <span>✨ Positivas ${posPct}%</span>
+                            <span>${100-posPct}% Difíciles 🌧️</span>
+                        </div>
+                        <div style="height:8px; border-radius:4px; background:var(--border-color); overflow:hidden; display:flex;">
+                            <div style="width:${posPct}%; background:var(--success-color); transition:width 0.6s ease;"></div>
+                            <div style="width:${100-posPct}%; background:var(--danger-color); opacity:0.6;"></div>
+                        </div>
+                    </div>
+                    <!-- Top 3 emociones -->
+                    ${top3.length > 0 ? `<div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:10px;">
+                        ${top3.map(([em, cnt]) => `<span style="padding:4px 10px; border-radius:20px; font-size:0.75rem; font-weight:600; background:var(--bg-primary); color:var(--text-primary);">${emojiMap[em]||'💭'} ${em} <span style="color:var(--text-secondary);">×${cnt}</span></span>`).join('')}
+                    </div>` : ''}
+                </div>
+
+                <!-- Alertas si hay emociones recurrentes -->
+                ${alerts.length > 0 ? `<div style="background:rgba(255,82,82,0.08); border:1.5px solid rgba(255,82,82,0.2); border-radius:16px; padding:14px 16px; margin-bottom:12px; display:flex; align-items:flex-start; gap:12px;">
+                    <div style="font-size:1.5rem; flex-shrink:0;">⚠️</div>
+                    <div>
+                        <div style="font-weight:700; color:var(--danger-color); font-size:0.88rem; margin-bottom:2px;">Patrón detectado</div>
+                        <div style="font-size:0.8rem; color:var(--text-secondary);">${alerts.map(a=>`<strong>${emojiMap[a.em]||''} ${a.em}</strong> aparece ${a.cnt} veces esta semana`).join(' · ')}</div>
+                    </div>
+                </div>` : ''}
+
+                <!-- Recomendaciones -->
+                <div class="card" style="padding:16px 18px;">
+                    <div style="font-weight:700; color:var(--text-primary); font-size:0.9rem; margin-bottom:12px;">💡 Para ti hoy</div>
+                    ${recs.slice(0,3).map(r => `
+                    <div style="display:flex; align-items:flex-start; gap:10px; margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid var(--border-color);">
+                        <span style="font-size:1.2rem; flex-shrink:0;">${r.icon}</span>
+                        <span style="font-size:0.82rem; color:var(--text-secondary); line-height:1.5;">${r.text}</span>
+                    </div>`).join('')}
+                    <!-- Mini gráfica de los últimos 7 días -->
+                    ${selfEmotions.length >= 3 ? (() => {
+                        const days7 = Array.from({length:7},(_,i)=>{
+                            const d = new Date(now - (6-i)*msDay);
+                            return d.toISOString().split('T')[0];
+                        });
+                        const bars = days7.map(day => {
+                            const dayEms = selfEmotions.filter(e => e.date && e.date.startsWith(day));
+                            if (!dayEms.length) return { val:0, empty:true };
+                            const avg = dayEms.reduce((s,e)=>{
+                                const hasNeg=(e.emotions||[]).some(x=>negative.includes(x));
+                                return s + (hasNeg ? -parseFloat(e.intensity||5) : parseFloat(e.intensity||5));
+                            }, 0) / dayEms.length;
+                            return { val: avg, empty: false };
+                        });
+                        const maxAbs = Math.max(...bars.map(b=>Math.abs(b.val)), 1);
+                        const dayNames = ['L','M','X','J','V','S','D'];
+                        const startDow = new Date(days7[0]).getDay();
+                        return `<div style="margin-top:10px;">
+                            <div style="font-size:0.72rem; color:var(--text-secondary); font-weight:600; margin-bottom:8px;">Últimos 7 días</div>
+                            <div style="display:flex; align-items:flex-end; gap:3px; height:48px;">
+                                ${bars.map((b,i)=>{
+                                    const pct = b.empty ? 0 : Math.round((Math.abs(b.val)/maxAbs)*100);
+                                    const col = b.empty ? 'var(--border-color)' : b.val >= 0 ? 'var(--success-color)' : 'var(--danger-color)';
+                                    const dow = (startDow + i) % 7;
+                                    return `<div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:2px;">
+                                        <div style="width:100%; border-radius:3px 3px 0 0; background:${col}; height:${Math.max(pct,b.empty?0:6)}%; min-height:${b.empty?'0':'4px'}; opacity:${b.empty?0.2:0.9}; transition:height 0.4s ease;"></div>
+                                        <div style="font-size:7px; color:var(--text-secondary);">${dayNames[dow]}</div>
+                                    </div>`;
+                                }).join('')}
+                            </div>
+                        </div>`;
+                    })() : ''}
+                </div>
+            `;
+
+            // ── Historial personal (solo "sobre mí") ──
+            if (!selfList) return;
+            if (selfEmotions.length === 0) {
+                selfList.innerHTML = '';
+                return;
+            }
+            selfList.innerHTML = selfEmotions.slice(0, 10).map(emotion => {
+                const intBadge = emotion.intensity
+                    ? `<span style="font-size:0.72rem; padding:2px 8px; border-radius:20px; background:var(--bg-primary); color:var(--text-secondary); font-weight:600;">intensidad ${emotion.intensity}/10</span>` : '';
+                const intBar = emotion.intensity ? `
+                    <div style="height:3px; border-radius:2px; background:var(--border-color); margin:8px 0 2px; overflow:hidden;">
+                        <div style="height:100%; width:${emotion.intensity*10}%; background:var(--gradient); border-radius:2px;"></div>
+                    </div>` : '';
+                const tags = (emotion.emotions||[]).map(e=>`<span style="padding:3px 9px; border-radius:20px; font-size:0.72rem; font-weight:600; background:var(--bg-primary); color:var(--text-primary);">${emojiMap[e]||'💭'} ${e}</span>`).join('');
+                return `
+                <div class="card" style="margin-bottom:10px; padding:14px 16px; position:relative;">
+                    <div class="card-actions">
+                        <button class="action-btn-small delete-btn" data-id="${emotion.id}" data-type="emotion"><i class="fas fa-trash"></i></button>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                        <span style="font-size:0.75rem; color:var(--text-secondary);">📅 ${formatDate(emotion.date)}</span>
+                        ${intBadge}
+                    </div>
+                    ${intBar}
+                    <div style="display:flex; flex-wrap:wrap; gap:5px; margin:6px 0;">${tags}</div>
+                    ${emotion.description ? `<p style="font-size:0.82rem; color:var(--text-secondary); margin:6px 0 0; line-height:1.5; font-style:italic;">"${emotion.description}"</p>` : ''}
+                </div>`;
+            }).join('') + (selfEmotions.length > 10 ? `<div style="text-align:center; padding:12px; color:var(--text-secondary); font-size:0.82rem;">+${selfEmotions.length-10} registros anteriores</div>` : '');
         }
 
         function switchEmotionView(view) {
@@ -5794,7 +6203,7 @@
             let html = `
                 <div style="margin-top: 1.5rem;">
                     <!-- Encabezado Principal -->
-                    <div style="background: var(--gradient); color: white; padding: 1.5rem; border-radius: 16px; margin-bottom: 1.5rem; box-shadow: 0 8px 24px rgba(106, 17, 203, 0.3);">
+                    <div style="background: var(--gradient); color: white; padding: 1.5rem; border-radius: 16px; margin-bottom: 1.5rem; box-shadow: 0 8px 24px rgba(40, 74, 138, 0.3);">
                         <h3 style="margin: 0 0 0.5rem 0; font-size: 1.3rem;">🔍 Análisis Individual: ${analysis.personName}</h3>
                         <div style="font-size: 0.9rem; opacity: 0.95; margin-bottom: 1rem;">${analysis.relation} • ${analysis.totalRegistries} registros emocionales</div>
                         <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
@@ -6252,7 +6661,7 @@
             let html = `
                 <div style="margin-top: 1.5rem;">
                     <!-- Resumen Ejecutivo -->
-                    <div style="background: var(--gradient); color: white; padding: 1.5rem; border-radius: 16px; margin-bottom: 1.5rem; box-shadow: 0 8px 24px rgba(106, 17, 203, 0.3);">
+                    <div style="background: var(--gradient); color: white; padding: 1.5rem; border-radius: 16px; margin-bottom: 1.5rem; box-shadow: 0 8px 24px rgba(40, 74, 138, 0.3);">
                         <h3 style="margin: 0 0 1rem 0; font-size: 1.3rem;">📊 Resumen Ejecutivo de Bienestar Social</h3>
                         <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1rem;">
                             <div style="background: rgba(255, 255, 255, 0.15); padding: 1rem; border-radius: 12px; backdrop-filter: blur(10px);">
@@ -6463,6 +6872,7 @@
                     saveData();
                     renderHabits();
                     updateHabitStats();
+                    updateQuickStats();
                     const card = document.querySelector(`.habit-card[data-id="${habitId}"]`);
                     if (card) {
                         card.classList.add('just-completed');
@@ -6483,6 +6893,7 @@
                     saveData();
                     renderHabits();
                     updateHabitStats();
+                    updateQuickStats();
                     showNotification(`↩️ "${habit.name}" desmarcado`, 'info');
                 }
             } catch(err) {
@@ -6498,6 +6909,8 @@
             saveData();
             renderHabits();
             updateHabitStats();
+            updateStats();
+            updateQuickStats();
             showNotification('Hábito eliminado', 'info');
         }
 
@@ -6557,15 +6970,14 @@
                 const completedSet = new Set(habit.completedDates || []);
                 const dots = last7.map(day => completedSet.has(day));
                 const categoryColors = {
-                    salud: '#00c853', mente: '#7c4dff', relaciones: '#ff4081',
+                    salud: '#00c853', mente: '#977DE8', relaciones: '#ff4081',
                     finanzas: '#ffab00', trabajo: '#2979ff', otro: '#78909c'
                 };
-                const catColor  = categoryColors[habit.category] || '#7c4dff';
+                const catColor  = categoryColors[habit.category] || '#977DE8';
                 const fireEmoji = streak >= 21 ? '💎' : streak >= 7 ? '🔥' : streak >= 3 ? '⚡' : '🌱';
 
                 return `
                     <div class="habit-card ${done ? 'completed-today' : ''}" data-id="${habit.id}">
-                        <button class="habit-delete-btn" id="del-habit-${habit.id}" title="Eliminar">✕</button>
                         <div style="display:flex; align-items:center; gap:12px; width:100%;">
                             <div class="habit-emoji">${habit.emoji || '⭐'}</div>
                             <div style="flex:1; min-width:0;">
@@ -6592,18 +7004,24 @@
                             </div>
                             <span style="font-size:0.68rem; color:var(--text-secondary); min-width:46px; text-align:right;">mejor: ${best}d</span>
                         </div>
-                        <button id="toggle-habit-${habit.id}" style="
-                            width:100%; margin-top:12px;
-                            padding:${done ? '10px' : '13px'};
-                            border-radius:14px; border:none; cursor:pointer;
-                            font-size:0.92rem; font-weight:700;
-                            font-family:Poppins,sans-serif;
-                            touch-action:manipulation;
-                            transition:all 0.2s ease;
-                            background:${done ? 'rgba(0,230,118,0.12)' : `linear-gradient(135deg, ${catColor}, ${catColor}cc)`};
-                            color:${done ? 'var(--success-color)' : 'white'};
-                            box-shadow:${done ? 'none' : `0 4px 14px ${catColor}55`};
-                        ">${done ? '✅ Completado hoy — toca para desmarcar' : '○  Marcar como completado hoy'}</button>
+                        <div style="display:flex; gap:8px; margin-top:12px; align-items:center;">
+                            <button id="toggle-habit-${habit.id}" style="
+                                flex:1;
+                                padding:10px 12px;
+                                border-radius:14px; border:none; cursor:pointer;
+                                font-size:0.82rem; font-weight:700;
+                                font-family:Poppins,sans-serif;
+                                touch-action:manipulation;
+                                transition:all 0.2s ease;
+                                background:${done ? 'rgba(0,230,118,0.12)' : `linear-gradient(135deg, ${catColor}, ${catColor}cc)`};
+                                color:${done ? 'var(--success-color)' : 'white'};
+                                box-shadow:${done ? 'none' : `0 4px 14px ${catColor}55`};
+                                white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+                            ">${done ? '✅ Completado' : '○  Marcar hecho'}</button>
+                            <button class="habit-delete-btn" id="del-habit-${habit.id}" title="Eliminar hábito">
+                                <i class="fas fa-trash-alt" style="font-size:0.75rem;"></i>
+                            </button>
+                        </div>
                     </div>
                 `;
             }).join('');
@@ -6725,6 +7143,7 @@
             saveData();
             renderHabits();
             updateHabitStats();
+            updateQuickStats();
             closeAllModals();
             showNotification(`🌱 Hábito "${name}" creado. ¡A construir la racha!`, 'success');
         });
@@ -7753,7 +8172,7 @@
             canvas.width  = window.innerWidth;
             canvas.height = window.innerHeight;
             const ctx = canvas.getContext('2d');
-            const colors = ['#7c4dff','#448aff','#00e676','#ffea00','#ff5252','#ff6d00','#e040fb'];
+            const colors = ['#977DE8','#448aff','#00e676','#ffea00','#ff5252','#ff6d00','#e040fb'];
             _confettiParts.length = 0;
             for (let i = 0; i < 120; i++) {
                 _confettiParts.push({
@@ -7909,7 +8328,7 @@
             }
             const days = getLast30Days();
             const today = getTodayString();
-            const categoryColors = { salud:'#00c853', mente:'#7c4dff', relaciones:'#ff4081', finanzas:'#ffab00', trabajo:'#2979ff', otro:'#78909c' };
+            const categoryColors = { salud:'#00c853', mente:'#977DE8', relaciones:'#ff4081', finanzas:'#ffab00', trabajo:'#2979ff', otro:'#78909c' };
 
             container.innerHTML = `
                 <div style="overflow-x:auto; padding-bottom:4px;">
@@ -7920,7 +8339,7 @@
                         </div>
                         ${habits.map(habit => {
                             const completed = new Set(habit.completedDates || []);
-                            const color = categoryColors[habit.category] || '#7c4dff';
+                            const color = categoryColors[habit.category] || '#977DE8';
                             return `<div style="display:flex;align-items:center;gap:3px;margin-bottom:3px;">
                                 <div style="width:86px;font-size:10px;color:var(--text-secondary);font-weight:500;text-align:right;padding-right:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${habit.emoji||'•'} ${habit.name}</div>
                                 ${days.map(day => {
